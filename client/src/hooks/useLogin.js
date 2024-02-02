@@ -19,10 +19,10 @@ export const useLogin = () => {
       return
     }
     // save the user to local storage
-    localStorage.setItem('user', response.email)
+    localStorage.setItem('user', response)
 
     // update the auth context
-    dispatch({type: 'LOGIN', payload: response.email})
+    dispatch({type: 'LOGIN', payload: response})
 
     // update loading state
     setIsLoading(false)
