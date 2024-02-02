@@ -14,4 +14,19 @@ module.exports = userController =  {
       })
     }
   },
+
+  loginUser: async (req, res) => {
+    const {email, password} = req.body
+  
+    try {
+      await User.login(email, password)
+  
+      res.status(200).json({email})
+    } catch (error) {
+      res.status(400).json({
+        error: 'Bad Request',
+        message: error.message,
+      })
+    }
+  }
 };
