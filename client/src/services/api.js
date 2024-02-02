@@ -23,4 +23,13 @@ export class ApiRouter {
             return response.data;
         }
     }
+    static async login(data) {
+        try {
+            const response = await http.post("/user/login", data);
+            return response.data; 
+        } catch ({response}) {
+            console.log("Error logging in:", response.data);
+            return response.data;
+        }
+    }
 }
