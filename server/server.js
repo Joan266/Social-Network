@@ -1,8 +1,10 @@
-import mongoose from "mongoose";
-import express from 'express';
-import cors from 'cors';
-import { createServer } from 'http';
-import { MONGODB_URI, PORT } from './dotenv.js';
+const express = require('express')
+const mongoose = require('mongoose')
+const cors = require('cors');
+const {createServer} = require('http');
+const { MONGODB_URI, PORT } = require('./dotenv.js');
+
+const userRoutes = require('./routes/user')
 
 const configExpress = async () => {
   const app = express();
@@ -17,6 +19,9 @@ const configExpress = async () => {
     console.log(req.path, req.method)
     next()
   })  
+
+  //routes
+  app.use('/api/user', userRoutes)
 
   const httpServer = createServer(app);
 
@@ -38,6 +43,7 @@ const configDB = async () => {
 };
 
 // Configure and start Express server
-await configExpress();
+configExpress();
+
 // Connect to the MongoDB database
 configDB();

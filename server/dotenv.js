@@ -1,5 +1,5 @@
-import { config } from "dotenv";
+const { config } = require('dotenv');
 
 config();
 
-export const { MONGODB_URI, PORT } = process.env;
+module.exports = { MONGODB_URI, PORT } = process.env;
