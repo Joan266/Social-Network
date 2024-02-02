@@ -6,11 +6,11 @@ export const useSignup = () => {
   const [isLoading, setIsLoading] = useState(false)
   const { dispatch } = useAuthContext()
 
-  const signup = async (email, password) => {
+  const signup = async ({email, password, username}) => {
     setIsLoading(true)
     setError(null)
 
-    const response = await ApiRouter.signup({email, password});
+    const response = await ApiRouter.signup({email, password, username});
     if (response.error) {
       setIsLoading(false)
       setError(response.message)
