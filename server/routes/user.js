@@ -1,7 +1,7 @@
-import express from 'express'
+const express = require('express');
 
 // controller 
-import userController from '../controllers/user.js';
+const userController = require('../controllers/user');
 
 const router = express.Router()
 
