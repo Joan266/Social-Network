@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useLogin } from "../hooks/useLogin"
+import { Link } from 'react-router-dom'
 
 const Login = () => {
   const [emailOrUsername, setEmailOrUsername] = useState('')
@@ -13,25 +14,30 @@ const Login = () => {
   }
 
   return (
-    <form className="login" onSubmit={handleSubmit}>
-      <h3>Log In</h3>
-      
-      <label>Email address or username:</label>
-      <input 
-        type="text" 
-        onChange={(e) => setEmailOrUsername(e.target.value)} 
-        value={emailOrUsername} 
-      />
-      <label>Password:</label>
-      <input 
-        type="password" 
-        onChange={(e) => setPassword(e.target.value)} 
-        value={password} 
-      />
+    <>
+      <form className="login" onSubmit={handleSubmit}>
+        <h3>Inicia sesión</h3>
+        
+        <label>Correo electrónico o nombre de usuario:</label>
+        <input 
+          type="text" 
+          onChange={(e) => setEmailOrUsername(e.target.value)} 
+          value={emailOrUsername} 
+        />
+        <label>Contraseña:</label>
+        <input 
+          type="password" 
+          onChange={(e) => setPassword(e.target.value)} 
+          value={password} 
+        />
 
-      <button disabled={isLoading}>Log in</button>
-      {error && <div className="error">{error}</div>}
-    </form>
+        <button disabled={isLoading}>Inicia sesión</button>
+        {error && <div className="error">{error}</div>}
+      </form>
+      <div>
+        <p>¿No tienes cuenta?<Link to="/signup">Regístrate</Link></p>
+      </div>
+    </>
   )
 }
 

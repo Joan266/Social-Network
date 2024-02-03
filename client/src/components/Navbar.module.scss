@@ -1,0 +1,102 @@
+// Navbar.module.scss
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 240px; 
+  float: right;
+  padding: 20px;
+  flex-direction: column;
+  .menu {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+  }
+  .accountMenu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 25px;
+    justify-content: space-around;
+    .profilePic {
+      width: 40px;
+      height: 40px;
+      background-color: #ccc; /* Example background color */
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+  
+    span {
+      color: var(--text-color);
+      margin-bottom: 10px;
+    }
+  
+    button {
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 25px;
+      margin-top: 20px;
+      width: 45%;
+      min-width: 80px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: var(--button-hover-background);
+      }
+    }
+  }
+}
+
+
+.logo {
+  h1 {
+    margin: 0;
+  }
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .linkContainer {
+    display:flex;
+    justify-content: left;
+    width: 100%;
+    a {
+      text-decoration: none;
+      color: var(--link-color);
+      padding: 10px;
+      margin: 5px 0;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: var(--link-hover-color);
+      }
+
+      svg {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+.postButton {
+  background-color: var(--button-background);
+  color: var(--button-text-color);
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 25px;
+  margin-top: 20px;
+  width: 45%;
+  min-width: 80px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--button-hover-background);
+  }
+}

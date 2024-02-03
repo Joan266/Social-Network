@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useSignup } from "../hooks/useSignup"
+import { Link } from 'react-router-dom'
 
 const Signup = () => {
   const [username, setUsername] = useState('')
@@ -14,30 +15,35 @@ const Signup = () => {
   }
 
   return (
+    <>
     <form className="signup" onSubmit={handleSubmit}>
-      <h3>Sign Up</h3>
-      <label>Username:</label>
+      <h3>Crea una cuenta</h3>
+      <label>Nombre de usuario:</label>
       <input 
-        type="username" 
+        type="text" 
         onChange={(e) => setUsername(e.target.value.trim())} 
         value={username} 
       />
-      <label>Email address:</label>
+      <label>Dirección de correo electrónico:</label>
       <input 
         type="email" 
         onChange={(e) => setEmail(e.target.value.trim())} 
         value={email} 
       />
-      <label>Password:</label>
+      <label>Contraseña:</label>
       <input 
         type="password" 
         onChange={(e) => setPassword(e.target.value.trim())} 
         value={password} 
       />
 
-      <button disabled={isLoading}>Sign up</button>
+      <button disabled={isLoading}>Regístrate</button>
       {error && <div className="error">{error}</div>}
     </form>
+    <div>
+      <p>¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link></p>
+    </div>
+    </>
   )
 }
 

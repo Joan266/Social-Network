@@ -5,7 +5,29 @@ import { useAuthContext } from './hooks/useAuthContext.js';
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import Profile from './pages/Profile'
+import Search from './pages/Search'
+import Post from './pages/Post'
+import Notifications from './pages/Notifications'
 import Navbar from './components/Navbar'
+
+const PrincipalLayout = ({ children }) => (
+  <div className='mainlayout'>
+    <div className='header'>
+      <Navbar />
+    </div>
+    <div className='main'>
+      <div className='dashboard'>{children}</div>
+      <div className='extras'></div>
+    </div>
+  </div>
+);
+
+const AuthLayout = ({ children }) => (
+  <div className='authlayout'>
+    <div className='container'>{children}</div>
+  </div>
+);
 
 function App() {
   const { user } = useAuthContext()
@@ -13,23 +35,40 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar />
-        <div className="pages">
-          <Routes>
-            <Route 
-              path="/" 
-              element={user ? <Home /> : <Navigate to="/login" />} 
-            />
-            <Route 
-              path="/login" 
-              element={!user ? <Login /> : <Navigate to="/" />} 
-            />
-            <Route 
-              path="/signup" 
-              element={!user ? <Signup /> : <Navigate to="/" />} 
-            />
-          </Routes>
-        </div>
+        <Routes>
+          <Route 
+            path="/" 
+            element={user ? <Navigate to="/home" /> : <Navigate to="/signup" />} 
+          />
+          <Route 
+            path="/home" 
+            element={!user ? <Navigate to="/login" /> :  <PrincipalLayout><Home /></PrincipalLayout>} 
+          />
+          <Route 
+            path="/login" 
+            element={user ?  <Navigate to="/home" />: <AuthLayout><Login /></AuthLayout>} 
+          />
+          <Route 
+            path="/signup" 
+            element={user ?  <Navigate to="/home" />: <AuthLayout><Signup /></AuthLayout>} 
+          />
+          <Route 
+            path="/profile" 
+            element={!user ? <Navigate to="/login" /> : <PrincipalLayout><Profile /></PrincipalLayout>} 
+          />
+          <Route 
+            path="/search" 
+            element={!user ? <Navigate to="/login" /> : <PrincipalLayout><Search /></PrincipalLayout>} 
+          />
+          <Route 
+            path="/notifications" 
+            element={!user ? <Navigate to="/login" /> : <PrincipalLayout><Notifications /></PrincipalLayout>} 
+          />
+          <Route 
+            path="/post" 
+            element={!user ? <Navigate to="/login" /> : <PrincipalLayout><Post /></PrincipalLayout>} 
+          />
+        </Routes>
       </BrowserRouter>
     </div>
   );
