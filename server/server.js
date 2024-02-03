@@ -33,7 +33,7 @@ const configExpress = async () => {
 
 const configDB = async () => {
   try {
-    await mongoose.connect(MONGODB_URI);
+    const conn = await mongoose.connect(MONGODB_URI);
     console.log("Connected to the DB");
 
   } catch (error) {
