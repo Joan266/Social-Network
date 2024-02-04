@@ -9,7 +9,7 @@
   --text-color: #333;
   --label-color: #555;
   --input-border-color: #ccc;
-  --button-background: #3498db;
+  --button-background: #45b1f9;
   --button-text-color: #fff;
   --button-hover-background: #2185d0;
   --link-color: #3498db;
@@ -111,19 +111,28 @@ body {
  background-color: white;
   .header {
     display: flex;
-    flex: 2;
+    flex: 3;
     justify-content: right;
   }
   
   .main {
     display: flex;
-    flex: 5;
-    .dashboard {
-      flex: 1;
-    }
-    
-    .extras {
-      flex: 1;
+    flex: 7;
+    justify-content: left;
+    .container {
+     width: 1050px;
+     display: flex;
+      .dashboard {
+        width: 600px;
+      }
+      
+      .trending {
+        width: 350px;
+        margin-right: 70px;
+      }
     }
   }
+}
+button {
+  font-family:'Poppins';
 }

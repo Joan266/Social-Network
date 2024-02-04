@@ -10,15 +10,19 @@ import Search from './pages/Search'
 import Post from './pages/Post'
 import Notifications from './pages/Notifications'
 import Navbar from './components/Navbar'
-
+import SearchBar from './components/SearchBar'
 const PrincipalLayout = ({ children }) => (
   <div className='mainlayout'>
     <div className='header'>
       <Navbar />
     </div>
     <div className='main'>
-      <div className='dashboard'>{children}</div>
-      <div className='extras'></div>
+      <div className='container'>
+        <div className='dashboard'>{children}</div>
+        <div className='trending'>
+          <SearchBar/>
+        </div>
+      </div>
     </div>
   </div>
 );
