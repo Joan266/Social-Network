@@ -1,0 +1,101 @@
+// Navbar.module.scss
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  width: 257px; 
+  float: right;
+  padding: 20px;
+  flex-direction: column;
+  font-size: 1.2rem;
+
+  .menu {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    .logo {
+      h1 {
+        margin: 0;
+      }
+      height: 25px;
+    }
+    nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    
+      .linkContainer {
+        display:flex;
+        justify-content: left;
+        width: 100%;
+        a {
+          color: #333;
+          border-radius: 25px;
+          text-decoration: none;
+          padding: 10px 20px;
+          margin: 5px 0;
+          transition: color 0.3s ease;
+          svg {
+            margin-right: 15px;
+          }
+          &:hover {
+            background-color: rgb(237, 236, 236);
+          }
+        }
+      }
+    }
+    .postButton {
+      background-color: var(--button-background);
+      color: var(--button-text-color);
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 30px;
+      margin-top: 20px;
+      width: 75%;
+      min-width: 80px;
+      min-height: 55px;
+      transition: background-color 0.3s ease;
+      font-size: 0.9rem;
+      font-weight: 500;
+    
+      &:hover {
+        background-color: var(--button-hover-background);
+      }
+    }
+    
+  }
+  .accountMenu {
+    display: flex;
+    padding: 15px;
+    border-radius: 25px;
+    &:hover {
+      background-color: whitesmoke;
+    }
+    .container {
+      padding: 0;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      justify-content: space-between;
+      text-align: center;
+      font-size: 0.8rem;
+      
+      .profilePic {
+        width: 40px;
+        height: 40px;
+        background-color: #ccc; /* Example background color */
+        border-radius: 50%;
+        display: flex;
+      }
+      .logout {
+        text-decoration: underline;
+        cursor: pointer;
+        &:hover {
+          color: var(--link-hover-color);
+        }
+      }
+    }
+  }
+}
