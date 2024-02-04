@@ -18,8 +18,9 @@ export const useLogin = () => {
       setError(response.message)
       return
     }
+    console.log(response);
     // save the user to local storage
-    localStorage.setItem('user', response)
+    localStorage.setItem('user', JSON.stringify(response))
 
     // update the auth context
     dispatch({type: 'LOGIN', payload: response})

@@ -11,7 +11,6 @@ import styles from './Navbar.module.scss';
 const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
-  console.log(user.username);
   const handleClick = () => {
     logout();
   };
@@ -35,14 +34,16 @@ const Navbar = () => {
             <Link to="/notifications"><FontAwesomeIcon icon={solidBell} className="rounded me-2"/>Notifications</Link>
           </div>
           <div className={styles.linkContainer}>
-            <Link to="/profile"><FontAwesomeIcon icon={solidUser} className="rounded me-2"/>Profile</Link>
+            <Link to={`/`+ user.username}><FontAwesomeIcon icon={solidUser} className="rounded me-2"/>Profile</Link>
           </div>
         </nav>
         <button className={styles.postButton}>Post</button>
       </div>
       <div className={styles.accountMenu}>
         <div className={styles.container}>
-          <div className={styles.profilePic}></div>
+          <div className={styles.profilePic}>
+            <FontAwesomeIcon icon={solidUser} className="rounded me-2"/>
+          </div>
           <span>@{user.username}</span>
           <div className={styles.logout} onClick={handleClick}>Log out</div>
         </div>

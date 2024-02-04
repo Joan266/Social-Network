@@ -1,20 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useAuthContext } from '../hooks/useAuthContext';
-import { faSearch as solidLens } from '@fortawesome/free-solid-svg-icons';
+import { faSearch as solidLens, faTimes as faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useSearch } from '../hooks/useSearch.js';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import styles from './SearchBar.module.scss';
 
 const SearchBar = () => {
-  const { user } = useAuthContext();
-  const [searchQuery, setSearchQuery] = useState('');
+  const { searchQuery, setSearchQuery, searchResults, clearSearch } = useSearch();
   const [selected, setSelected] = useState(false);
-  const [searchResults, setSearchResults] = useState(['Result 1', 'Result 2', 'Result 3']);
   const searchBarRef = useRef(null);
-
-  const handleSearch = () => {
-    const dummyResults = ['Result A', 'Result B', 'Result C'];
-    setSearchResults(dummyResults);
-  };
+  const navigate = useNavigate(); // Create a navigate function
 
   const handleClick = () => {
     setSelected(true);
@@ -24,6 +19,10 @@ const SearchBar = () => {
     if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
       setSelected(false);
     }
+  };
+
+  const handleUserInfoClick = (username) => {
+    navigate(`/${username}`);
   };
 
   useEffect(() => {
@@ -36,7 +35,7 @@ const SearchBar = () => {
   return (
     <div className={styles.searchBar} onClick={handleClick} ref={searchBarRef}>
       <div className={styles.formContainer}>
-        <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+        <form>
           <div className={styles.searchInputContainer}>
             <FontAwesomeIcon icon={solidLens} />
             <input
@@ -45,17 +44,36 @@ const SearchBar = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+            {searchQuery !== "" && (
+              <FontAwesomeIcon
+                className={styles.cancelSearch}
+                onClick={clearSearch}
+                icon={faXmark}
+              />
+            )}
           </div>
         </form>
       </div>
-      {searchResults.length > 0 && selected && (
+      {selected && (
         <div className={styles.searchResultsContainer}>
-          <h3>Search Results:</h3>
-          <ul>
-            {searchResults.map((result, index) => (
-              <li key={index}>{result}</li>
-            ))}
-          </ul>
+          {searchResults.length > 0 ? (
+            <>
+              {searchResults.map((user) => (
+                <div
+                  className={styles.userInfoContainer}
+                  onClick={() => handleUserInfoClick(user.username)} // Change here
+                  key={user.username}
+                >
+                  <div className={styles.profilePic}></div>
+                  <span>@{user.username}</span>
+                </div>
+              ))}
+            </>
+          ) : (
+            <div className={styles.emptySearchResultsContainer}>
+              Try searching for people, emails, or keywords
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -63,3 +81,5 @@ const SearchBar = () => {
 };
 
 export default SearchBar;
+
+
