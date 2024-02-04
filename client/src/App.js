@@ -44,6 +44,7 @@ function App() {
             path="/" 
             element={user ? <Navigate to="/home" /> : <Navigate to="/signup" />} 
           />
+          <Route path="/:username" element={user ? <PrincipalLayout><Profile /></PrincipalLayout> : <Navigate to="/login" />} />
           <Route 
             path="/home" 
             element={!user ? <Navigate to="/login" /> :  <PrincipalLayout><Home /></PrincipalLayout>} 

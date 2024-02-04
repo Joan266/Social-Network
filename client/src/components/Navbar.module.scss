@@ -3,7 +3,7 @@
 .container {
   display: flex;
   justify-content: space-between;
-  width: 257px; 
+  width: 257px;
   float: right;
   padding: 20px;
   flex-direction: column;
@@ -13,37 +13,42 @@
     display: flex;
     flex-direction: column;
     align-items: left;
+
     .logo {
       h1 {
         margin: 0;
       }
       height: 25px;
     }
+
     nav {
       display: flex;
       flex-direction: column;
       align-items: center;
-    
+
       .linkContainer {
-        display:flex;
+        display: flex;
         justify-content: left;
         width: 100%;
+
         a {
           color: #333;
           border-radius: 25px;
           text-decoration: none;
           padding: 10px 20px;
           margin: 5px 0;
-          transition: color 0.3s ease;
+          transition: color 0.3s ease, background-color 0.3s ease; /* Added transition */
           svg {
             margin-right: 15px;
           }
+
           &:hover {
-            background-color: rgb(237, 236, 236);
+            background-color: whitesmoke;
           }
         }
       }
     }
+
     .postButton {
       background-color: var(--button-background);
       color: var(--button-text-color);
@@ -55,23 +60,25 @@
       width: 75%;
       min-width: 80px;
       min-height: 55px;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease; /* Added transition */
       font-size: 0.9rem;
       font-weight: 500;
-    
+
       &:hover {
         background-color: var(--button-hover-background);
       }
     }
-    
   }
+
   .accountMenu {
     display: flex;
     padding: 15px;
     border-radius: 25px;
+
     &:hover {
       background-color: whitesmoke;
     }
+
     .container {
       padding: 0;
       display: flex;
@@ -81,17 +88,19 @@
       justify-content: space-between;
       text-align: center;
       font-size: 0.8rem;
-      
+      cursor: pointer;
       .profilePic {
-        width: 40px;
-        height: 40px;
-        background-color: #ccc; /* Example background color */
+        background-color: #ccc;
         border-radius: 50%;
         display: flex;
+        color: white;
+        padding: 10px;
+        font-size: 1.1rem;
       }
+
       .logout {
         text-decoration: underline;
-        cursor: pointer;
+
         &:hover {
           color: var(--link-hover-color);
         }

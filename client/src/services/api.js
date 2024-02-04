@@ -1,5 +1,4 @@
 import axios from "axios";
-
 const { REACT_APP_PORT } = process.env;
 
 if (!REACT_APP_PORT) {
@@ -12,7 +11,6 @@ const http = axios.create({
     baseURL: URL,
     headers: { 'Content-Type': 'application/json' },
 });
-
 export class ApiRouter {
     static async signup(data) {
         try {
@@ -30,6 +28,21 @@ export class ApiRouter {
         } catch ({response}) {
             console.log("Error logging in:", response.data);
             return response.data;
+        }
+    }
+    static async searchUser(query, headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+
+            const response = await auth.get("/user/search", {
+                params: { query },
+            });
+            return response.data;
+        } catch (error) {
+            console.log("Error searching user:", error);
         }
     }
 }

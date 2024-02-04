@@ -41,5 +41,26 @@ module.exports = userController =  {
         message: error.message,
       })
     }
-  }
+  },
+
+  searchUser: async (req, res) => {
+    try {
+      const { query } = req.query;
+
+      // Use Mongoose to search for users
+      const users = await User.find({
+        $or: [
+          { username: { $regex: new RegExp(query, 'i') } },
+          { email: { $regex: new RegExp(query, 'i') } },
+        ],
+      })
+        .select('_id username')
+        .limit(10)
+
+      res.status(200).json(users);
+    } catch (error) {
+      console.error("Error searching for users:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
 };
