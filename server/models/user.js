@@ -15,22 +15,53 @@ function isUsername(username) {
 
 const Schema = mongoose.Schema
 
-const userSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true
+const userSchema = new Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    password: {
+      type: String,
+      required: true
+    },
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    privacyStatus: {
+      type:Boolean,
+      default:false,
+    },
+    followers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        unique: true 
+      }
+    ],
+    following: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        unique: true 
+      }
+    ],
+    followersCount: {
+      type: Number,
+      default: 0
+    },
+    followingCount: {
+      type: Number,
+      default: 0
+    }
   },
-  password: {
-    type: String,
-    required: true
-  },
-  username: {
-    type: String,
-    required: true,
-    unique:true,
+  {
+    timestamps: { createdAt: true, updatedAt: false }
   }
-})
+);
 
 userSchema.statics.signup = async function ({ email, password, username }) {
   if (!email || !password || !username) {

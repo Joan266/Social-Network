@@ -61,4 +61,46 @@ export class ApiRouter {
             return response.data;
         }
     }
+    static async followUser(data, headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+
+            const response = await auth.put("/user/follow", data);
+            return response.data;
+        } catch ({response}) {
+            console.log("Error following user:", response.data);
+            return response.data;
+        }
+    }
+    static async unfollowUser(data, headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+
+            const response = await auth.put("/user/unfollow", data);
+            return response.data;
+        } catch ({response}) {
+            console.log("Error unfollowing user:", response.data);
+            return response.data;
+        }
+    }
+    static async updatePrivacyStatus(data, headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+
+            const response = await auth.put("/user/updateprivacystatus", data);
+            return response.data;
+        } catch ({response}) {
+            console.log("Error updating privacy settings:", response.data);
+            return response.data;
+        }
+    }
 }
