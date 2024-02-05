@@ -45,4 +45,20 @@ export class ApiRouter {
             console.log("Error searching user:", error);
         }
     }
+    static async getUser(query, headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+
+            const response = await auth.get("/user/get", {
+                params: { query },
+            });
+            return response.data;
+        } catch ({response}) {
+            console.log("Error user not found:", response.data);
+            return response.data;
+        }
+    }
 }

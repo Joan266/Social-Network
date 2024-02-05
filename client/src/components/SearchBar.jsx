@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import styles from './SearchBar.module.scss';
 
 const SearchBar = () => {
-  const { searchQuery, setSearchQuery, searchResults, clearSearch } = useSearch();
+  const { searchQuery, setSearchQuery, searchResults, clearSearch, isLoading } = useSearch();
   const [selected, setSelected] = useState(false);
   const searchBarRef = useRef(null);
   const navigate = useNavigate(); // Create a navigate function
@@ -44,13 +44,13 @@ const SearchBar = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            {searchQuery !== "" && (
+            {searchQuery !== "" && selected ? (
               <FontAwesomeIcon
                 className={styles.cancelSearch}
                 onClick={clearSearch}
                 icon={faXmark}
               />
-            )}
+            ): ""}
           </div>
         </form>
       </div>
@@ -71,7 +71,9 @@ const SearchBar = () => {
             </>
           ) : (
             <div className={styles.emptySearchResultsContainer}>
-              Try searching for people, emails, or keywords
+              {!isLoading && searchQuery === "" ? (
+                <p>Try searching for people, emails, or keywords</p>
+              ) : null}
             </div>
           )}
         </div>
