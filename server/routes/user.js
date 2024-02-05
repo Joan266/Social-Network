@@ -13,4 +13,7 @@ router.post('/login', userController.loginUser)
 // search user route
 router.get('/search', requireAuth, userController.searchUser);
 
+// get user route
+router.get('/get', requireAuth, userController.getUser);
+
 module.exports = router

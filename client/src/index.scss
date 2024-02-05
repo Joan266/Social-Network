@@ -122,6 +122,7 @@ body {
     .container {
      width: 1050px;
      display: flex;
+     justify-content: space-between;
       .dashboard {
         width: 600px;
       }

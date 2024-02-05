@@ -54,12 +54,29 @@ module.exports = userController =  {
           { email: { $regex: new RegExp(query, 'i') } },
         ],
       })
-        .select('_id username')
+        .select('-_id -__v -password')
         .limit(10)
 
       res.status(200).json(users);
     } catch (error) {
       console.error("Error searching for users:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
+  getUser: async (req, res) => {
+    try {
+      const { query } = req.query;
+
+      // Use Mongoose to search for users
+      const user = await User.findOne({ username: query }).select('-_id -__v -password');
+
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res.status(404).json({ error: "User not found" });
+      }
+    } catch (error) {
+      console.error("Error getting user:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
