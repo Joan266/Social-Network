@@ -17,6 +17,7 @@ const Schema = mongoose.Schema
 
 const userSchema = new Schema(
   {
+    _id: Schema.Types.ObjectId,
     email: {
       type: String,
       required: true,
@@ -39,14 +40,12 @@ const userSchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        unique: true 
       }
     ],
     following: [
       {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        unique: true 
       }
     ],
     followersCount: {
@@ -90,7 +89,7 @@ userSchema.statics.signup = async function ({ email, password, username }) {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
-  const user = await this.create({ email, password: hash, username });
+  const user = await this.create({_id: new mongoose.Types.ObjectId(), email, password: hash, username });
 
   return user;
 };

@@ -14,7 +14,10 @@ router.post('/login', userController.loginUser)
 router.get('/search', requireAuth, userController.searchUser);
 
 // get user route
-router.get('/get', requireAuth, userController.fetchUserData);
+router.get('/fetchdata', requireAuth, userController.fetchUserData);
+
+// unfollow user route
+router.post('/isfollowing', requireAuth, userController.isFollowingUser);
 
 // Update privacy status user route
 router.put('/updateprivacystatus', requireAuth, userController.updatePrivacyStatus);

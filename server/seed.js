@@ -18,6 +18,10 @@ configDB();
 
 const seedUsers = async () => {
   try {
+    // Delete all existing users
+    await User.deleteMany({});
+    console.log('All existing users deleted.');
+
     let count = 0;
     for (let i = 1; i <= 200; i++) {
       const casual_email = casual.email;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ApiRouter } from '../services/api';
+import { userApi } from '../services/api';
 import { useAuthContext } from './useAuthContext';
 
 export const useSearch = () => {
@@ -24,7 +24,7 @@ export const useSearch = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${user.token}`,
         };
-        const data = await ApiRouter.searchUser(query, headers);
+        const data = await userApi.searchUser(query, headers);
         return data;
       } catch (error) {
         console.log("Error searching for users:", error);

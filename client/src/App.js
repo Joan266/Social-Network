@@ -6,11 +6,11 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Profile from './pages/Profile'
-import Search from './pages/Search'
 import Post from './pages/Post'
 import Notifications from './pages/Notifications'
 import Navbar from './components/Navbar'
 import SearchBar from './components/SearchBar'
+
 const PrincipalLayout = ({ children }) => (
   <div className='mainlayout'>
     <div className='header'>
@@ -62,10 +62,6 @@ function App() {
           <Route 
             path="/profile" 
             element={!user ? <Navigate to="/login" /> : <PrincipalLayout><Profile /></PrincipalLayout>} 
-          />
-          <Route 
-            path="/search" 
-            element={!user ? <Navigate to="/login" /> : <PrincipalLayout><Search /></PrincipalLayout>} 
           />
           <Route 
             path="/notifications" 

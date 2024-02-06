@@ -11,7 +11,19 @@ const http = axios.create({
     baseURL: URL,
     headers: { 'Content-Type': 'application/json' },
 });
-export class ApiRouter {
+
+export class postApi {
+    static async create(data) {
+        try {
+            const response = await http.post("/post/create", data);
+            return response.data; 
+        } catch ({response}) {
+            console.log("Error signing up:", response.data);
+            return response.data;
+        }
+    }
+}
+export class userApi {
     static async signup(data) {
         try {
             const response = await http.post("/user/signup", data);

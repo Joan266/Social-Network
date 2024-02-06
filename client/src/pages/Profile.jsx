@@ -5,47 +5,16 @@ import { faLock, faUnlock,faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Profile.module.scss';
 import useFetchUserData from '../hooks/useFetchProfileData';
-import { Spinner } from 'react-bootstrap';
 
 const Profile = () => {
   const { username } = useParams();
   const { userData, loading, isUserFollowed, isUserProfile, handleFollowToggle, handlePrivacyStatus } = useFetchUserData(username);
   const [followHover, setFollowHover] = useState(false);
 
+  if(!userData || loading) return;
 
-  if(!userData || loading) {
-    return(
-      <div className={styles.profileContainer}>
-        <div className={styles.userContainer}>
-          <div className={styles.banner}></div>  
-          <div className={styles.body}>
-            <Spinner
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-            variant="light"
-          />
-          </div>
-        </div>
-        <div className={styles.nav}></div>
-        <div className={styles.sectionContainer}>
-
-        </div>
-      </div>
-    )
-  }
   return (
     <div className={styles.profileContainer}>
-      <Spinner
-      as="span"
-      animation="border"
-      size="sm"
-      role="status"
-      aria-hidden="true"
-      variant="light"
-    />
       <div className={styles.userContainer}>
         <div className={styles.banner}></div>  
         <div className={styles.body}>
@@ -73,7 +42,7 @@ const Profile = () => {
             Hola me llamo Joan, soy de España y soy programador web.
           </div> */}
           <div className={styles.data}>
-           <FontAwesomeIcon icon={faCalendarDays} /> Joined January 2017
+           <FontAwesomeIcon icon={faCalendarDays} /> {userData.createdAt}
           </div>
           <div className={styles.following}>
             <span>{userData.followingCount}</span> Following <span>{userData.followersCount}</span> Followers
