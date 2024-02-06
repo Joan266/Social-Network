@@ -80,6 +80,23 @@ module.exports = userController =  {
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
+  isFollowingUser: async (req, res) => {
+    try {
+      const { userId, profileUsername } = req.body;
+      
+      // Use Mongoose to search for user
+      const isFollowing = await User.findOne({ username: profileUsername, followers: userId });
+
+      if (isFollowing) {
+        res.status(200).json(true);
+      } else {
+        res.status(200).json(false);
+      }
+    } catch (error) {
+      console.error("Error getting user:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
   updatePrivacyStatus: async (req, res) => {
     try {
       const { privacyStatus, username } = req.body;
@@ -99,45 +116,46 @@ module.exports = userController =  {
   },
   followUser: async (req, res) => {
     try {
-        const { followerId, followedUsername } = req.body;
+      const { followerId, followedUsername } = req.body;
 
-        // Use Mongoose to search for user
-        const user = await User.findOneAndUpdate(
-            { username: followedUsername },
-            { $push: { followers: followerId }, $inc: { followersCount: 1 } },
-            { new: true }
-        );
-
-        if (user) {
-            res.status(200).json();
-        } else {
-            res.status(404).json({ error: "User not found" });
-        }
+      // Use Mongoose to search for user
+      const user = await User.findOneAndUpdate(
+        { username: followedUsername },
+        { $push: { followers: followerId }, $inc: { followersCount: 1 } },
+        { new: true }
+      );
+      
+      if (user) {
+        console.log(user);
+        res.status(200).json();
+      } else {
+        res.status(404).json({ error: "User not found" });
+      }
     } catch (error) {
-        console.error("Error following user:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+      console.error("Error following user:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
   },
 
   unfollowUser: async (req, res) => {
     try {
-        const { followerId, followedUsername } = req.body;
+      const { followerId, followedUsername } = req.body;
 
-        // Use Mongoose to search for user
-        const user = await User.findOneAndUpdate(
-            { username: followedUsername },
-            { $pull: { followers: followerId }, $inc: { followersCount: -1 } },
-            { new: true }
-        );
-
-        if (user) {
-            res.status(200).json();
-        } else {
-            res.status(404).json({ error: "User not found" });
-        }
+      // Use Mongoose to search for user
+      const user = await User.findOneAndUpdate(
+        { username: followedUsername },
+        { $pull: { followers: followerId }, $inc: { followersCount: -1 } },
+        { new: true }
+      );
+      if (user) {
+        console.log(user);
+        res.status(200).json();
+      } else {
+        res.status(404).json({ error: "User not found" });
+      }
     } catch (error) {
-        console.error("Error unfollowing user:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+      console.error("Error unfollowing user:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
   },
 };

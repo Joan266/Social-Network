@@ -9,11 +9,7 @@ const SearchBar = () => {
   const { searchQuery, setSearchQuery, searchResults, clearSearch, isLoading } = useSearch();
   const [selected, setSelected] = useState(false);
   const searchBarRef = useRef(null);
-  const navigate = useNavigate(); // Create a navigate function
-
-  const handleClick = () => {
-    setSelected(true);
-  };
+  const navigate = useNavigate(); 
 
   const handleClickOutside = (event) => {
     if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
@@ -22,9 +18,13 @@ const SearchBar = () => {
   };
 
   const handleUserInfoClick = (username) => {
-    navigate(`/${username}`);
-  };
-
+    clearSearch(); 
+    setSelected(false); 
+    navigate(`/${username}`); 
+};
+  useEffect(()=>{
+    console.log(selected)
+  },[selected])
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -33,7 +33,7 @@ const SearchBar = () => {
   }, []);
 
   return (
-    <div className={styles.searchBar} onClick={handleClick} ref={searchBarRef}>
+    <div className={styles.searchBar}  ref={searchBarRef}>
       <div className={styles.formContainer}>
         <form>
           <div className={styles.searchInputContainer}>
@@ -42,6 +42,7 @@ const SearchBar = () => {
               type="text"
               placeholder="Search..."
               value={searchQuery}
+              onClick={()=>setSelected(true)}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             {searchQuery !== "" && selected ? (

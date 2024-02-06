@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
-import { ApiRouter } from '../services/api' 
+import { userApi } from '../services/api' 
 export const useSignup = () => {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -10,7 +10,7 @@ export const useSignup = () => {
     setIsLoading(true)
     setError(null)
 
-    const response = await ApiRouter.signup({email, password, username});
+    const response = await userApi.signup({email, password, username});
     if (response.error) {
       setIsLoading(false)
       setError(response.message)

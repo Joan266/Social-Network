@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
-import { ApiRouter } from '../services/api' 
+import { userApi } from '../services/api' 
 
 export const useLogin = () => {
   const [error, setError] = useState(null)
-  const [isLoading, setIsLoading] = useState(null)
+  const [isLoading, setIsLoading] = useState(false)
   const { dispatch } = useAuthContext()
 
   const login = async (emailOrUsername, password) => {
     setIsLoading(true)
     setError(null)
 
-    const response = await ApiRouter.login({emailOrUsername, password});
+    const response = await userApi.login({emailOrUsername, password});
 
     if (response.error) {
       setIsLoading(false)

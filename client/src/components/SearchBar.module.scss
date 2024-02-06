@@ -9,7 +9,6 @@
     background-color: whitesmoke;
     padding: 10px 15px;
     border-radius: 25px;
-
     .searchInputContainer {
       display: flex;
       align-items: center;
@@ -24,7 +23,7 @@
 
         &:hover {
           color: #007bff;
-          transition: color 0.3s ease; // Added transition
+          transition: color 0.3s ease; 
         }
       }
 
@@ -32,15 +31,12 @@
         margin-left: 18px;
         margin-right: 18px;
         display: flex;
-        padding: 5px;
+        padding: 4px;
         border: none;
-        border-radius: 3px;
         background-color: transparent;
-        justify-content: left;
-
+ 
         &:focus {
           outline: none;
-          border-color: #007bff; // Adjust the color as needed
         }
       }
     }

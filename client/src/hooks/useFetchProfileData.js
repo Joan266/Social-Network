@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ApiRouter } from '../services/api';
+import { userApi } from '../services/api';
 import { useAuthContext } from '../hooks/useAuthContext';
 
 const useFetchUserData = (username) => {
@@ -13,8 +13,8 @@ const useFetchUserData = (username) => {
     const headers = getHeaders();
     try {
       const response = await (isUserFollowed
-        ? ApiRouter.unfollowUser({ followerId: user._id, followedUsername: username }, headers)
-        : ApiRouter.followUser({ followerId: user._id, followedUsername: username }, headers));
+        ? userApi.unfollowUser({ followerId: user._id, followedUsername: username }, headers)
+        : userApi.followUser({ followerId: user._id, followedUsername: username }, headers));
 
       if (response.error) {
         console.log(response.error);
@@ -34,7 +34,7 @@ const useFetchUserData = (username) => {
   const handlePrivacyStatus = async () => {
     const headers = getHeaders();
     try {
-      const response = await ApiRouter.updatePrivacyStatus({ privacyStatus: !userData.privacyStatus, username }, headers);
+      const response = await userApi.updatePrivacyStatus({ privacyStatus: !userData.privacyStatus, username }, headers);
       if (response.error) {
         console.log(response.error);
         return;
@@ -62,14 +62,14 @@ const useFetchUserData = (username) => {
         setLoading(true);
 
         // Fetch user data
-        const userDataResponse = await ApiRouter.fetchUserData(username, headers);
+        const userDataResponse = await userApi.fetchUserData(username, headers);
 
         setUserData(userDataResponse);
 
         // Check if the logged-in user is following this user
         if (username !== user.username) {
-          const isFollowingResponse = await ApiRouter.isFollowing({ userId: user._id, profileUsername: username }, headers);
-          setIsUserFollowed(!isFollowingResponse.error);
+          const isFollowingResponse = await userApi.isFollowing({ userId: user._id, profileUsername: username }, headers);
+          setIsUserFollowed(isFollowingResponse);
         }
 
         
