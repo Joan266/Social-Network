@@ -45,14 +45,14 @@ export class ApiRouter {
             console.log("Error searching user:", error);
         }
     }
-    static async getUser(query, headers) {
+    static async fetchUserData(query, headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
                 headers,
             });
 
-            const response = await auth.get("/user/get", {
+            const response = await auth.get("/user/fetchdata", {
                 params: { query },
             });
             return response.data;
@@ -100,6 +100,20 @@ export class ApiRouter {
             return response.data;
         } catch ({response}) {
             console.log("Error updating privacy settings:", response.data);
+            return response.data;
+        }
+    }
+    static async isFollowing(data, headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+            console.log(data);
+            const response = await auth.post("/user/isfollowing", data);
+            return response.data;
+        } catch ({response}) {
+            console.log("Error checking if user profile is being followed by user:", response.data);
             return response.data;
         }
     }
