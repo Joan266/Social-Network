@@ -5,13 +5,18 @@ import { faLock, faUnlock,faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Profile.module.scss';
 import useFetchUserData from '../hooks/useFetchProfileData';
+import useFetchUserPosts from '../hooks/useFetchUserPosts';
+import PostDetails from '../components/PostDetails';
+import { usePostsContext } from '../hooks/usePostsContext';
 
 // date 
 import {formatDate} from '../utils/useFormatDate';
 
 const Profile = () => {
+  const {posts} = usePostsContext();
   const { username } = useParams();
   const { userData, loading, isUserFollowed, isUserProfile, handleFollowToggle, handlePrivacyStatus } = useFetchUserData(username);
+  const  { userPosts } = useFetchUserPosts(username);
   const [followHover, setFollowHover] = useState(false);
   const date = formatDate(userData.createdAt);
   if(!userData || loading) return;
@@ -45,17 +50,22 @@ const Profile = () => {
             Hola me llamo Joan, soy de España y soy programador web.
           </div> */}
           <div className={styles.data}>
-           <FontAwesomeIcon icon={faCalendarDays} />  <p>{date}</p>
-     
+           <FontAwesomeIcon icon={faCalendarDays} /> {date}
           </div>
           <div className={styles.following}>
             <span>{userData.followingCount}</span> Following <span>{userData.followersCount}</span> Followers
           </div>
         </div>
       </div>
-      <div className={styles.nav}></div>
-      <div className={styles.sectionContainer}>
-
+      <div className={styles.navContainer}>
+        <div className={styles.posts}>
+          Posts
+        </div>
+      </div>
+      <div className={styles.postsContainer}>
+        {userPosts && userPosts.map((_id) => (
+          <PostDetails key={_id} postId={_id} />
+        ))}
       </div>
     </div>
   );

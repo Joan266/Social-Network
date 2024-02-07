@@ -116,5 +116,15 @@
       }
     }
   }
-
+  .navContainer {
+    font-size: 17px;
+    height: 58px;
+    .posts{
+      color:#0f1419
+    }
+  }
+  .postsContainers{
+    display: flex;
+    flex-direction: column;
+  }
 }
