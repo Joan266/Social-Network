@@ -6,12 +6,12 @@ import { faUser, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const PostForm = ({setIsPostFormVisible}) => {
   const { createPost, isLoading } = usePost();
-  const [text, setText] = useState('')
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if(isLoading || text.trim() === "")return;
-    createPost(text)
-    setText("")
+  const [content, setContent] = useState('')
+  const handlePostSubmit = async () => {
+    if(isLoading || content.trim() === "")return;
+    createPost(content)
+    setContent("")
+    setIsPostFormVisible(false)
   }
    
   return (
@@ -32,16 +32,16 @@ const PostForm = ({setIsPostFormVisible}) => {
             <div className={styles.inputContainer}>
               <textarea 
                 rows="7" cols="50"
-                maxlength="251"
+                maxLength="251"
                 type="text"
-                onChange={(e) => setText(e.target.value)}
-                value={text}
+                onChange={(e) => setContent(e.target.value)}
+                value={content}
                 placeholder="What is happening?!"
               />
             </div>
           </div>
           <div className={styles.postButtonContainer}>
-            <button disabled={text.trim() === ""}>Post</button>
+            <button disabled={content.trim() === ""} onClick={handlePostSubmit}>Post</button>
           </div>
         </div>
       </div>
