@@ -13,13 +13,16 @@ const http = axios.create({
 });
 
 export class postApi {
-    static async create(data) {
+    static async create(data,headers) {
         try {
-            const response = await http.post("/post/create", data);
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+            const response = await auth.post("/post/create", data);
             return response.data; 
         } catch ({response}) {
-            console.log("Error signing up:", response.data);
-            return response.data;
+            console.log("Error creating post:", response.error);
         }
     }
 }

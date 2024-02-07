@@ -5,6 +5,7 @@ const {createServer} = require('http');
 const { MONGODB_URI, PORT } = require('./dotenv.js');
 
 const userRoutes = require('./routes/user')
+const postRoutes = require('./routes/post')
 
 const configExpress = async () => {
   const app = express();
@@ -22,6 +23,7 @@ const configExpress = async () => {
 
   //routes
   app.use('/api/user', userRoutes)
+  app.use('/api/post', postRoutes)
 
   const httpServer = createServer(app);
 

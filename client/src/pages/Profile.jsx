@@ -6,11 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Profile.module.scss';
 import useFetchUserData from '../hooks/useFetchProfileData';
 
+// date 
+import {formatDate} from '../utils/useFormatDate';
+
 const Profile = () => {
   const { username } = useParams();
   const { userData, loading, isUserFollowed, isUserProfile, handleFollowToggle, handlePrivacyStatus } = useFetchUserData(username);
   const [followHover, setFollowHover] = useState(false);
-
+  const date = formatDate(userData.createdAt);
   if(!userData || loading) return;
 
   return (
@@ -42,7 +45,8 @@ const Profile = () => {
             Hola me llamo Joan, soy de España y soy programador web.
           </div> */}
           <div className={styles.data}>
-           <FontAwesomeIcon icon={faCalendarDays} /> {userData.createdAt}
+           <FontAwesomeIcon icon={faCalendarDays} />  <p>{date}</p>
+     
           </div>
           <div className={styles.following}>
             <span>{userData.followingCount}</span> Following <span>{userData.followersCount}</span> Followers
