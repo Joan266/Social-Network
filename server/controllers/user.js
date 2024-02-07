@@ -80,6 +80,23 @@ module.exports = userController =  {
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
+  fetchUserPosts: async (req, res) => {
+    try {
+      const { query } = req.query;
+
+      // Use Mongoose to search for user
+      const user = await User.findOne({ username: query }).select('posts');
+      console.log(user.posts);
+      if (user) {
+        res.status(200).json(user.posts);
+      } else {
+        res.status(404).json({ error: "User posts not found" });
+      }
+    } catch (error) {
+      console.error("Error getting user posts:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  },
   isFollowingUser: async (req, res) => {
     try {
       const { userId, profileUsername } = req.body;

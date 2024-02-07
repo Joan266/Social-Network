@@ -7,4 +7,7 @@ const router = express.Router()
 // create post route
 router.post('/create', requireAuth, postController.create);
 
+// get post data route
+router.get('/fetchdata', requireAuth, postController.fetchPostData);
+
 module.exports = router

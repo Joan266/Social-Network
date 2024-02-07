@@ -13,8 +13,11 @@ router.post('/login', userController.loginUser)
 // search user route
 router.get('/search', requireAuth, userController.searchUser);
 
-// get user route
+// get user data route
 router.get('/fetchdata', requireAuth, userController.fetchUserData);
+
+// get user posts route
+router.get('/fetchposts', requireAuth, userController.fetchUserPosts);
 
 // unfollow user route
 router.post('/isfollowing', requireAuth, userController.isFollowingUser);

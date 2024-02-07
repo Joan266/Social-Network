@@ -7,18 +7,15 @@ module.exports = postController =  {
     const {content, userId} = req.body
     console.log(req.body)
     try {
-      const user = await User.findById(userId).select('username');
-      const post = await Post.create({ _id: new mongoose.Types.ObjectId(), content, user:userId});
-      const postData = {
-        username: user.username,
-        content: post.content, 
-        likesCount: post.likesCount, 
-        _id: post._id,
-        createdAt:post.createdAt,
-      };
+      const post = await Post.create({ _id: new mongoose.Types.ObjectId(), content});
+      await User.findByIdAndUpdate(
+        userId,
+        { $push: { posts: post._id } }
+      );
+      post.user = userId;
+      await post.save();
       if(post){
-        console.log(`newPost: ${post}, user:${user}`)
-        res.status(200).json(postData)
+        res.status(200).json(post._id)
       }else {
         console.log(`Post create operation failed`)
         res.status(404).json({ error: "Post create operation failed" })
@@ -30,4 +27,26 @@ module.exports = postController =  {
       })
     }
   },
+  fetchPostData: async (req, res) => {
+    try {
+      const { query } = req.query;
+
+      // Use Mongoose to search for post
+      const post = await Post.findOne({ _id: query })
+      .select('-likes -_id -__v')
+      .populate({ path: 'user', select: 'username -_id' })
+      .exec()
+      const { user, ...rest } = post.toObject(); 
+      const modifiedPost = { ...rest, ...user };
+      console.log(modifiedPost)
+      if (modifiedPost) {
+        res.status(200).json(modifiedPost);
+      } else {
+        res.status(404).json({ error: "Post not found" });
+      }
+    } catch (error) {
+      console.error("Error getting user:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
 }

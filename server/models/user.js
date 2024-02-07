@@ -55,7 +55,13 @@ const userSchema = new Schema(
     followingCount: {
       type: Number,
       default: 0
-    }
+    },
+    posts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Post',
+      }
+    ],
   },
   {
     timestamps: { createdAt: true, updatedAt: false }

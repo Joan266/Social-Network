@@ -32,7 +32,7 @@ const PostForm = ({setIsPostFormVisible}) => {
             <div className={styles.inputContainer}>
               <textarea 
                 rows="7" cols="50"
-                maxLength="251"
+                maxLength="252"
                 type="text"
                 onChange={(e) => setContent(e.target.value)}
                 value={content}

@@ -1,25 +1,13 @@
-import { usePostsContext } from "../hooks/usePostsContext"
-import { useAuthContext } from "../hooks/useAuthContext"
-import { postApi } from "../services/api"
 import styles from './PostDetails.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faXmark, faBan, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as regularHeart, faComment } from '@fortawesome/free-regular-svg-icons';
 import { timeSince } from "../utils/useTimeSinceString";
-const PostDetails = ({post}) => {
-  const {username,_id,content,likesCount ,createdAt} = post;
-  const { dispatch } = usePostsContext()
-  const { user } = useAuthContext()
-  const handleClick = async () => {
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${user.token}`,
-    };
-    const response = await postApi.delete({postId:_id}, headers)
-    if (response) {
-      dispatch({type: 'DELETE_WORKOUT', payload: response})
-    }
-  }
+import useFetchPostData from "../hooks/useFetchPostData";
 
+const PostDetails = ({postId}) => {
+  const { postData, isLoading } = useFetchPostData(postId);
+  if(isLoading || !postData)return "";
   return (
     <div className={styles.postDetailsContainer}>
       <div className={styles.profilePicContainer}>
@@ -30,23 +18,25 @@ const PostDetails = ({post}) => {
       <div className={styles.body}>
         <div className={styles.header}>
           <div className={styles.name}>
-           {username}
+           {postData.username}
           </div>
           <div className={styles.username}>
-          @{username}
+          @{postData.username}
           </div>
           <div className={styles.dote}>
             ·
           </div>
           <div className={styles.date}>
-            {timeSince(createdAt)}
+            {timeSince(postData.createdAt)}
           </div>
+          <FontAwesomeIcon icon={faBan} className="rounded me-2"/>
         </div>
         <div className={styles.content}>
-          {content}
+          {postData.content}
         </div>
         <div className={styles.settings}>
-
+          <FontAwesomeIcon icon={faComment} className="rounded me-2"/>
+          <FontAwesomeIcon icon={regularHeart} className="rounded me-2"/>
         </div>
       </div>
     </div>
