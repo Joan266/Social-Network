@@ -5,6 +5,11 @@ const Schema = mongoose.Schema
 const postSchema = new Schema(
   {
     _id: Schema.Types.ObjectId,
+    reply: {
+      _id : {type: Schema.Types.ObjectId,
+      ref: 'Post',},
+      username: { type: String },
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -22,7 +27,17 @@ const postSchema = new Schema(
     likesCount: {
       type: Number,
       default:0,
-    }
+    },
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Post',
+      }
+    ],
+    commentsCount: {
+      type: Number,
+      default:0,
+    },
   },
   {
     timestamps: { createdAt: true, updatedAt: false }

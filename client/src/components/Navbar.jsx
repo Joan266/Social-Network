@@ -34,7 +34,7 @@ const Navbar = () => {
           </div>
         </nav>
         <button className={styles.postButton} onClick={()=>setIsPostFormVisible(true)}>Post</button>
-         {isPostFormVisible && <PostForm setIsPostFormVisible={setIsPostFormVisible} />}
+        {isPostFormVisible && <PostForm setIsPostFormVisible={setIsPostFormVisible} postCommentData={false} />}
       </div>
       <div className={styles.accountMenu}>
         <div className={styles.container}>

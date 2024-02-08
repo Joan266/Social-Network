@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react';
-import { userApi } from '../services/api';
+import { postApi } from '../services/api';
 import { useAuthContext } from './useAuthContext';
 import {usePostsContext} from './usePostsContext';
 
-const useFetchUserPosts = (username) => {
+const useFetchHomePosts = (username) => {
   const { dispatch } = usePostsContext()
   const [loading, setLoading] = useState(false);
   const { user } = useAuthContext();
   useEffect(() => {
-    const fetchUserPosts = async () => {
+    const fetchHomePosts = async () => {
       const headers = getHeaders();
       try {
         setLoading(true);
 
-        // Fetch user posts
-        const userPostsResponse = await userApi.fetchUserPosts(username, headers);
+        // Fetch home posts
+        const homePostsResponse = await postApi.fetchUserPosts(headers);
 
-        dispatch({type: 'ADD_POSTS', payload: userPostsResponse})
+        dispatch({type: 'ADD_POSTS', payload: homePostsResponse})
    
       } catch (error) {
         console.error('Error fetching user posts:', error);
@@ -25,8 +25,8 @@ const useFetchUserPosts = (username) => {
       }
     };
 
-    fetchUserPosts();
-  }, [username,dispatch]);
+    fetchHomePosts();
+  }, [dispatch]);
 
   const getHeaders = () => ({
     'Content-Type': 'application/json',
@@ -36,4 +36,4 @@ const useFetchUserPosts = (username) => {
   return { loading };
 };
 
-export default useFetchUserPosts;
+export default useFetchHomePosts;
