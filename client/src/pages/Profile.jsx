@@ -16,7 +16,7 @@ const Profile = () => {
   const {posts} = usePostsContext();
   const { username } = useParams();
   const { userData, loading, isUserFollowed, isUserProfile, handleFollowToggle, handlePrivacyStatus } = useFetchUserData(username);
-  const  { userPosts } = useFetchUserPosts(username);
+  useFetchUserPosts(username);
   const [followHover, setFollowHover] = useState(false);
   const date = formatDate(userData.createdAt);
   if(!userData || loading) return;
@@ -63,8 +63,8 @@ const Profile = () => {
         </div>
       </div>
       <div className={styles.postsContainer}>
-        {userPosts && userPosts.map((_id) => (
-          <PostDetails key={_id} postId={_id} />
+        {posts && posts.map((_id,index) => (
+          <PostDetails key={`${_id}${index}`} postId={_id} />
         ))}
       </div>
     </div>

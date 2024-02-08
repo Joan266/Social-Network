@@ -13,6 +13,20 @@ const http = axios.create({
 });
 
 export class postApi {
+    static async fetchHomePosts(headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+
+            const response = await auth.get("/post/fetchallposts");
+            return response.data;
+        } catch ({response}) {
+            console.log("Error posts not found:", response.data);
+            return response.data;
+        }
+    }
     static async fetchPostData(query, headers) {
         try {
             const auth = axios.create({
@@ -39,6 +53,48 @@ export class postApi {
             return response.data; 
         } catch ({response}) {
             console.log("Error creating post:", response.error);
+        }
+    }
+    static async likePost(data, headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+
+            const response = await auth.put("/post/like", data);
+            return response.data;
+        } catch ({response}) {
+            console.log("Error liking post:", response.data);
+            return response.data;
+        }
+    }
+    static async unlikePost(data, headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+
+            const response = await auth.put("/post/unlike", data);
+            return response.data;
+        } catch ({response}) {
+            console.log("Error unliking post:", response.data);
+            return response.data;
+        }
+    }
+    static async isLiking(data, headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+            console.log(data);
+            const response = await auth.post("/post/isliking", data);
+            return response.data;
+        } catch ({response}) {
+            console.log("Error checking if post is being liked by user:", response.data);
+            return response.data;
         }
     }
 }

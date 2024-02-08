@@ -19,7 +19,7 @@ router.get('/fetchdata', requireAuth, userController.fetchUserData);
 // get user posts route
 router.get('/fetchposts', requireAuth, userController.fetchUserPosts);
 
-// unfollow user route
+// isfolling user route
 router.post('/isfollowing', requireAuth, userController.isFollowingUser);
 
 // Update privacy status user route
@@ -30,5 +30,8 @@ router.put('/follow', requireAuth, userController.followUser);
 
 // unfollow user route
 router.put('/unfollow', requireAuth, userController.unfollowUser);
+
+// home posts
+router.get('/homeposts', requireAuth, userController.homePosts)
 
 module.exports = router

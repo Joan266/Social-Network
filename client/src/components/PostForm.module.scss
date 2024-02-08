@@ -8,16 +8,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1;
 }
 .postFormContainer {
   position: relative;
   margin-top: -25%;
   display: flex;
-  padding: 4px 18px 0 18px;
+  padding: 4px 30px 0 18px;
   width: 600px;
   border-radius: 20px;
   background-color: white;
   flex-direction: column;
+  z-index: 2;
   .header{
     display: flex;
     height: 50px;
@@ -36,39 +38,78 @@
     display: flex;
     flex-direction: column;
     .upperContainer{
-      padding-top: 4px;
       display:flex;
-      flex-direction: row;
-      .profilePic {
-        margin-right: 13px;
-        margin-top: 8px;
-        background-color: #ccc;
-        border-radius: 50%;
-        display: flex;
-        color: white;
-        font-size: 1.1rem;
-        width: 60px;
-        justify-content: center;
-        align-items: center;
-        height: 50px;
-      }
-      .inputContainer{
-        padding: 13px 0;
-        min-height: 50px;
-        height: auto;
-        display: flex;
-        textarea{
-          font-family: 'Poppins';
+      flex-direction: column;
+      .container {
+        display:flex;
+        flex-direction: row;
+        padding-top: 4px;
+        font-size: 17px;
+        color:#536471;
+        .postInfo{
           display: flex;
-          width: 537px;
-          font-size: 22px;
-          border: none;
-          overflow: hidden;
-          resize: none;
-          padding: 2px 0;
-            &:focus {
-              outline: none;
+          flex-direction: column;
+          .userInfo{
+            display: flex;
+            flex-direction: row;
+            .name{
+              display: flex;
+              align-items: center;
+              color:#0f1419;
+              align-items: center;
+              font-weight: 600;
+              margin-right: 3px;
             }
+            .username {
+              display: flex;
+              align-items: center;
+              align-items: center;
+            }
+            .dote{
+              padding: 0 4px;
+            }
+            .date {
+              display: flex;
+              align-items: center;
+            }
+          }
+          .content{
+            min-height: 50px;
+            max-width: 500px;
+            word-wrap: break-word;
+          }
+        }
+        .profilePic {
+          margin-right: 13px;
+          margin-top: 8px;
+          background-color: #ccc;
+          border-radius: 50%;
+          display: flex;
+          color: white;
+          font-size: 1.1rem;
+          width: 50px;
+          justify-content: center;
+          align-items: center;
+          height: 50px;
+        }
+        .inputContainer{
+          padding: 18px  0 13px 0;
+          min-height: 50px;
+          height: auto;
+          display: flex;
+          textarea{
+            font-family: 'Poppins';
+            display: flex;
+            width: 537px;
+            font-size: 22px;
+            border: none;
+            overflow: hidden;
+            resize: none;
+            padding: 2px 0;
+              &:focus {
+                outline: none;
+              }
+          }
         }
       }
     }
@@ -77,7 +118,7 @@
       align-items: last baseline;
       justify-content: space-between;
       height: 53px;
-      width: 98%;
+      width: 100%;
       padding-bottom: 9px;
       border-top: 1px #cccccc74 solid;
       justify-content: flex-end;

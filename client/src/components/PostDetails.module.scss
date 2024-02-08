@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: row;
   min-height: 94px;
+  cursor: pointer;
   .profilePicContainer{
     .profilePic {
       margin-right: 13px;
@@ -23,32 +24,68 @@
     width: 500px;
     display: flex;
     flex-direction: column;
-    font-size: 17px;
+    font-size: 16px;
     .header{
       height: 22px;
       width: 100%;
       display: flex;
       flex-direction: row;
-      justify-content: left;
-      color:#538471;
-      .name{
+      justify-content: space-between;
+      align-items: center;
+      color:#536471;
+      .userInfo{
         display: flex;
-        align-items: center;
-       color:#0f1419;
-       align-items: center;
-       margin-right: 3px;
+        flex-direction: row;
+        justify-content: left;
+        .name{
+          display: flex;
+          align-items: center;
+          color:#0f1419;
+          align-items: center;
+          margin-right: 3px;
+          }
+        .username {
+          display: flex;
+          align-items: center;
+          align-items: center;
+        }
+        .dote{
+          padding: 0 4px;
+        }
+        .date {
+          display: flex;
+          align-items: center;
+        }
       }
-      .username {
+      .delete{
+        cursor: pointer;
+        height: 40px;
+        width: 40px;
         display: flex;
+        justify-content: center;
         align-items: center;
-        align-items: center;
+        border-radius: 50%;
+        font-size: 14px;
+        margin-top: -5%;
+        transition: background-color 0.3s, color 0.3s;
+        &:hover{
+          background-color: rgba(255, 0, 0, 0.073);
+          color:red;
+        }
       }
-      .dote{
-        padding: 0 4px;
+    }
+    .replyInfo{
+      color:#536471;
+      margin-bottom: 2px;
+      display: flex;
+      flex-direction: row;
+      a {
+        color: #1D9BF0;
+        margin-left: 2px;
+        text-decoration: none;
       }
-      .date {
-        display: flex;
-        align-items: center;
+      a:hover{
+        text-decoration: underline;
       }
     }
     .content {
@@ -60,7 +97,53 @@
       height: 35px;
       display: flex;
       flex-direction: row;
-      justify-content: space-between;
+      justify-content: space-around;
+      color:#536471;
+      span {
+        font-size: 14px;
+      }
+      .commentContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        transition: color 0.3s;
+        &:hover{
+          color:rgb(0, 187, 255);
+        }
+        .comment {
+          height: 40px;
+          width: 40px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 50%;
+          transition: background-color 0.3s;
+          &:hover{
+            background-color: rgba(0, 187, 255, 0.149);
+          }
+        }
+      }
+      .likesContainer {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        transition: color 0.3s;
+        &:hover{
+          color:rgb(255, 0, 162);
+        }
+        .heart{
+          min-height: 40px;
+          min-width: 40px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 50%;
+          transition: background-color 0.3s;
+          &:hover{
+            background-color: rgba(255, 0, 162, 0.149);
+          }
+        }
+      }
     }
   }
 }
