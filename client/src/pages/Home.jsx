@@ -1,18 +1,16 @@
+import { useState, useEffect } from 'react';
 import styles from './Home.module.scss';
-import { usePostsContext } from '../hooks/usePostsContext';
-import PostDetails from '../components/PostDetails';
 import useFetchHomePosts from '../hooks/useFetchHomePosts';
+import PostList from '../components/PostList';
 const Home = () => {
-  const { posts } = usePostsContext();
   useFetchHomePosts();
+  // Event listener for scroll events
+  // Function to check if the user has scrolled to the bottom of the page
+
   
   return (
     <div className={styles.homeContainer}>
-      <div className={styles.postsContainer}>
-        {posts && posts.map((_id,index) => (
-          <PostDetails key={`${_id}${index}`} postId={_id} />
-        ))}
-      </div>
+      <PostList/>
     </div>
   )
 }
