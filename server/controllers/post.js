@@ -129,7 +129,6 @@ module.exports = postController =  {
           ])
           .sort({ createdAt: -1 }) // Sort posts by createdAt in descending order
           .select('_id') // Select only the _id field of the posts
-          .limit(10); 
 
         // Check if posts were found
         if (posts.length > 0) {

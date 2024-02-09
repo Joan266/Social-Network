@@ -6,14 +6,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Profile.module.scss';
 import useFetchUserData from '../hooks/useFetchProfileData';
 import useFetchUserPosts from '../hooks/useFetchUserPosts';
-import PostDetails from '../components/PostDetails';
-import { usePostsContext } from '../hooks/usePostsContext';
+import PostList from '../components/PostList';
 
 // date 
 import {formatDate} from '../utils/useFormatDate';
 
 const Profile = () => {
-  const {posts} = usePostsContext();
   const { username } = useParams();
   const { userData, loading, isUserFollowed, isUserProfile, handleFollowToggle, handlePrivacyStatus } = useFetchUserData(username);
   useFetchUserPosts(username);
@@ -62,11 +60,7 @@ const Profile = () => {
           Posts
         </div>
       </div>
-      <div className={styles.postsContainer}>
-        {posts && posts.map((_id,index) => (
-          <PostDetails key={`${_id}${index}`} postId={_id} />
-        ))}
-      </div>
+      <PostList/>
     </div>
   );
 };

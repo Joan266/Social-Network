@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { postApi } from '../services/api';
 import { useAuthContext } from '../hooks/useAuthContext';
 
-const useFetchPostData = (postId) => {
+const useFetchPostData = ({isVisible,postId}) => {
   const { user } = useAuthContext();
   const [postData, setPostData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -49,8 +49,12 @@ const useFetchPostData = (postId) => {
       }
     };
 
-    fetchPostData();
-  }, [postId, user]);
+    if(isVisible) {
+      fetchPostData()
+      return
+    };
+    setPostData({});
+  }, [postId, user, isVisible]);
 
   const getHeaders = () => ({
     'Content-Type': 'application/json',
