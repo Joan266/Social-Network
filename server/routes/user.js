@@ -31,7 +31,4 @@ router.put('/follow', requireAuth, userController.followUser);
 // unfollow user route
 router.put('/unfollow', requireAuth, userController.unfollowUser);
 
-// home posts
-router.get('/homeposts', requireAuth, userController.homePosts)
-
 module.exports = router

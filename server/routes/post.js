@@ -19,6 +19,9 @@ router.put('/unlike', requireAuth, postController.unlikePost);
 // isliking post route
 router.post('/isliking', requireAuth, postController.isLikingPost);
 
+// home posts
+router.get('/homeposts', requireAuth, postController.homePosts)
+
 
 
 module.exports = router

@@ -181,26 +181,4 @@ module.exports = userController =  {
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
-  homePosts: async (req, res) => {
-    try {
-
-      // Use Mongoose to search for post
-      const user = await User.find({ privacyStatus: false })
-        .select('posts')
-        .populate({ 
-            path: 'posts',
-            options: { sort: { createdAt: -1 } },
-            select: '_id',
-            limit:50,
-        });
-      if (user) {
-        res.status(200).json(user.posts);
-      } else {
-        res.status(404).json({ error: "User posts not found" });
-      }
-    } catch (error) {
-      console.error("Error getting home posts:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  },
 };
