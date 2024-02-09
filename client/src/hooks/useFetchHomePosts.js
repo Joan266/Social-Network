@@ -3,7 +3,7 @@ import { postApi } from '../services/api';
 import { useAuthContext } from './useAuthContext';
 import {usePostsContext} from './usePostsContext';
 
-const useFetchHomePosts = (username) => {
+const useFetchHomePosts = () => {
   const { dispatch } = usePostsContext()
   const [loading, setLoading] = useState(false);
   const { user } = useAuthContext();
@@ -14,8 +14,8 @@ const useFetchHomePosts = (username) => {
         setLoading(true);
 
         // Fetch home posts
-        const homePostsResponse = await postApi.fetchUserPosts(headers);
-
+        const homePostsResponse = await postApi.fetchHomePosts(user._id,headers);
+        console.log(`homePostsResponse: ${homePostsResponse}`)
         dispatch({type: 'ADD_POSTS', payload: homePostsResponse})
    
       } catch (error) {

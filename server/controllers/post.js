@@ -118,4 +118,32 @@ module.exports = postController =  {
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
+  homePosts: async (req, res) => {
+    try {
+        const { userId } = req.query;
+        // Use Mongoose to search for posts of users with privacyStatus set to false
+        const posts = await Post.find()
+          .or([
+              { 'user.following': userId }, // Posts from users followed by userId
+              { 'user.privacyStatus': { $exists: false } } // Posts from users with no privacyStatus
+          ])
+          .sort({ createdAt: -1 }) // Sort posts by createdAt in descending order
+          .select('_id') // Select only the _id field of the posts
+          .limit(10); 
+
+        // Check if posts were found
+        if (posts.length > 0) {
+            console.log(posts);
+            // Send the retrieved posts in the response
+            res.status(200).json(posts);
+        } else {
+            // Send a 404 error if no posts were found
+            res.status(404).json({ error: "User posts not found" });
+        }
+    } catch (error) {
+        // Handle errors and send a 500 error response
+        console.error("Error getting home posts:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+},
 }

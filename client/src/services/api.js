@@ -13,20 +13,7 @@ const http = axios.create({
 });
 
 export class postApi {
-    static async fetchHomePosts(headers) {
-        try {
-            const auth = axios.create({
-                baseURL: URL,
-                headers,
-            });
-
-            const response = await auth.get("/post/fetchallposts");
-            return response.data;
-        } catch ({response}) {
-            console.log("Error posts not found:", response.data);
-            return response.data;
-        }
-    }
+    
     static async fetchPostData(query, headers) {
         try {
             const auth = axios.create({
@@ -97,8 +84,25 @@ export class postApi {
             return response.data;
         }
     }
+    static async fetchHomePosts(userId,headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+
+            const response = await auth.get("/post/homeposts",{
+                params: { userId },
+            });
+            return response.data;
+        } catch ({response}) {
+            console.log("Error posts not found:", response.data);
+            return response.data;
+        }
+    }
 }
 export class userApi {
+   
     static async signup(data) {
         try {
             const response = await http.post("/user/signup", data);

@@ -26,9 +26,9 @@ const Navbar = () => {
           <div className={styles.linkContainer}>
             <Link to="/home"><FontAwesomeIcon icon={solidHouse} className="rounded me-2"/> Home</Link>
           </div>
-          <div className={styles.linkContainer}>
+          {/* <div className={styles.linkContainer}>
             <Link to="/notifications"><FontAwesomeIcon icon={solidBell} className="rounded me-2"/>Notifications</Link>
-          </div>
+          </div> */}
           <div className={styles.linkContainer}>
             <Link to={`/`+ user.username}><FontAwesomeIcon icon={solidUser} className="rounded me-2"/>Profile</Link>
           </div>
