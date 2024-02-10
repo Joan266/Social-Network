@@ -12,6 +12,10 @@ export const PostsReducer = (state, action) => {
       return {
         posts: action.payload
       }
+    case 'ADD_POST':
+      return {
+        posts: [action.payload,...state.posts]
+      }
     case 'DELETE_POST':
       return {
         posts: state.posts.filter((w) => w !== action.payload._id)
@@ -23,8 +27,7 @@ export const PostsReducer = (state, action) => {
 
 export const PostsContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(PostsReducer, {
-    homePosts: [],
-    profliePosts:[],
+    posts:[],
   })
 
   return (

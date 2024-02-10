@@ -7,7 +7,6 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Profile from './pages/Profile'
 import Post from './pages/Post'
-import Notifications from './pages/Notifications'
 import Navbar from './components/Navbar'
 import SearchBar from './components/SearchBar'
 
@@ -44,7 +43,10 @@ function App() {
             path="/" 
             element={user ? <Navigate to="/home" /> : <Navigate to="/signup" />} 
           />
-          <Route path="/:username" element={user ? <PrincipalLayout><Profile /></PrincipalLayout> : <Navigate to="/login" />} />
+          <Route 
+            path="/:username" 
+            element={user ? <PrincipalLayout><Profile /></PrincipalLayout> : <Navigate to="/login" />}
+          />
           <Route 
             path="/home" 
             element={!user ? <Navigate to="/login" /> :  <PrincipalLayout><Home /></PrincipalLayout>} 
@@ -62,12 +64,8 @@ function App() {
             element={!user ? <Navigate to="/login" /> : <Navigate to={`/${user.username}`} />} 
           />
           <Route 
-            path="/notifications" 
-            element={!user ? <Navigate to="/login" /> : <PrincipalLayout><Notifications /></PrincipalLayout>} 
-          />
-          <Route 
-            path="/post" 
-            element={!user ? <Navigate to="/login" /> : <PrincipalLayout><Post /></PrincipalLayout>} 
+            path="/post/:postId" 
+            element={user ? <PrincipalLayout><Post /></PrincipalLayout> : <Navigate to="/login" />}
           />
         </Routes>
       </BrowserRouter>

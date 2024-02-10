@@ -22,6 +22,8 @@ router.post('/isliking', requireAuth, postController.isLikingPost);
 // home posts
 router.get('/homeposts', requireAuth, postController.homePosts)
 
+// post replies
+router.get('/replies', requireAuth, postController.postReplies)
 
 
 module.exports = router

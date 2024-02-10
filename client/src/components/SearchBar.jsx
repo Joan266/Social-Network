@@ -22,9 +22,6 @@ const SearchBar = () => {
     setSelected(false); 
     navigate(`/${username}`); 
 };
-  useEffect(()=>{
-    console.log(selected)
-  },[selected])
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {

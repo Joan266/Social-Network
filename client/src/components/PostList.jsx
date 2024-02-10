@@ -35,8 +35,8 @@ const PostList = () => {
   }, [ postRef]); // Include postRef in the dependency array
   return (
     <div className={styles.postsContainer}>
-      {posts && posts.map((_id,index) => (
-        <PostDetails key={`${_id}${index}`} postId={_id} />
+      {posts && posts.map((post,index) => (
+        <PostDetails key={`${post._id}${index}`} postId={post._id} />
       ))}
       <div className={styles.endMarkContainer} ref={postRef}></div>
     </div>

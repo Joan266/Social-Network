@@ -76,7 +76,6 @@ export class postApi {
                 baseURL: URL,
                 headers,
             });
-            console.log(data);
             const response = await auth.post("/post/isliking", data);
             return response.data;
         } catch ({response}) {
@@ -97,6 +96,22 @@ export class postApi {
             return response.data;
         } catch ({response}) {
             console.log("Error posts not found:", response.data);
+            return response.data;
+        }
+    }
+    static async fetchPostReplies(postId,headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+
+            const response = await auth.get("/post/replies",{
+                params: { postId },
+            });
+            return response.data;
+        } catch ({response}) {
+            console.log("Error post replies not found:", response.data);
             return response.data;
         }
     }
@@ -214,7 +229,6 @@ export class userApi {
                 baseURL: URL,
                 headers,
             });
-            console.log(data);
             const response = await auth.post("/user/isfollowing", data);
             return response.data;
         } catch ({response}) {

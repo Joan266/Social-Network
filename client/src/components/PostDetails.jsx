@@ -7,6 +7,7 @@ import { timeSince } from '../utils/useTimeSinceString';
 import useFetchPostData from '../hooks/useFetchPostData';
 import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const PostDetails = ({ postId }) => {
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
@@ -14,6 +15,7 @@ const PostDetails = ({ postId }) => {
   const [isVisible, setIsVisible] = useState(false);
   const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({isVisible, postId});
   const postRef = useRef(null);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     // Store the current value of postRef.current in a variable inside the effect
@@ -41,7 +43,9 @@ const PostDetails = ({ postId }) => {
       }
     };
   }, [postId, postRef]); // Include postRef in the dependency array
-  
+  const handlePostLink = () => {
+    navigate(`/post/${postId}`); 
+  };
 
   const increaseCommentsCount = () => {
     setCommentsCount(commentsCount + 1);
@@ -54,54 +58,61 @@ const PostDetails = ({ postId }) => {
   );
 
   return (
-    <div className={styles.postDetailsContainer} ref={postRef}>
-      {isPostFormVisible && (
-        <PostForm
-          setIsPostFormVisible={setIsPostFormVisible}
-          postCommentData={postData ? postData : false}
-          increaseCommentsCount={increaseCommentsCount}
-        />
-      )}
-      <div className={styles.profilePicContainer}>
-        <div className={styles.profilePic}>
-          <FontAwesomeIcon icon={faUser} className="rounded me-2" />
-        </div>
-      </div>
-      <div className={styles.body}>
-        <div className={styles.header}>
-          <div className={styles.userInfo}>
-            <div className={styles.name}>{postData.username}</div>
-            <div className={styles.username}>@{postData.username}</div>
-            <div className={styles.dote}>·</div>
-            <div className={styles.date}>{timeSince(postData.createdAt)}</div>
-          </div>
-        </div>
-        {postData.reply && postData.reply.username && (
-          <div className={styles.replyInfo}>
-            Replying to <Link to={`/${postData.reply.username}`}>@{postData.reply.username}</Link>
-          </div>
+      <div className={styles.postDetailsContainer} ref={postRef} onClick={() => handlePostLink()}>
+        {isPostFormVisible && (
+          <PostForm
+            setIsPostFormVisible={setIsPostFormVisible}
+            postIsCommentData={postData ? postData : false}
+            increaseCommentsCount={increaseCommentsCount}
+          />
         )}
-        <div className={styles.content}>{postData.content}</div>
-        <div className={styles.settings}>
-          <div className={styles.commentContainer}>
-            <div className={styles.comment} onClick={() => setIsPostFormVisible(true)}>
-              <FontAwesomeIcon icon={faComment} className="rounded me-2" />
-            </div>
-            <span>{postData.commentsCount + commentsCount}</span>
+        <div className={styles.profilePicContainer}>
+          <div className={styles.profilePic}>
+            <FontAwesomeIcon icon={faUser} className="rounded me-2" />
           </div>
-          <div className={styles.likesContainer}>
-            <div className={styles.heart} onClick={() => handleLikeToggle()}>
-              <FontAwesomeIcon
-                icon={isPostLiked ? faHeart : regularHeart}
-                className="rounded me-2"
-                style={{ color: isPostLiked ? 'rgb(255, 0, 162)' : '' }}
-              />
+        </div>
+        <div className={styles.body}>
+          <div className={styles.header} >
+            <div className={styles.userInfo}>
+              <div className={styles.name}>
+                <Link to={`/${postData.username}`} onClick={(e) => e.stopPropagation()}>
+                  {postData.username}
+                </Link>
+              </div>
+              <div className={styles.username}>@{postData.username}</div>
+              <div className={styles.dote}>·</div>
+              <div className={styles.date}>{timeSince(postData.createdAt)}</div>
             </div>
-            <span>{postData.likesCount}</span>
+          </div>
+          {postData.reply && postData.reply.username && (
+            <div className={styles.replyInfo}>
+              Replying to 
+              <Link to={`/${postData.reply.username}`} onClick={(e) => e.stopPropagation()}>
+                @{postData.reply.username}
+              </Link>
+            </div>
+          )}
+          <div className={styles.content}>{postData.content}</div>
+          <div className={styles.settings}>
+            <div className={styles.commentContainer}>
+              <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>
+                <FontAwesomeIcon icon={faComment} className="rounded me-2" />
+              </div>
+              <span>{postData.commentsCount + commentsCount}</span>
+            </div>
+            <div className={styles.likesContainer}>
+              <div className={styles.heart} onClick={(e) => { e.stopPropagation(); handleLikeToggle(); }}>
+                <FontAwesomeIcon
+                  icon={isPostLiked ? faHeart : regularHeart}
+                  className="rounded me-2"
+                  style={{ color: isPostLiked ? 'rgb(255, 0, 162)' : '' }}
+                />
+              </div>
+              <span>{postData.likesCount}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

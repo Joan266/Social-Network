@@ -2,5 +2,17 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  margin-top: 58px;
+  margin-top: 10px;
+  .navContainer {
+    display: flex;
+    font-size: 17px;
+    height: 58px;
+    padding-bottom: 8px;
+    align-items: center;
+    .homeLabel{
+      color:#333;
+      font-size: 24px;
+      margin-left: 15px;
+    }
+  }
 }

@@ -1,0 +1,180 @@
+.postRepliesContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 13px;
+  .navContainer {
+    display: flex;
+    font-size: 17px;
+    height: 58px;
+    align-items: center;
+    .postLabel{
+      color:#0f1419;
+      font-weight:600;
+      font-size: 22px;
+      margin-left: 15px;
+    }
+  }
+  .postDetailsContainer {
+    padding: 0 18px;
+    padding-top: 13px;
+    display: flex;
+    flex-direction: row;
+    min-height: 95px;
+    min-width: 100px;
+    transition: background-color 0.3s;
+    .profilePicContainer{
+      .profilePic {
+        margin-right: 13px;
+        background-color: #ccc;
+        border-radius: 50%;
+        display: flex;
+        color: white;
+        font-size: 1.1rem;
+        width: 50px;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+      }
+    }
+    .body{
+      padding-bottom: 13px;
+      width: 500px;
+      display: flex;
+      flex-direction: column;
+      font-size: 16px;
+      .header{
+        height: 22px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        color:#536471;
+        cursor: pointer;
+        .userInfo{
+          display: flex;
+          flex-direction: row;
+          justify-content: left;
+          .name{
+            display: flex;
+            align-items: center;
+            margin-right: 3px;
+            a {
+              color:#0f1419;
+              text-decoration: none;
+            }
+            a:hover{
+              text-decoration: underline;
+            }
+          }
+          .username {
+            display: flex;
+            align-items: center;
+            align-items: center;
+          }
+          .dote{
+            padding: 0 4px;
+          }
+          .date {
+            display: flex;
+            align-items: center;
+          }
+        }
+        .delete{
+          cursor: pointer;
+          height: 40px;
+          width: 40px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border-radius: 50%;
+          font-size: 14px;
+          margin-top: -5%;
+          transition: background-color 0.3s, color 0.3s;
+          &:hover{
+            background-color: rgba(255, 0, 0, 0.073);
+            color:red;
+          }
+        }
+      }
+      .replyInfo{
+        color:#536471;
+        margin-bottom: 2px;
+        display: flex;
+        flex-direction: row;
+        a {
+          color: #1D9BF0;
+          margin-left: 2px;
+          text-decoration: none;
+        }
+        a:hover{
+          text-decoration: underline;
+        }
+      }
+      .content {
+        word-wrap: break-word;
+        max-width: 500px;
+        color:#0f1419;
+      }
+      .settings{
+        height: 35px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        margin-top: 13px;
+        color:#536471;
+        span {
+          font-size: 14px;
+          width: 14px;
+          text-align: center;
+        }
+        .commentContainer {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          cursor: pointer;
+          transition: color 0.3s;
+          &:hover{
+            color:rgb(0, 187, 255);
+          }
+          .comment {
+            height: 40px;
+            width: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            &:hover{
+              background-color: rgba(0, 187, 255, 0.149);
+            }
+          }
+        }
+        .likesContainer {
+          display: flex;
+          cursor: pointer;
+          flex-direction: row;
+          align-items: center;
+          transition: color 0.3s;
+          &:hover{
+            color:rgb(255, 0, 162);
+          }
+          .heart{
+            min-height: 40px;
+            min-width: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            &:hover{
+              background-color: rgba(255, 0, 162, 0.149);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+}
