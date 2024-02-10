@@ -16,8 +16,6 @@ export const useSignup = () => {
       setError(response.message)
       return
     }
-    // save the user to local storage
-    localStorage.setItem('user', response)
 
     // update the auth context
     dispatch({type: 'LOGIN', payload: response})

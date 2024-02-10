@@ -23,7 +23,7 @@ module.exports = postController =  {
       post.user = userId;
       await post.save();
       if(post){
-        res.status(200).json(post._id)
+        res.status(200).json({_id: post._id})
       }else {
         console.log(`Post create operation failed`)
         res.status(404).json({ error: "Post create operation failed" })
@@ -144,5 +144,29 @@ module.exports = postController =  {
         console.error("Error getting home posts:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
+},
+postReplies: async (req, res) => {
+  try {
+      const { postId } = req.query;
+      // Use Mongoose to search for posts of users with privacyStatus set to false
+      const post = await Post.findById(postId)
+      .select('comments -_id')
+      .populate({ path: 'comments', select: '_id' })
+      .exec()
+      console.log(postId)
+      // Check if posts were found
+      if (post && post.comments) {
+          console.log(post.comments);
+          // Send the retrieved posts in the response
+          res.status(200).json(post.comments);
+      } else {
+          // Send a 404 error if no posts were found
+          res.status(404).json({ error: "Post replies not found" });
+      }
+  } catch (error) {
+      // Handle errors and send a 500 error response
+      console.error("Error getting post replies:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
 },
 }

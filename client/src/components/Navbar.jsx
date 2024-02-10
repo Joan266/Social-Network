@@ -24,14 +24,14 @@ const Navbar = () => {
         </div>
         <nav>
           <div className={styles.linkContainer}>
-            <Link to="/home"><FontAwesomeIcon icon={solidHouse} className="rounded me-2"/> Home</Link>
+            <Link to="/"><FontAwesomeIcon icon={solidHouse} className="rounded me-2"/> Home</Link>
           </div>
           <div className={styles.linkContainer}>
             <Link to="/profile"><FontAwesomeIcon icon={solidUser} className="rounded me-2"/>Profile</Link>
           </div>
         </nav>
         <button className={styles.postButton} onClick={()=>setIsPostFormVisible(true)}>Post</button>
-        {isPostFormVisible && <PostForm setIsPostFormVisible={setIsPostFormVisible} postCommentData={false} />}
+        {isPostFormVisible && <PostForm setIsPostFormVisible={setIsPostFormVisible} postIsCommentData={false} />}
       </div>
       <div className={styles.accountMenu}>
         <div className={styles.container}>

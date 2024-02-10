@@ -33,22 +33,24 @@ const PostTargeted = ({postData}) => {
   </div>
   )
 }
-const PostForm = ({setIsPostFormVisible, postCommentData,increaseCommentsCount}) => {
+const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount}) => {
   const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
   const navigate = useNavigate(); 
   const handlePostSubmit = async () => {
     if(isLoading || content.trim() === "")return;
-    createPost({content,postId:postCommentData ?  postCommentData._id:false})
-    postCommentData && increaseCommentsCount()
+    createPost({content,postId:postIsCommentData ?  postIsCommentData._id:false})
+    postIsCommentData && increaseCommentsCount()
     setContent("")
     setIsPostFormVisible(false)
-    navigate("/"); 
+    const navigateString = `/${postIsCommentData && postIsCommentData._id ? `post/${postIsCommentData._id}` : ""}`;
+    navigate(navigateString); 
+    console.log(postIsCommentData)
   }
    
   return (
-    <div className={styles.postFormOverlay}>
-      <div className={styles.postFormContainer}>
+    <div className={styles.postFormOverlay}onClick={(e)=>e.stopPropagation()}>
+      <div className={styles.postFormContainer} >
         <div className={styles.header}>
         <FontAwesomeIcon
                 className={styles.cancelSearch}
@@ -58,7 +60,7 @@ const PostForm = ({setIsPostFormVisible, postCommentData,increaseCommentsCount})
         </div>
         <div className={styles.body}>
           <div className={styles.upperContainer}>
-            {postCommentData && <PostTargeted postData={postCommentData}/>}
+            {postIsCommentData && <PostTargeted postData={postIsCommentData}/>}
             <div className={styles.container}>
               <div className={styles.profilePic}>
                 <FontAwesomeIcon icon={faUser} className="rounded me-2"/>
@@ -70,7 +72,7 @@ const PostForm = ({setIsPostFormVisible, postCommentData,increaseCommentsCount})
                   type="text"
                   onChange={(e) => setContent(e.target.value)}
                   value={content}
-                  placeholder={postCommentData ? "Add another post":"What is happening?!"}
+                  placeholder={postIsCommentData ? "Add another post":"What is happening?!"}
                 />
               </div>
             </div>

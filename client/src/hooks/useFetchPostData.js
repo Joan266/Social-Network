@@ -10,6 +10,7 @@ const useFetchPostData = ({isVisible,postId}) => {
   const handleLikeToggle = async () => {
     const headers = getHeaders();
     try {
+      setLoading(true);
       const response = await (isPostLiked
         ? postApi.unlikePost({ userId: user._id, postId }, headers)
         : postApi.likePost({ userId: user._id, postId }, headers));
@@ -26,6 +27,8 @@ const useFetchPostData = ({isVisible,postId}) => {
       });
     } catch (error) {
       console.error('Error liking/unliking user:', error);
+    }finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -36,10 +39,8 @@ const useFetchPostData = ({isVisible,postId}) => {
 
         // Fetch user data
         const postDataResponse = await postApi.fetchPostData(postId, headers);
-        console.log(postDataResponse)
         setPostData(postDataResponse);
         const isLikingResponse = await postApi.isLiking({ userId: user._id, postId }, headers);
-        console.log(isLikingResponse)
         setIsPostLiked(isLikingResponse);
         
       } catch (error) {

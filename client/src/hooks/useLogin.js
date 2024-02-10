@@ -19,9 +19,7 @@ export const useLogin = () => {
       return
     }
     console.log(response);
-    // save the user to local storage
-    localStorage.setItem('user', JSON.stringify(response))
-
+    
     // update the auth context
     dispatch({type: 'LOGIN', payload: response})
 
