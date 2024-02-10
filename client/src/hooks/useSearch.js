@@ -24,7 +24,7 @@ export const useSearch = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${user.token}`,
         };
-        const data = await userApi.searchUser(query, headers);
+        const data = await userApi.searchUser({query, userId: user._id}, headers);
         return data;
       } catch (error) {
         console.log("Error searching for users:", error);

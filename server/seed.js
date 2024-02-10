@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const casual = require('casual');
 const User = require('./models/user'); 
+const Post = require('./models/post'); 
 const { MONGODB_URI } = require('./dotenv.js');
 
 const configDB = async () => {
@@ -21,7 +22,9 @@ const seedUsers = async () => {
     // Delete all existing users
     await User.deleteMany({});
     console.log('All existing users deleted.');
-
+    // Delete all existing posts
+    await Post.deleteMany({});
+    console.log('All existing posts deleted.');
     let count = 0;
     for (let i = 1; i <= 200; i++) {
       const casual_email = casual.email;

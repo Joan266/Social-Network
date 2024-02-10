@@ -7,11 +7,13 @@ import styles from './Profile.module.scss';
 import useFetchUserData from '../hooks/useFetchProfileData';
 import useFetchUserPosts from '../hooks/useFetchUserPosts';
 import PostList from '../components/PostList';
+import { usePostsContext } from '../hooks/usePostsContext';
 
 // date 
 import {formatDate} from '../utils/useFormatDate';
 
 const Profile = () => {
+  const { profilePosts } = usePostsContext;
   const { username } = useParams();
   const { userData, loading, isUserFollowed, isUserProfile, handleFollowToggle, handlePrivacyStatus } = useFetchUserData(username);
   useFetchUserPosts(username);
@@ -33,10 +35,18 @@ const Profile = () => {
                 <div className={styles.lock} onClick={() => handlePrivacyStatus()}>
                   <FontAwesomeIcon icon={userData.privacyStatus ? faLock : faUnlock} />{userData.privacyStatus ? "Private" : "Public"}
                 </div>:
-                <div className={`${styles.sharedFollow} ${isUserFollowed && followHover ? styles.unfollow : isUserFollowed ? styles.following : styles.follow}`} onClick={()=>handleFollowToggle()} onMouseEnter={() => {isUserFollowed && setFollowHover(true)}}
-                onMouseLeave={() => setFollowHover(false)}>
-                  {isUserFollowed ? (followHover ? "Unfollow" : "Following") : "Follow"}
-                </div>
+                <div
+                className={`${styles.sharedFollow} ${
+                  isUserFollowed && followHover ? styles.unfollow : isUserFollowed ? styles.following : styles.follow
+                }`}
+                onClick={handleFollowToggle}
+                onMouseEnter={() => {
+                  setFollowHover(true);
+                }}
+                onMouseLeave={() => setFollowHover(false)}
+              >
+                {isUserFollowed ? (followHover ? "Unfollow" : "Following") : "Follow"}
+              </div>
               }
             </div>
           </div>
@@ -44,9 +54,6 @@ const Profile = () => {
             <div className={styles.nameContainer}>{userData.username}</div>
             <div className={styles.usernameContainer}>@{userData.username}</div>
           </div>
-          {/* <div className={styles.bio}>
-            Hola me llamo Joan, soy de España y soy programador web.
-          </div> */}
           <div className={styles.data}>
            <FontAwesomeIcon icon={faCalendarDays} /> {date}
           </div>
@@ -60,7 +67,7 @@ const Profile = () => {
           Posts
         </div>
       </div>
-      <PostList/>
+      <PostList posts={profilePosts}/>
     </div>
   );
 };

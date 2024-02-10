@@ -117,10 +117,14 @@
     }
   }
   .navContainer {
+    display: flex;
     font-size: 17px;
     height: 58px;
+    align-items: center;
     .posts{
-      color:#0f1419
+      color:#0f1419;
+      font-weight:500;
+      margin-left: 25px;
     }
   }
 }

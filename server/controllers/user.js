@@ -45,18 +45,28 @@ module.exports = userController =  {
 
   searchUser: async (req, res) => {
     try {
-      const { query } = req.query;
+      const { query, userId } = req.body;
 
       // Use Mongoose to search for users
       const users = await User.find({
-        $or: [
-          { username: { $regex: new RegExp(query, 'i') } },
-          { email: { $regex: new RegExp(query, 'i') } },
-        ],
+        $and: [
+          { 
+            $or: [
+              { username: { $regex: new RegExp(query, 'i') } },
+              { email: { $regex: new RegExp(query, 'i') } },
+            ]
+          },
+          { 
+            $or: [
+              { following: userId }, 
+              { privacyStatus: false }, 
+            ]
+          }
+        ]
       })
         .select('-_id -__v -password')
         .limit(10)
-
+       console.log(users)
       res.status(200).json(users);
     } catch (error) {
       console.error("Error searching for users:", error);
@@ -140,45 +150,82 @@ module.exports = userController =  {
   followUser: async (req, res) => {
     try {
       const { followerId, followedUsername } = req.body;
-
-      // Use Mongoose to search for user
-      const user = await User.findOneAndUpdate(
+  
+      // Check if required fields are provided
+      if (!followerId || !followedUsername) {
+        return res.status(400).json({ error: "Required fields missing" });
+      }
+  
+      // Use Mongoose to search for user to follow
+      const userFollowed = await User.findOneAndUpdate(
         { username: followedUsername },
         { $push: { followers: followerId }, $inc: { followersCount: 1 } },
         { new: true }
       );
-      
-      if (user) {
-        console.log(user);
-        res.status(200).json();
-      } else {
-        res.status(404).json({ error: "User not found" });
+  
+      // Check if user to follow exists
+      if (!userFollowed) {
+        return res.status(404).json({ error: "User to follow not found" });
       }
+  
+      // Use Mongoose to search for follower user
+      const userFollowing = await User.findByIdAndUpdate(
+        followerId,
+        { $push: { following: userFollowed._id }, $inc: { followingCount: 1 } },
+        { new: true }
+      );
+  
+      // Check if follower user exists
+      if (!userFollowing) {
+        return res.status(404).json({ error: "Follower user not found" });
+      }
+  
+      // Both operations successful, return success response
+      res.status(200).json();
     } catch (error) {
       console.error("Error following user:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
-
   unfollowUser: async (req, res) => {
     try {
       const { followerId, followedUsername } = req.body;
-
-      // Use Mongoose to search for user
-      const user = await User.findOneAndUpdate(
+  
+      // Check if required fields are provided
+      if (!followerId || !followedUsername) {
+        return res.status(400).json({ error: "Required fields missing" });
+      }
+  
+      // Use Mongoose to search for user to unfollow
+      const userFollowed = await User.findOneAndUpdate(
         { username: followedUsername },
         { $pull: { followers: followerId }, $inc: { followersCount: -1 } },
         { new: true }
       );
-      if (user) {
-        console.log(user);
-        res.status(200).json();
-      } else {
-        res.status(404).json({ error: "User not found" });
+  
+      // Check if user to unfollow exists
+      if (!userFollowed) {
+        return res.status(404).json({ error: "User to unfollow not found" });
       }
+  
+      // Use Mongoose to search for follower user
+      const userFollowing = await User.findByIdAndUpdate(
+        followerId,
+        { $pull: { following: userFollowed._id }, $inc: { followingCount: -1 } },
+        { new: true }
+      );
+  
+      // Check if follower user exists
+      if (!userFollowing) {
+        return res.status(404).json({ error: "Follower user not found" });
+      }
+  
+      // Both operations successful, return success response
+      res.status(200).json();
     } catch (error) {
       console.error("Error unfollowing user:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
+  
 };

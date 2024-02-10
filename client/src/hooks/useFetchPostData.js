@@ -4,7 +4,7 @@ import { useAuthContext } from '../hooks/useAuthContext';
 
 const useFetchPostData = ({isVisible,postId}) => {
   const { user } = useAuthContext();
-  const [postData, setPostData] = useState({});
+  const [postData, setPostData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [ isPostLiked, setIsPostLiked ] = useState(false);
   const handleLikeToggle = async () => {
@@ -53,7 +53,7 @@ const useFetchPostData = ({isVisible,postId}) => {
       fetchPostData()
       return
     };
-    setPostData({});
+    setPostData(null);
   }, [postId, user, isVisible]);
 
   const getHeaders = () => ({

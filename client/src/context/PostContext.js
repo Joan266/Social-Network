@@ -8,13 +8,7 @@ export const PostsReducer = (state, action) => {
       return {
         posts: action.payload
       }
-    case 'CREATE_POST':
-      console.log(action.payload)
-      return {
-        posts: [action.payload, ...state.posts]
-      }
     case 'ADD_POSTS':
-      console.log(action.payload)
       return {
         posts: action.payload
       }
@@ -29,7 +23,8 @@ export const PostsReducer = (state, action) => {
 
 export const PostsContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(PostsReducer, {
-    posts: []
+    homePosts: [],
+    profliePosts:[],
   })
 
   return (
