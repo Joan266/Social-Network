@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
-import { usePostsContext } from './usePostsContext'
 import { postApi } from '../services/api'
 
-export const usePost = () => {
-  const { dispatch } = usePostsContext()
+export const useCreatePost = () => {
   const { user } = useAuthContext()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -20,7 +18,6 @@ export const usePost = () => {
       console.log(response.error);
       return
     }
-    dispatch({type: 'CREATE_POST', payload: response})
   }
   return { createPost, isLoading }
 }

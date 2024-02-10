@@ -16,8 +16,9 @@ const useFetchHomePosts = () => {
         // Fetch home posts
         const homePostsResponse = await postApi.fetchHomePosts(user._id,headers);
         console.log(`homePostsResponse: ${homePostsResponse}`)
-        dispatch({type: 'ADD_POSTS', payload: homePostsResponse})
-   
+        if(!homePostsResponse.error){
+          dispatch({type: 'ADD_POSTS', payload: homePostsResponse})
+        }
       } catch (error) {
         console.error('Error fetching user posts:', error);
       } finally {

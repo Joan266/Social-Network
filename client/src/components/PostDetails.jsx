@@ -1,8 +1,8 @@
 import React, { useEffect, useRef,useState } from 'react';
 import styles from './PostDetails.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faHeart, faComment } from '@fortawesome/free-solid-svg-icons';
-import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
+import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as regularHeart, faComment } from '@fortawesome/free-regular-svg-icons';
 import { timeSince } from '../utils/useTimeSinceString';
 import useFetchPostData from '../hooks/useFetchPostData';
 import PostForm from './PostForm';
@@ -47,7 +47,7 @@ const PostDetails = ({ postId }) => {
     setCommentsCount(commentsCount + 1);
   };
 
-  if (isLoading || !postData || !isVisible) return (
+  if (isLoading || !postData || !isVisible ) return (
     <div className={styles.postDetailsContainer} ref={postRef}>
 
     </div>

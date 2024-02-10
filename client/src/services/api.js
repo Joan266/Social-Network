@@ -121,16 +121,14 @@ export class userApi {
             return response.data;
         }
     }
-    static async searchUser(query, headers) {
+    static async searchUser(data, headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
                 headers,
             });
 
-            const response = await auth.get("/user/search", {
-                params: { query },
-            });
+            const response = await auth.post("/user/search", data);
             return response.data;
         } catch (error) {
             console.log("Error searching user:", error);

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { usePost } from "../hooks/usePost"
+import { useCreatePost } from "../hooks/useCreatePost"
 import styles from './PostForm.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -33,7 +33,7 @@ const PostTargeted = ({postData}) => {
   )
 }
 const PostForm = ({setIsPostFormVisible, postCommentData,increaseCommentsCount}) => {
-  const { createPost, isLoading } = usePost();
+  const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
   const handlePostSubmit = async () => {
     if(isLoading || content.trim() === "")return;

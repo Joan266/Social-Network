@@ -11,7 +11,7 @@ router.post('/signup', userController.signupUser)
 router.post('/login', userController.loginUser)
 
 // search user route
-router.get('/search', requireAuth, userController.searchUser);
+router.post('/search', requireAuth, userController.searchUser);
 
 // get user data route
 router.get('/fetchdata', requireAuth, userController.fetchUserData);
