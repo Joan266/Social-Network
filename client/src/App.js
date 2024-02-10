@@ -59,7 +59,7 @@ function App() {
           />
           <Route 
             path="/profile" 
-            element={!user ? <Navigate to="/login" /> : <PrincipalLayout><Profile /></PrincipalLayout>} 
+            element={!user ? <Navigate to="/login" /> : <Navigate to={`/${user.username}`} />} 
           />
           <Route 
             path="/notifications" 

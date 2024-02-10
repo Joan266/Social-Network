@@ -4,6 +4,7 @@ import styles from './PostForm.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { timeSince } from "../utils/useTimeSinceString";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 const PostTargeted = ({postData}) => {
   return (
     <div className={styles.container}>
@@ -35,12 +36,14 @@ const PostTargeted = ({postData}) => {
 const PostForm = ({setIsPostFormVisible, postCommentData,increaseCommentsCount}) => {
   const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
+  const navigate = useNavigate(); 
   const handlePostSubmit = async () => {
     if(isLoading || content.trim() === "")return;
     createPost({content,postId:postCommentData ?  postCommentData._id:false})
     postCommentData && increaseCommentsCount()
     setContent("")
     setIsPostFormVisible(false)
+    navigate("/"); 
   }
    
   return (
