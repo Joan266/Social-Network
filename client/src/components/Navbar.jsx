@@ -26,11 +26,8 @@ const Navbar = () => {
           <div className={styles.linkContainer}>
             <Link to="/home"><FontAwesomeIcon icon={solidHouse} className="rounded me-2"/> Home</Link>
           </div>
-          {/* <div className={styles.linkContainer}>
-            <Link to="/notifications"><FontAwesomeIcon icon={solidBell} className="rounded me-2"/>Notifications</Link>
-          </div> */}
           <div className={styles.linkContainer}>
-            <Link to={`/`+ user.username}><FontAwesomeIcon icon={solidUser} className="rounded me-2"/>Profile</Link>
+            <Link to="/profile"><FontAwesomeIcon icon={solidUser} className="rounded me-2"/>Profile</Link>
           </div>
         </nav>
         <button className={styles.postButton} onClick={()=>setIsPostFormVisible(true)}>Post</button>
