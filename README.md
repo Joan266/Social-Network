@@ -1,14 +1,14 @@
 
-#Social-Network
+# Social-Network
 
-##Description
+## Description
 
 Social-Network is a simple social networking platform developed by Joan266 using the MERN stack, featuring a layout inspired by Twitter. 
 It enables users to connect, share posts, follow other users, and engage in discussions through comments and likes.
 
-##Installation
+## Installation
 
-###Client
+### Client
 
 1.- Navigate to the `client` folder..
 
@@ -20,7 +20,7 @@ It enables users to connect, share posts, follow other users, and engage in disc
 
     npm run start
 
-###Server
+### Server
 
 1.- Navigate to the `server` folder.
 
@@ -28,12 +28,12 @@ It enables users to connect, share posts, follow other users, and engage in disc
 
     npm install
 
-##Setup
+## Setup
 
 1.- Create .env files in both the client and server folders to hide sensitive information:
 
-    · `client/.env`: Set REACT_APP_API_URL to the server's URL.
-    · `server/.env`: Set MONGODB_URL, PORT, and SECRET_KEY.
+  · client/.env: Set REACT_APP_API_URL to the server's URL.
+  · server/.env: Set MONGODB_URL, PORT, and SECRET_KEY.
 
 2.- Seed the database with demo users:
 
@@ -43,7 +43,7 @@ It enables users to connect, share posts, follow other users, and engage in disc
 
     npm run dev
 
-##Main Features
+## Main Features
 
 · User Authentication: Users can sign up, log in, and log out securely.
 · Search Service: Users can search for other users or posts.
