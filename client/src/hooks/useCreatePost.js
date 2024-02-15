@@ -7,13 +7,21 @@ export const useCreatePost = () => {
   const { dispatch } = usePostsContext()
   const [isLoading, setIsLoading] = useState(false)
 
-  const createPost = async ({content, postId}) => {
+  const createPost = async ({content, postId, file}) => {
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${user.token}`,
     };
     setIsLoading(true);
-    const response = await postApi.create({userId:user._id,content,postId}, headers);
+    const response = await postApi.create(
+      {
+        userId:user._id,
+        content,
+        postId,
+        file
+      }, 
+      headers
+    );
     if (response.error) {
       setIsLoading(false)
       console.log(response.error);

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { useCreatePost } from "../hooks/useCreatePost"
 import styles from './PostForm.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,23 +16,15 @@ const FileContainer = ({file, removeFileSelected}) => {
           className="rounded me-2"
         />
       </div>
-      {file.type.startsWith('image/') ? (
-        <img
-          src={URL.createObjectURL(file)}
-          alt={file.name}
-        />
-      ) : file.type.startsWith('video/') ? (
-        <video
-          src={URL.createObjectURL(file)}
-          alt={file.name}
-          controls
-        />
-      ) : null}
+      <img
+        src={URL.createObjectURL(file)}
+        alt={file.name}
+      />
     </div>
   );
 }
 
-function DynamicTextarea({setContent,...rest}) {
+const DynamicTextarea = ({setContent,...rest}) => {
   function textAreaAdjust(event) {
     const element = event.target;
     setContent(element.value)
@@ -76,37 +68,55 @@ const PostTargeted = ({postData}) => {
   </div>
   )
 }
+
+function convertToBase64(file){
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      resolve(fileReader.result)
+    };
+    fileReader.onerror = (error) => {
+      reject(error)
+    }
+  })
+}
+
 const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount}) => {
   const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
   const navigate = useNavigate(); 
   const fileInputRef = useRef(null);
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
   const handleFileSelect = (event) => {
     event.stopPropagation();
     fileInputRef.current.click();
   };
-  const removeFileSelected = (index) => {
-    setSelectedFiles(prevFiles => prevFiles.filter((file, i) => i !== index));
-  }
-  const handleFileChange = (event) => {
-    const files = event.target.files;
-    console.log(event.target.files);
-    const maxFiles = 1;
 
-    // Take only the first 4 files
-    const selectedFilesArray = Array.from(files).slice(0, maxFiles);
-    // Store selected files in state
-    setSelectedFiles(selectedFilesArray);
-    event.target.value = null;
+  const removeFileSelected = () => {
+    // Remove file selected
+    setSelectedFile(null);
+  }
+
+  const handleFileChange = async (event) => { 
+    // File selected
+    const file = event.target.files[0];
+    if(!file) return;
+    // Transform input into base64
+    const base64 = await convertToBase64(file);
+    // Store selected file and base64 
+    setSelectedFile({file, base64});
+    // Clear file input
+    event.target.file = null;
   };
-  useEffect(()=> {
-    console.log(selectedFiles)
-  },[selectedFiles])
 
   const handlePostSubmit = async () => {
-    if(isLoading || content.trim() === "")return;
-    createPost({content,postId:postIsCommentData ?  postIsCommentData._id:false})
+    if(isLoading || (content.trim() === "" && !selectedFile))return;
+    createPost({
+      content,
+      postId: postIsCommentData ?  postIsCommentData._id:false,
+      file: selectedFile,
+    })
     postIsCommentData && increaseCommentsCount()
     setContent("")
     setIsPostFormVisible(false)
@@ -120,10 +130,10 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
       <div className={styles.postFormContainer} >
         <div className={styles.header}>
         <FontAwesomeIcon
-                className={styles.cancelSearch}
-                onClick={()=>setIsPostFormVisible(false)}
-                icon={faXmark}
-              />
+          className={styles.cancelSearch}
+          onClick={()=>setIsPostFormVisible(false)}
+          icon={faXmark}
+        />
         </div>
         <div className={styles.body}>
           <div className={styles.upperContainer}>
@@ -143,11 +153,9 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
                     placeholder={postIsCommentData ? "Add another post" : "What is happening?!"}
                   />
                 </div>
-                {selectedFiles.length > 0 && (
+                {selectedFile && (
                   <div className={styles.filesContainer}>
-                    {selectedFiles.map((file, index) => (
-                      <FileContainer key={index} file={file} removeFileSelected={()=>removeFileSelected(index)} />
-                    ))}
+                    <FileContainer file={selectedFile.file} removeFileSelected={()=>removeFileSelected()} />
                   </div>
                 )}
               </div>
@@ -159,13 +167,13 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
               ref={fileInputRef}
               style={{ display: 'none' }}
               onChange={handleFileChange}
-              accept="image/jpeg,image/png,image/gif,video/mp4,video/mpeg,video/quicktime"
+              accept='.jpeg, .png, .jpg'
             />
             <div className={styles.mediaDropLink} onClick={handleFileSelect}>
               <FontAwesomeIcon icon={faPhotoFilm} className="rounded me-2"/>
             </div>
             <div className={styles.postButtonContainer}>
-              <button disabled={content.trim() === "" && selectedFiles.length === 0} onClick={handlePostSubmit}>Post</button>
+              <button disabled={content.trim() === "" && !selectedFile} onClick={handlePostSubmit}>Post</button>
             </div>
           </div>
         </div>
