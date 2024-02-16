@@ -7,20 +7,23 @@ export const useCreatePost = () => {
   const { dispatch } = usePostsContext()
   const [isLoading, setIsLoading] = useState(false)
 
-  const createPost = async ({content, postId, file}) => {
+  const createPost = async ({content, postId, image}) => {
     const headers = {
-      'Content-Type': 'application/json',
+      'Content-Type': "multipart/form-data",
       'Authorization': `Bearer ${user.token}`,
     };
     setIsLoading(true);
+    const formData = new FormData();
+    formData.append("image", image);
+    content && formData.append("content", content);
+    postId && formData.append("postId", postId);
+        // Log the FormData contents
+    for (const pair of formData.entries()) {
+      console.log(pair[0] + ', 1' + pair[1]);
+    }
     const response = await postApi.create(
-      {
-        userId:user._id,
-        content,
-        postId,
-        file
-      }, 
-      headers
+      formData, 
+      headers,
     );
     if (response.error) {
       setIsLoading(false)
