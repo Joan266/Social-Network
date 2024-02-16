@@ -16,7 +16,9 @@ const postSchema = new Schema(
     },
     content: {
       type: String,
-      required: true,
+    },
+    file: {
+      type:String,
     },
     likes: [
       {

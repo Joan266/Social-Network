@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { postApi } from '../services/api';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { convertFromBase64, useConvertFromBase64 } from '../utils/useConvertFromBase64'
 
-const useFetchPostData = ({isVisible,postId}) => {
+const useFetchPostData = ({isVisible, postId}) => {
   const { user } = useAuthContext();
   const [postData, setPostData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [ isPostLiked, setIsPostLiked ] = useState(false);
+
   const handleLikeToggle = async () => {
     const headers = getHeaders();
     try {
@@ -31,6 +33,7 @@ const useFetchPostData = ({isVisible,postId}) => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     const fetchPostData = async () => {
       const headers = getHeaders();
@@ -38,8 +41,12 @@ const useFetchPostData = ({isVisible,postId}) => {
         setLoading(true);
 
         // Fetch user data
-        const postDataResponse = await postApi.fetchPostData(postId, headers);
-        setPostData(postDataResponse);
+        const response = await postApi.fetchPostData(postId, headers);
+        setPostData(response.postData);
+        if(response &&response.file) {
+          const file = await convertFromBase64(response.file);
+          console.log(file)
+        }
         const isLikingResponse = await postApi.isLiking({ userId: user._id, postId }, headers);
         setIsPostLiked(isLikingResponse);
         

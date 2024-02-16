@@ -1,11 +1,13 @@
 const express = require('express')
-const mongoose = require('mongoose')
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const {createServer} = require('http');
-const { MONGODB_URI, PORT } = require('./dotenv.js');
-
+const configDB = require('./configDB.js');
 const userRoutes = require('./routes/user')
 const postRoutes = require('./routes/post')
+// const filesRoutes = require('./routes/files.js')
+
+const { PORT } = require('./dotenv.js');
 
 const configExpress = async () => {
   const app = express();
@@ -14,6 +16,8 @@ const configExpress = async () => {
   app.use(cors());
   app.use(express.json());
 
+  // Parse JSON bodies
+  app.use(bodyParser.json());
 
   // Error Handling Middleware
   app.use((req, res, next) => {
@@ -24,24 +28,14 @@ const configExpress = async () => {
   //routes
   app.use('/api/user', userRoutes)
   app.use('/api/post', postRoutes)
+  // app.use('/api/files', filesRoutes)
 
   const httpServer = createServer(app);
 
   httpServer.listen(PORT || 5000, () => {
-    console.log(`Listening on port ${process.env.PORT || 5000}`);
+    console.log(`Listening on port ${PORT || 5000}`);
   });
 
-};
-
-const configDB = async () => {
-  try {
-    const conn = await mongoose.connect(MONGODB_URI);
-    console.log("Connected to the DB");
-
-  } catch (error) {
-    console.error("Error connecting to the DB:", error);
-    process.exit(1); // Exit the process on a critical error
-  }
 };
 
 // Configure and start Express server

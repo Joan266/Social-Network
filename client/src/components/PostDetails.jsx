@@ -43,6 +43,7 @@ const PostDetails = ({ postId }) => {
       }
     };
   }, [postId, postRef]); // Include postRef in the dependency array
+  
   const handlePostLink = () => {
     navigate(`/post/${postId}`); 
   };

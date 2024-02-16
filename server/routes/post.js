@@ -5,7 +5,7 @@ const requireAuth = require('../middleware/requireAuth')
 const router = express.Router()
 
 // create post route
-router.post('/create', requireAuth, postController.create);
+router.post('/create',  postController.create);
 
 // get post data route
 router.get('/fetchdata', requireAuth, postController.fetchPostData);

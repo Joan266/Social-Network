@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faXmark, faPhotoFilm } from '@fortawesome/free-solid-svg-icons';
 import { timeSince } from "../utils/useTimeSinceString";
 import { useNavigate } from 'react-router-dom'; 
+import { convertToBase64 } from '../utils/useConvertToBase64';
 
 const FileContainer = ({file, removeFileSelected}) => {
   return (
@@ -69,18 +70,7 @@ const PostTargeted = ({postData}) => {
   )
 }
 
-function convertToBase64(file){
-  return new Promise((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
-      resolve(fileReader.result)
-    };
-    fileReader.onerror = (error) => {
-      reject(error)
-    }
-  })
-}
+
 
 const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount}) => {
   const { createPost, isLoading } = useCreatePost();
@@ -102,8 +92,10 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
     // File selected
     const file = event.target.files[0];
     if(!file) return;
+    console.log(file)
     // Transform input into base64
     const base64 = await convertToBase64(file);
+    console.log(base64)
     // Store selected file and base64 
     setSelectedFile({file, base64});
     // Clear file input
@@ -115,7 +107,7 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
     createPost({
       content,
       postId: postIsCommentData ?  postIsCommentData._id:false,
-      file: selectedFile,
+      file: selectedFile ? selectedFile.file:null,
     })
     postIsCommentData && increaseCommentsCount()
     setContent("")
@@ -167,7 +159,7 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
               ref={fileInputRef}
               style={{ display: 'none' }}
               onChange={handleFileChange}
-              accept='.jpeg, .png, .jpg'
+              accept='.jpeg, .png, .jpg .webp'
             />
             <div className={styles.mediaDropLink} onClick={handleFileSelect}>
               <FontAwesomeIcon icon={faPhotoFilm} className="rounded me-2"/>
