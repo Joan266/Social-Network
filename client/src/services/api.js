@@ -30,13 +30,13 @@ export class postApi {
             return response.data;
         }
     }
-    static async create(data,headers) {
+    static async create(formData,headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
                 headers,
             });
-            const response = await auth.post("/post/create", data);
+            const response = await auth.post("/post/create", formData);
             return response.data; 
         } catch ({response}) {
             console.log("Error creating post:", response.error);

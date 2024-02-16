@@ -1,31 +1,49 @@
+const fs = require('fs'); // Import the 'fs' module for file operations
+const mongoose = require('mongoose');
+const Grid = require('gridfs-stream');
+const connection = mongoose.connection;
+const File = require('../models/file'); // Import Mongoose model for files
 
+// Initialize GridFS stream
+let gfs;
+
+connection.once('open', () => {
+    gfs = Grid(connection.db, mongoose.mongo);
+    gfs.collection('uploads');
+});
+
+// Set the destination folder for temporary file storage
 module.exports = filesController =  {
-  image: (req, res) => {
-    gfs.files.findOne({ filename: req.params.filename }, (err, file) => {
-      // Check if file
-      if (!file || file.length === 0) {
-        return res.status(404).json({
-          err: 'No file exists'
+  upload: async (req, res) => {
+    try {
+        // Create a new file instance
+        const newFile = new File({
+            filename: req.file.originalname,
+            contentType: req.file.mimetype
         });
-      }
   
-      // Check if image
-      if (file.contentType === 'image/jpeg' || file.contentType === 'image/png') {
-        // Read output to browser
-        const readstream = gfs.createReadStream(file.filename);
-        readstream.pipe(res);
-      } else {
-        res.status(404).json({
-          err: 'Not an image'
+        // Save file metadata to MongoDB
+        await newFile.save();
+  
+        // Create a writestream to store file data in GridFS
+        const writestream = gfs.createWriteStream({
+            filename: req.file.originalname,
+            metadata: newFile._id // Attach file ID as metadata
         });
-      }
-    });
-  },
-  delete: (req, res) => {
-    gfs.remove({ _id: req.params.id, root: 'uploads' }, (err, gridStore) => {
-      if (err) {
-        return res.status(404).json({ err: err });
-      }
-    });
+  
+        // Pipe the uploaded file from multer into the GridFS writestream
+        const readstream = fs.createReadStream(req.file.path);
+        readstream.pipe(writestream);
+  
+        // Once upload is complete, remove temporary file and respond to client
+        writestream.on('close', () => {
+            fs.unlink(req.file.path, () => {
+                res.status(201).send('File uploaded successfully');
+            });
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
   }
 }

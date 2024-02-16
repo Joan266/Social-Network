@@ -5,7 +5,7 @@ const {createServer} = require('http');
 const configDB = require('./configDB.js');
 const userRoutes = require('./routes/user')
 const postRoutes = require('./routes/post')
-// const filesRoutes = require('./routes/files.js')
+const filesRoutes = require('./routes/files.js')
 
 const { PORT } = require('./dotenv.js');
 
@@ -28,7 +28,7 @@ const configExpress = async () => {
   //routes
   app.use('/api/user', userRoutes)
   app.use('/api/post', postRoutes)
-  // app.use('/api/files', filesRoutes)
+  app.use('/api/files', filesRoutes)
 
   const httpServer = createServer(app);
 
