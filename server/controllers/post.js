@@ -5,7 +5,7 @@ const User = require('../models/user');
 module.exports = postController =  {
   create: async (req, res) => {
     const {content, userId, postId, file} = req.body
-    console.log(file)
+    console.log("file",file)
     try {
       const post = await Post.create({ _id: new mongoose.Types.ObjectId(), content});
       const user = await User.findByIdAndUpdate(

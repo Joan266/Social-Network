@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faXmark, faPhotoFilm } from '@fortawesome/free-solid-svg-icons';
 import { timeSince } from "../utils/useTimeSinceString";
 import { useNavigate } from 'react-router-dom'; 
-import { convertToBase64 } from '../utils/useConvertToBase64';
+// import { convertToBase64 } from '../utils/useConvertToBase64';
 
 const FileContainer = ({file, removeFileSelected}) => {
   return (
@@ -93,21 +93,22 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
     const file = event.target.files[0];
     if(!file) return;
     console.log(file)
-    // Transform input into base64
-    const base64 = await convertToBase64(file);
-    console.log(base64)
-    // Store selected file and base64 
-    setSelectedFile({file, base64});
+    // // Transform input into base64
+    // const base64 = await convertToBase64(file);
+    // console.log(base64)
+    // // Store selected file and base64 
+    setSelectedFile(file);
     // Clear file input
     event.target.file = null;
   };
 
   const handlePostSubmit = async () => {
     if(isLoading || (content.trim() === "" && !selectedFile))return;
+    console.log(`selectedFile ${selectedFile}`);
     createPost({
       content,
       postId: postIsCommentData ?  postIsCommentData._id:false,
-      file: selectedFile ? selectedFile.file:null,
+      file: selectedFile,
     })
     postIsCommentData && increaseCommentsCount()
     setContent("")
@@ -147,7 +148,7 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
                 </div>
                 {selectedFile && (
                   <div className={styles.filesContainer}>
-                    <FileContainer file={selectedFile.file} removeFileSelected={()=>removeFileSelected()} />
+                    <FileContainer file={selectedFile} removeFileSelected={()=>removeFileSelected()} />
                   </div>
                 )}
               </div>
