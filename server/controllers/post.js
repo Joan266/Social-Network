@@ -4,7 +4,8 @@ const User = require('../models/user');
 
 module.exports = postController =  {
   create: async (req, res) => {
-    const {content, userId, postId } = req.body
+    const {content, userId, postId, fileId } = req.body
+    console.log(req.body)
     try {
       const post = await Post.create({ _id: new mongoose.Types.ObjectId(), content});
       const user = await User.findByIdAndUpdate(
@@ -20,8 +21,10 @@ module.exports = postController =  {
         );
       }
       post.user = userId;
+      post.file = fileId || null;
       await post.save();
       if(post){
+        console.log("post",post)
         res.status(200).json({_id: post._id})
       }else {
         console.log(`Post create operation failed`)
@@ -43,11 +46,11 @@ module.exports = postController =  {
       .select('-likes -__v')
       .populate({ path: 'user', select: 'username -_id' })
       .exec()
-      const { file, user, ...rest } = post.toObject(); 
+      const { user, ...rest } = post.toObject(); 
       const modifiedPost = { ...rest, ...user };
       console.log(modifiedPost)
       if (modifiedPost) {
-        res.status(200).json({postData:modifiedPost, file});
+        res.status(200).json({postData:modifiedPost});
       } else {
         res.status(404).json({ error: "Post not found" });
       }

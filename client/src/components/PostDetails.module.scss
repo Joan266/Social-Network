@@ -26,7 +26,7 @@
     }
   }
   .body{
-    padding-bottom: 13px;
+    padding-bottom: 8px;
     width: 500px;
     display: flex;
     flex-direction: column;
@@ -105,12 +105,28 @@
       max-width: 500px;
       color:#0f1419;
     }
+    .imageContainer {
+      border-radius: 15px;
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      margin-top: 13px;
+      img {
+        max-width: 500px;
+        max-height: 1000px;
+        height: auto;
+      }
+      display:flex;
+      background-color: #ccc;
+    }
     .settings{
       height: 35px;
       display: flex;
       flex-direction: row;
       justify-content: space-around;
       color:#536471;
+      margin-top: 8px;
+      
       span {
         font-size: 14px;
         width: 14px;

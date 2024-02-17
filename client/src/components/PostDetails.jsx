@@ -8,6 +8,7 @@ import useFetchPostData from '../hooks/useFetchPostData';
 import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import ImageComponent from './Image';
 
 const PostDetails = ({ postId }) => {
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
@@ -94,6 +95,11 @@ const PostDetails = ({ postId }) => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
+          {postData.file && (
+            <div className={styles.imageContainer}>
+              <ImageComponent fileId={postData.file}/>
+            </div>
+          )}
           <div className={styles.settings}>
             <div className={styles.commentContainer}>
               <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>

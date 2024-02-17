@@ -93,12 +93,8 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
     const file = event.target.files[0];
     if(!file) return;
     console.log(file)
-    // // Transform input into base64
-    // const base64 = await convertToBase64(file);
-    // console.log(base64)
-    // // Store selected file and base64 
+
     setImage(file);
-    // Clear file input
   };
 
   const handlePostSubmit = async () => {

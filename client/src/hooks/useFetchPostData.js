@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { postApi } from '../services/api';
 import { useAuthContext } from '../hooks/useAuthContext';
-import { convertFromBase64, useConvertFromBase64 } from '../utils/useConvertFromBase64'
 
 const useFetchPostData = ({isVisible, postId}) => {
   const { user } = useAuthContext();
@@ -43,10 +42,7 @@ const useFetchPostData = ({isVisible, postId}) => {
         // Fetch user data
         const response = await postApi.fetchPostData(postId, headers);
         setPostData(response.postData);
-        if(response &&response.file) {
-          const file = await convertFromBase64(response.file);
-          console.log(file)
-        }
+        console.log(response.postData)
         const isLikingResponse = await postApi.isLiking({ userId: user._id, postId }, headers);
         setIsPostLiked(isLikingResponse);
         
