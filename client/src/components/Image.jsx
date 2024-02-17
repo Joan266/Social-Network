@@ -31,7 +31,7 @@ const ImageComponent = ({ fileId }) => {
   }, [fileId, user]);
 
   return (
-    <img src={imageUrl} alt="Uploaded" />
+    imageUrl && <img src={imageUrl} alt="Uploaded" />
   );
 };
 

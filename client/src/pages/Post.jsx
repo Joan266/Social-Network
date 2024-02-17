@@ -10,7 +10,7 @@ import { timeSince } from '../utils/useTimeSinceString';
 import useFetchPostData from '../hooks/useFetchPostData';
 import { Link } from 'react-router-dom';
 import PostForm from '../components/PostForm';
-
+import ImageComponent from '../components/Image';
 const Post = () => {
   const { postId } = useParams();
   useFetchPostReplies(postId);
@@ -72,6 +72,11 @@ const Post = () => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
+          {postData.file && (
+            <div className={styles.imageContainer}>
+              <ImageComponent fileId={postData.file}/>
+            </div>
+          )}
           <div className={styles.settings}>
             <div className={styles.commentContainer}>
               <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>

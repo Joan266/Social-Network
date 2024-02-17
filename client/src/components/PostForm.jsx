@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faXmark, faPhotoFilm } from '@fortawesome/free-solid-svg-icons';
 import { timeSince } from "../utils/useTimeSinceString";
 import { useNavigate } from 'react-router-dom'; 
-// import { convertToBase64 } from '../utils/useConvertToBase64';
+import ImageComponent from "./Image";
 
 const FileContainer = ({file, removeImage}) => {
   return (
@@ -65,6 +65,11 @@ const PostTargeted = ({postData}) => {
       <div className={styles.content}>
         {postData.content}
       </div>
+      {postData.file && (
+            <div className={styles.imageContainer}>
+              <ImageComponent fileId={postData.file}/>
+            </div>
+          )}
     </div>
   </div>
   )
