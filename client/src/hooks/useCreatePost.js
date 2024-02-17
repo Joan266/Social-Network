@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
 import { postApi } from '../services/api'
+import { filesApi } from '../services/api'
 import { usePostsContext } from './usePostsContext'
 export const useCreatePost = () => {
   const { user } = useAuthContext()
@@ -8,31 +9,40 @@ export const useCreatePost = () => {
   const [isLoading, setIsLoading] = useState(false)
 
   const createPost = async ({content, postId, image}) => {
-    const headers = {
-      'Content-Type': "multipart/form-data",
-      'Authorization': `Bearer ${user.token}`,
-    };
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append("image", image);
-    content && formData.append("content", content);
-    postId && formData.append("postId", postId);
-        // Log the FormData contents
-    for (const pair of formData.entries()) {
-      console.log(pair[0] + ', 1' + pair[1]);
+    let postData = { postId, content, userId: user._id };
+    if(image){
+      const formData = new FormData();
+      formData.append("file", image);
+      const uploadFileResponse = await filesApi.upload(
+        formData, 
+        {
+          'Content-Type': "multipart/form-data",
+          'Authorization': `Bearer ${user.token}`,
+        },
+      );
+      if (uploadFileResponse.error) {
+        setIsLoading(false)
+        console.log(uploadFileResponse.error);
+        return
+      }
+      postData.fileId = uploadFileResponse.fileId;
     }
-    const response = await postApi.create(
-      formData, 
-      headers,
+    const createPostResponse = await postApi.create(
+      postData, 
+      {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`,
+      },
     );
-    if (response.error) {
+    if (createPostResponse.error) {
       setIsLoading(false)
-      console.log(response.error);
+      console.log(createPostResponse.error);
       return
     }
-    console.log(response)
+    console.log(createPostResponse)
     setIsLoading(false)
-    dispatch({type: 'ADD_POST', payload: response})
+    dispatch({type: 'ADD_POST', payload: createPostResponse})
   }
   return { createPost, isLoading }
 }

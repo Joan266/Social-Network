@@ -40,6 +40,10 @@ const postSchema = new Schema(
       type: Number,
       default:0,
     },
+    file: {
+      type: Schema.Types.ObjectId,
+      ref: 'File',
+    },
   },
   {
     timestamps: { createdAt: true, updatedAt: false }

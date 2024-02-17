@@ -12,6 +12,36 @@ const http = axios.create({
     headers: { 'Content-Type': 'application/json' },
 });
 
+export class filesApi {
+    static async upload(formData,headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers,
+            });
+            const response = await auth.post("/files/upload", formData);
+            return response.data; 
+        } catch ({response}) {
+            console.log("Error uploading file:", response.error);
+        }
+    }
+    static async image(fileId,headers) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers, 
+            });
+            const response = await auth.get("/files/image", {
+                params: { fileId },
+                responseType: 'blob'
+            });
+            return response.data; 
+        } catch ({response}) {
+            console.log("Error showing image:", response.error);
+        }
+    }
+}
+
 export class postApi {
     
     static async fetchPostData(query, headers) {
@@ -30,13 +60,13 @@ export class postApi {
             return response.data;
         }
     }
-    static async create(formData,headers) {
+    static async create(data,headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
                 headers,
             });
-            const response = await auth.post("/post/create", formData);
+            const response = await auth.post("/post/create", data);
             return response.data; 
         } catch ({response}) {
             console.log("Error creating post:", response.error);

@@ -1,49 +1,68 @@
-const fs = require('fs'); // Import the 'fs' module for file operations
+const fs = require('fs');
 const mongoose = require('mongoose');
-const Grid = require('gridfs-stream');
-const connection = mongoose.connection;
-const File = require('../models/file'); // Import Mongoose model for files
+const { GridFSBucket } = require('mongoose');
 
-// Initialize GridFS stream
+const connection = mongoose.connection;
+const File = require('../models/file');
+
 let gfs;
 
 connection.once('open', () => {
-    gfs = Grid(connection.db, mongoose.mongo);
-    gfs.collection('uploads');
+    gfs = new mongoose.mongo.GridFSBucket(connection.db);
 });
 
-// Set the destination folder for temporary file storage
-module.exports = filesController =  {
-  upload: async (req, res) => {
-    try {
-        // Create a new file instance
-        const newFile = new File({
-            filename: req.file.originalname,
-            contentType: req.file.mimetype
-        });
-  
-        // Save file metadata to MongoDB
-        await newFile.save();
-  
-        // Create a writestream to store file data in GridFS
-        const writestream = gfs.createWriteStream({
-            filename: req.file.originalname,
-            metadata: newFile._id // Attach file ID as metadata
-        });
-  
-        // Pipe the uploaded file from multer into the GridFS writestream
-        const readstream = fs.createReadStream(req.file.path);
-        readstream.pipe(writestream);
-  
-        // Once upload is complete, remove temporary file and respond to client
-        writestream.on('close', () => {
-            fs.unlink(req.file.path, () => {
-                res.status(201).send('File uploaded successfully');
+module.exports = filesController = {
+    upload: async (req, res) => {
+        try {
+            const { file } = req;
+            console.log(file, file.originalname);
+            // Check if the file is an image based on its MIME type
+            if (!file.mimetype.startsWith('image/')) {
+                return res.status(400).json({ error: 'Only image files are allowed' });
+            }
+            const newFile = new File({
+                filename: file.originalname,
+                contentType: file.mimetype
             });
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('Server error');
-    }
-  }
-}
+
+            await newFile.save();
+            console.log(newFile);
+
+            const uploadStream = gfs.openUploadStream(newFile._id.toString());
+
+            const readStream = fs.createReadStream(file.path);
+            readStream.pipe(uploadStream);
+
+            uploadStream.on('finish', () => {
+                fs.unlink(file.path, () => {
+                    res.status(201).json({fileId: newFile._id});
+                });
+            });
+        } catch (error) {
+            console.log(`Error: ${error}`)
+            res.status(400).json({
+                error: 'Bad Request',
+            })
+        }
+    },
+    image: async (req, res) => {
+        const { fileId } = req.query;
+        
+        try {
+            const files = await gfs.find({ filename: fileId }).toArray();
+            
+            if (!files || files.length === 0) {
+                return res.status(404).json({ error: 'File not found' });
+            }
+            console.log("file",files[0])
+            const fileData = await File.findById(fileId);
+            res.set('Content-Type', fileData.contentType);  
+            // Assuming you want the first file found
+            const readstream = gfs.openDownloadStream(files[0]._id);
+            readstream.pipe(res); // Pipe the file data directly to the response
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }     
+};
