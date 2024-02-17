@@ -40,6 +40,8 @@
     .upperContainer{
       display:flex;
       flex-direction: column;
+      max-height: 800px; 
+      overflow-y: auto;
       .container {
         display:flex;
         flex-direction: row;
@@ -78,7 +80,20 @@
             max-width: 500px;
             word-wrap: break-word;
           }
-          
+          .imageContainer {
+            border-radius: 15px;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            margin-top: 13px;
+            img {
+              max-width: 500px;
+              max-height: 1000px;
+              height: auto;
+            }
+            display:flex;
+            background-color: #ccc;
+          }
         }
         .profilePic {
           margin-right: 13px;
@@ -158,6 +173,21 @@
           }
         }
       }
+    }
+    .upperContainer::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .upperContainer::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    .upperContainer::-webkit-scrollbar-thumb {
+      background: #888888b4;
+    }
+    
+    .upperContainer::-webkit-scrollbar-thumb:hover {
+      background: #888;
     }
     .bottomContainer {
       display: flex;
