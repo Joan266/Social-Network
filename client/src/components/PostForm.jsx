@@ -6,6 +6,7 @@ import { faUser, faXmark, faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
 import { timeSince } from "../utils/useTimeSinceString";
 import { useNavigate } from 'react-router-dom'; 
 import ImageComponent from "./Image";
+import DynamicTextarea from "./DynamicTextarea";
 
 const FileContainer = ({file, removeImage}) => {
   return (
@@ -22,22 +23,6 @@ const FileContainer = ({file, removeImage}) => {
         alt={file.name}
       />
     </div>
-  );
-}
-
-const DynamicTextarea = ({setContent,...rest}) => {
-  function textAreaAdjust(event) {
-    const element = event.target;
-    setContent(element.value)
-    element.style.height = "auto";
-    element.style.height = (25 + element.scrollHeight) + "px";
-  }
-
-  return (
-    <textarea
-      onChange={textAreaAdjust}
-      {...rest}
-    />
   );
 }
 

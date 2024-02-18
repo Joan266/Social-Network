@@ -48,10 +48,9 @@
           border: white 4px solid;
         }
         .settingsContainer {
-          width: 124px;
           display: flex;
           justify-content: center;
-          margin-right: 13px;
+          height: 38px;
           .sharedFollow {
             font-size: 17px;
             display: flex;
@@ -88,15 +87,33 @@
             }
           }
           .lock {
-            padding: 10px 20px;
+            padding: 0 20px;
             cursor: pointer;
+            display: flex;
+            color: #333;
+            align-items: center;
+            font-weight: 600;
             border-radius: 25px;
-            border: #536471 1px solid;
+            border: #ccc 1px solid;
+            margin-right: 8px;
             &:hover{
               background-color: whitesmoke;
             }
             svg {
               margin-right: 8px;
+            }
+          }
+          .edit {
+            padding: 0 20px;
+            cursor: pointer;
+            display: flex;
+            color: #333;
+            align-items: center;
+            font-weight: 600;
+            border-radius: 25px;
+            border: #ccc 1px solid;
+            &:hover{
+              background-color: whitesmoke;
             }
           }
         }
