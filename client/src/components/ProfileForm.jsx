@@ -38,7 +38,7 @@ const PostForm = ({setIsProfileFormVisible, handlePrivacyStatus, userData}) => {
           <div className={styles.container}>
             <div className={styles.name}>
               <label>Name</label>
-              <input type="text"></input>
+              <input type="text" maxlength="30"/>
             </div>
           </div>
           <div className={styles.container}>
@@ -47,7 +47,7 @@ const PostForm = ({setIsProfileFormVisible, handlePrivacyStatus, userData}) => {
               <DynamicTextarea  
                 type="text"
                 setContent={setContent}
-                maxLength="200"
+                maxLength="160"
                 value={content}
               />
             </div>
@@ -55,7 +55,7 @@ const PostForm = ({setIsProfileFormVisible, handlePrivacyStatus, userData}) => {
           <div className={styles.container}>
             <div className={styles.location}>
               <label>Location</label>
-              <input type="text"></input>
+              <input type="text" maxlength="30"/>
             </div>
           </div>
           <div className={styles.container}>
