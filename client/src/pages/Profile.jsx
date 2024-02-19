@@ -1,7 +1,7 @@
 import { useState} from 'react';
 import { useParams } from 'react-router-dom'
 import { faCalendarDays } from '@fortawesome/free-regular-svg-icons';
-import { faLock, faUnlock,faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Profile.module.scss';
 import useFetchUserData from '../hooks/useFetchProfileData';
