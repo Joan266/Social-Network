@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { postApi } from '../services/api';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { readImageId } from '../utils/useReadImageId';
 
 const useFetchPostData = ({isVisible, postId}) => {
   const { user } = useAuthContext();
@@ -40,9 +41,12 @@ const useFetchPostData = ({isVisible, postId}) => {
         setLoading(true);
 
         // Fetch user data
-        const response = await postApi.fetchPostData(postId, headers);
-        setPostData(response.postData);
-        console.log(response.postData)
+        const postDataResponse = await postApi.fetchPostData(postId, headers);
+        console.log(postDataResponse.postData)
+        const { postImageFileId, ...rest } = postDataResponse.postData;
+        const postImageUrl = postImageFileId ? await readImageId({ fileId: postImageFileId, userToken:user.token}) : null;
+
+        setPostData({postImageUrl,...rest});
         const isLikingResponse = await postApi.isLiking({ userId: user._id, postId }, headers);
         setIsPostLiked(isLikingResponse);
         

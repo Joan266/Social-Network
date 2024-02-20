@@ -40,7 +40,7 @@ const postSchema = new Schema(
       type: Number,
       default:0,
     },
-    file: {
+    postImageFileId: {
       type: Schema.Types.ObjectId,
       ref: 'File',
     },

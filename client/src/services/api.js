@@ -239,17 +239,17 @@ export class userApi {
             return response.data;
         }
     }
-    static async updatePrivacyStatus(data, headers) {
+    static async updateProfileData(data, headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
                 headers,
             });
 
-            const response = await auth.put("/user/updateprivacystatus", data);
+            const response = await auth.put("/user/updateprofiledata", data);
             return response.data;
         } catch ({response}) {
-            console.log("Error updating privacy settings:", response.data);
+            console.log("Error updating profile data:", response.data);
             return response.data;
         }
     }
