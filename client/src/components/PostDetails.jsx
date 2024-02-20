@@ -1,4 +1,4 @@
-import React, { useEffect, useRef,useState } from 'react';
+import { useEffect, useRef,useState } from 'react';
 import styles from './PostDetails.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -8,16 +8,22 @@ import useFetchPostData from '../hooks/useFetchPostData';
 import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import ImageComponent from './Image';
+import useReadImage from '../hooks/useReadImage'
 
 const PostDetails = ({ postId }) => {
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const [ fileId, setFileId ] = useState(undefined);
   const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({isVisible, postId});
   const postRef = useRef(null);
   const navigate = useNavigate(); 
-
+  const { imageUrl } = useReadImage({fileId});
+  useEffect(()=>{
+    if(!postData)return
+    setFileId(postData.file)
+  },[postData])
+  
   useEffect(() => {
     // Store the current value of postRef.current in a variable inside the effect
     const currentPostRef = postRef.current;
@@ -29,36 +35,36 @@ const PostDetails = ({ postId }) => {
         root: null, // Use the viewport as the root
         threshold: 0.1, // Trigger when 50% of the component is visible
       }
-    );
-  
-    // Start observing the PostDetails component
-    if (currentPostRef) {
-      observer.observe(currentPostRef);
-    }
-  
-    // Cleanup function
-    return () => {
+      );
+      
+      // Start observing the PostDetails component
       if (currentPostRef) {
-        observer.unobserve(currentPostRef);
-        setIsVisible(false); // Update isVisible to false when component is no longer observed
+        observer.observe(currentPostRef);
       }
+      
+      // Cleanup function
+      return () => {
+        if (currentPostRef) {
+          observer.unobserve(currentPostRef);
+          setIsVisible(false); // Update isVisible to false when component is no longer observed
+        }
+      };
+    }, [postId, postRef]); // Include postRef in the dependency array
+    
+    const handlePostLink = () => {
+      navigate(`/post/${postId}`); 
     };
-  }, [postId, postRef]); // Include postRef in the dependency array
-  
-  const handlePostLink = () => {
-    navigate(`/post/${postId}`); 
-  };
+    
+    const increaseCommentsCount = () => {
+      setCommentsCount(commentsCount + 1);
+    };
 
-  const increaseCommentsCount = () => {
-    setCommentsCount(commentsCount + 1);
-  };
-
-  if (isLoading || !postData || !isVisible ) return (
+  if (isLoading || !postData || !isVisible  ) return (
     <div className={styles.postDetailsContainer} ref={postRef}>
 
     </div>
   );
-
+  
   return (
       <div className={styles.postDetailsContainer} ref={postRef} onClick={() => handlePostLink()}>
         {isPostFormVisible && (
@@ -95,9 +101,9 @@ const PostDetails = ({ postId }) => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          {postData.file && (
+          {imageUrl && (
             <div className={styles.imageContainer}>
-              <ImageComponent fileId={postData.file}/>
+              <img src={imageUrl} alt='post'/>
             </div>
           )}
           <div className={styles.settings}>

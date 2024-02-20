@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { filesApi } from '../services/api';
 import { useAuthContext } from '../hooks/useAuthContext';
 
-const ImageComponent = ({ fileId }) => {
+const ReadImage = ({ fileId }) => {
   const [imageUrl, setImageUrl] = useState('');
   const { user } = useAuthContext();
   
@@ -21,7 +21,7 @@ const ImageComponent = ({ fileId }) => {
         console.error('Error fetching image:', error);
       }
     }
-
+    if(!fileId)return
     fetchImage();
 
     // Clean up to revoke the Object URL when component unmounts
@@ -30,9 +30,7 @@ const ImageComponent = ({ fileId }) => {
     };
   }, [fileId, user]);
 
-  return (
-    imageUrl && <img src={imageUrl} alt="Uploaded" />
-  );
+  return { imageUrl }
 };
 
-export default ImageComponent;
+export default ReadImage;
