@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useParams } from 'react-router-dom'
 import styles from './Post.module.scss';
 import useFetchPostReplies from '../hooks/useFetchPostReplies';
@@ -10,13 +10,20 @@ import { timeSince } from '../utils/useTimeSinceString';
 import useFetchPostData from '../hooks/useFetchPostData';
 import { Link } from 'react-router-dom';
 import PostForm from '../components/PostForm';
-import ImageComponent from '../components/Image';
+import useReadImage from '../hooks/useReadImage';
+
 const Post = () => {
   const { postId } = useParams();
   useFetchPostReplies(postId);
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
+  const [ fileId, setFileId ] = useState(undefined);
   const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({isVisible:true, postId});
+  const { imageUrl } = useReadImage({fileId});
+  useEffect(()=>{
+    if(!postData)return
+    setFileId(postData.file)
+  },[postData])
 
 
 
@@ -24,7 +31,7 @@ const Post = () => {
     setCommentsCount(commentsCount + 1);
   };
 
-  if (isLoading || !postData  ) return (
+  if (isLoading || !postData   ) return (
     <div className={styles.postRepliesContainer}>
 
     </div>
@@ -72,9 +79,9 @@ const Post = () => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          {postData.file && (
+          {imageUrl && (
             <div className={styles.imageContainer}>
-              <ImageComponent fileId={postData.file}/>
+              <img src={imageUrl} alt='postpage'/>
             </div>
           )}
           <div className={styles.settings}>

@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faXmark, faPhotoFilm } from '@fortawesome/free-solid-svg-icons';
 import { timeSince } from "../utils/useTimeSinceString";
 import { useNavigate } from 'react-router-dom'; 
-import ImageComponent from "./Image";
 import DynamicTextarea from "./DynamicTextarea";
+import useReadImage from '../hooks/useReadImage'
 
 const FileContainer = ({file, removeImage}) => {
   return (
@@ -27,6 +27,7 @@ const FileContainer = ({file, removeImage}) => {
 }
 
 const PostTargeted = ({postData}) => {
+  const { imageUrl } = useReadImage({fileId:postData.file})
   return (
     <div className={styles.container}>
     <div className={styles.profilePic}>
@@ -50,9 +51,9 @@ const PostTargeted = ({postData}) => {
       <div className={styles.content}>
         {postData.content}
       </div>
-      {postData.file && (
+      {imageUrl && (
             <div className={styles.imageContainer}>
-              <ImageComponent fileId={postData.file}/>
+              <img src={imageUrl} alt="postcomment"/>
             </div>
           )}
     </div>

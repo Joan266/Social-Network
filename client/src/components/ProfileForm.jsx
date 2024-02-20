@@ -1,17 +1,53 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import styles from './ProfileForm.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faXmark, faUnlock,faCameraRetro } from '@fortawesome/free-solid-svg-icons';
 import DynamicTextarea from "./DynamicTextarea";
 import EditMedia from "./EditMedia";
+import { useUpdateProfileData } from "../hooks/useUpdateProfileData";
+
 const ProfileForm = ({setIsProfileFormVisible, handlePrivacyStatus, userData}) => {
-  const [ content, setContent ] = useState(""); 
+
+  const { updateProfileData, isLoading } = useUpdateProfileData();
+
+  const [ bioContent, setBioContent ] = useState(Text);
+  const [ name, setName ] = useState(String);
+  const [location,setLocation] = useState(String);
+  const [ birthDate, setBirthDate ] = useState(Date);  
+  const [ bannerImage, setBannerImage ] = useState(File);
+  const [ profilePic, setProfilePic ] = useState(File);
+
   const fileInputRef = useRef(null);
   const [imgSrc, setImgSrc] = useState(null);
-  const [editingImage,setEditingImage] = useState(false);
-  const [ bannerImage, setBannerImage ] = useState(null);
-  const [ userImage, setUserImage ] = useState(null);
   const [ inputImageType, setInputImageType ] = useState(null);
+  const [editingImage,setEditingImage] = useState(false);
+
+  useEffect(()=>{
+    const { bio, name, location, birthDate, bannerImage, profilePic } = userData
+    setBioContent(bio)
+    setName(name)
+    setLocation(location)
+    setBirthDate(birthDate)
+    setBannerImage(bannerImage)
+    setProfilePic(profilePic)
+  },[userData])
+
+  const handleSaveUserData = () => {
+    const data = {
+      bioContent,
+      name,
+      location,
+      birthDate
+    }
+    const files = new FormData();
+    if(profilePic !== userData.profilePic){
+      files.append("profile-pic", profilePic);
+    }
+    if(bannerImage !== userData.banner){
+      files.append("banner", bannerImage);
+    }
+    updateProfileData(data,files)
+  }
   const handleFileSelect = (type) => {
     setInputImageType(type)
     fileInputRef.current.click();
@@ -32,9 +68,19 @@ const endOfEdit = (editedImage) => {
   if (inputImageType === "banner") {
     setBannerImage(editedImage); 
   } else if (inputImageType === "userpic") {
-    setUserImage(editedImage); 
+    setProfilePic(editedImage); 
   }
 };
+  if(isLoading){
+    return (
+    <div className={styles.profileFormOverlay} onClick={(e)=>e.stopPropagation()}>
+      <div className={styles.profileFormContainer} >
+        Loading
+      </div>
+    </div>
+  )
+
+  }
   if(editingImage){
     return (
       <div className={styles.profileFormOverlay} onClick={(e)=>e.stopPropagation()}>
@@ -59,7 +105,7 @@ const endOfEdit = (editedImage) => {
               Profile
             </div>
             <div className={styles.saveButton}>
-              <button>Save</button>
+              <button onClick={handleSaveUserData}>Save</button>
             </div>
           </div>
           <input 
@@ -77,7 +123,7 @@ const endOfEdit = (editedImage) => {
           </div>  
           <div className={styles.picAndControls}>
             <div className={styles.profilePic}>
-               {userImage && <img src={userImage} alt="userpicture" />}
+               {profilePic && <img src={profilePic} alt="userpicture" />}
               <div className={styles.mediaDropLink} onClick={(e) => { handleFileSelect("userpic");  e.stopPropagation() }}>
                 <FontAwesomeIcon icon={faCameraRetro} />
               </div>
@@ -91,7 +137,12 @@ const endOfEdit = (editedImage) => {
           <div className={styles.container}>
             <div className={styles.name}>
               <label>Name</label>
-              <input type="text" maxlength="30"/>
+              <input 
+                  type="text" 
+                  maxlength="30" 
+                  onChange={(event) => setName(event.target.value)} 
+                  value={name}
+              />
             </div>
           </div>
           <div className={styles.container}>
@@ -99,22 +150,33 @@ const endOfEdit = (editedImage) => {
               <label>Bio</label>
               <DynamicTextarea  
                 type="text"
-                setContent={setContent}
+                setContent={setBioContent}
                 maxLength="160"
-                value={content}
+                value={bioContent}
               />
             </div>
           </div>
           <div className={styles.container}>
             <div className={styles.location}>
               <label>Location</label>
-              <input type="text" maxlength="30"/>
+              <input 
+                  type="text" 
+                  maxlength="30" 
+                  onChange={(event) => setLocation(event.target.value)} 
+                  value={location}
+              />
             </div>
           </div>
           <div className={styles.container}>
             <div className={styles.birthDate}>
               <label>Birth date</label>
-              <input type="date" min="1900-01-01" max={new Date().toISOString().split('T')[0]} />
+              <input 
+                type="date" 
+                min="1900-01-01" 
+                max={new Date().toISOString().split('T')[0]} 
+                onChange={(event) => setBirthDate(event.target.value)} 
+                value={birthDate}
+              />
             </div>
           </div>
         </div>
