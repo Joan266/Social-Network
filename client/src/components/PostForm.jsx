@@ -6,7 +6,7 @@ import { faUser, faXmark, faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
 import { timeSince } from "../utils/useTimeSinceString";
 import { useNavigate } from 'react-router-dom'; 
 import DynamicTextarea from "./DynamicTextarea";
-import useReadImage from '../hooks/useReadImage'
+import {readImageId} from '../utils/useReadImageId'
 
 const FileContainer = ({file, removeImage}) => {
   return (
@@ -27,7 +27,6 @@ const FileContainer = ({file, removeImage}) => {
 }
 
 const PostTargeted = ({postData}) => {
-  const { imageUrl } = useReadImage({fileId:postData.file})
   return (
     <div className={styles.container}>
     <div className={styles.profilePic}>
@@ -51,9 +50,9 @@ const PostTargeted = ({postData}) => {
       <div className={styles.content}>
         {postData.content}
       </div>
-      {imageUrl && (
+      {postData.postImageUrl && (
             <div className={styles.imageContainer}>
-              <img src={imageUrl} alt="postcomment"/>
+              <img src={postData.postImageUrl} alt="postcomment"/>
             </div>
           )}
     </div>

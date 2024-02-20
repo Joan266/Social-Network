@@ -8,21 +8,14 @@ import useFetchPostData from '../hooks/useFetchPostData';
 import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import useReadImage from '../hooks/useReadImage'
 
 const PostDetails = ({ postId }) => {
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const [ fileId, setFileId ] = useState(undefined);
   const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({isVisible, postId});
   const postRef = useRef(null);
   const navigate = useNavigate(); 
-  const { imageUrl } = useReadImage({fileId});
-  useEffect(()=>{
-    if(!postData)return
-    setFileId(postData.file)
-  },[postData])
   
   useEffect(() => {
     // Store the current value of postRef.current in a variable inside the effect
@@ -101,9 +94,9 @@ const PostDetails = ({ postId }) => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          {imageUrl && (
+          {postData.postImageUrl && (
             <div className={styles.imageContainer}>
-              <img src={imageUrl} alt='post'/>
+              <img src={postData.postImageUrl} alt='post'/>
             </div>
           )}
           <div className={styles.settings}>

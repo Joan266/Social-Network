@@ -23,7 +23,7 @@ router.get('/fetchposts', requireAuth, userController.fetchUserPosts);
 router.post('/isfollowing', requireAuth, userController.isFollowingUser);
 
 // Update privacy status user route
-router.put('/updateprivacystatus', requireAuth, userController.updatePrivacyStatus);
+router.put('/updateprofiledata', requireAuth, userController.updateProfileData);
 
 // follow user route
 router.put('/follow', requireAuth, userController.followUser);

@@ -32,6 +32,26 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    bioContent:{
+      type: String,
+    },
+    name:{
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    birthDate:{
+      type: Date,
+    },
+    bannerFileId: {
+      type: Schema.Types.ObjectId,
+      ref: 'File',
+    },
+    profilePicFileId: {
+      type: Schema.Types.ObjectId,
+      ref: 'File',
+    },
     privacyStatus: {
       type:Boolean,
       default:false,

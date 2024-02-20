@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { userApi } from '../services/api';
 import { useAuthContext } from '../hooks/useAuthContext';
+import {readImageId} from '../utils/useReadImageId';
 
 const useFetchUserData = (username) => {
   const { user } = useAuthContext();
@@ -30,25 +31,7 @@ const useFetchUserData = (username) => {
       console.error('Error following/unfollowing user:', error);
     }
   };
-
-  const handlePrivacyStatus = async () => {
-    const headers = getHeaders();
-    try {
-      const response = await userApi.updatePrivacyStatus({ privacyStatus: !userData.privacyStatus, username }, headers);
-      if (response.error) {
-        console.log(response.error);
-        return;
-      }
-      setUserData({
-        ...userData, 
-        privacyStatus:!userData.privacyStatus,
-      });
-    } catch (error) {
-      console.error('Error updating privacy status:', error);
-    }
-  };
-
-  
+ 
   useEffect(() => {
     if (!username || !user) return;
     if (username === user.username) {
@@ -63,8 +46,10 @@ const useFetchUserData = (username) => {
 
         // Fetch user data
         const userDataResponse = await userApi.fetchUserData(username, headers);
-
-        setUserData(userDataResponse);
+        const { profilePicFileId, bannerFileId, ...rest } = userDataResponse;
+        const profilePicUrl = profilePicFileId ? await readImageId({ fileId: profilePicFileId, userToken: user.token }) : null;
+        const bannerUrl = bannerFileId ? await readImageId({ fileId:bannerFileId, userToken: user.token }) : null;
+        setUserData({ profilePicUrl, bannerUrl, ...rest });
 
         // Check if the logged-in user is following this user
         if (username !== user.username) {
@@ -88,7 +73,7 @@ const useFetchUserData = (username) => {
     'Authorization': `Bearer ${user.token}`,
   });
 
-  return { userData, loading, isUserFollowed, isUserProfile,handleFollowToggle,handlePrivacyStatus };
+  return { userData, loading, isUserFollowed, isUserProfile,handleFollowToggle };
 };
 
 export default useFetchUserData;

@@ -10,22 +10,13 @@ import { timeSince } from '../utils/useTimeSinceString';
 import useFetchPostData from '../hooks/useFetchPostData';
 import { Link } from 'react-router-dom';
 import PostForm from '../components/PostForm';
-import useReadImage from '../hooks/useReadImage';
 
 const Post = () => {
   const { postId } = useParams();
   useFetchPostReplies(postId);
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
-  const [ fileId, setFileId ] = useState(undefined);
   const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({isVisible:true, postId});
-  const { imageUrl } = useReadImage({fileId});
-  useEffect(()=>{
-    if(!postData)return
-    setFileId(postData.file)
-  },[postData])
-
-
 
   const increaseCommentsCount = () => {
     setCommentsCount(commentsCount + 1);
@@ -79,9 +70,9 @@ const Post = () => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          {imageUrl && (
+          {postData.postImageUrl && (
             <div className={styles.imageContainer}>
-              <img src={imageUrl} alt='postpage'/>
+              <img src={postData.postImageUrl} alt='postpage'/>
             </div>
           )}
           <div className={styles.settings}>

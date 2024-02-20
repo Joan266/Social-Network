@@ -4,7 +4,7 @@ const User = require('../models/user');
 
 module.exports = postController =  {
   create: async (req, res) => {
-    const {content, userId, postId, fileId } = req.body
+    const {content, userId, postId, postImageFileId } = req.body
     console.log(req.body)
     try {
       const post = await Post.create({ _id: new mongoose.Types.ObjectId(), content});
@@ -21,7 +21,7 @@ module.exports = postController =  {
         );
       }
       post.user = userId;
-      post.file = fileId || null;
+      post.postImageFileId = postImageFileId || null;
       await post.save();
       if(post){
         console.log("post",post)

@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
 import { postApi } from '../services/api'
-import { filesApi } from '../services/api'
 import { usePostsContext } from './usePostsContext'
+import { uploadFile } from '../utils/useUploadFile';
+
 export const useCreatePost = () => {
   const { user } = useAuthContext()
   const { dispatch } = usePostsContext()
@@ -11,23 +12,11 @@ export const useCreatePost = () => {
   const createPost = async ({content, postId, image}) => {
     setIsLoading(true);
     let postData = { postId, content, userId: user._id };
-    if(image){
-      const formData = new FormData();
-      formData.append("file", image);
-      const uploadFileResponse = await filesApi.upload(
-        formData, 
-        {
-          'Content-Type': "multipart/form-data",
-          'Authorization': `Bearer ${user.token}`,
-        },
-      );
-      if (uploadFileResponse.error) {
-        setIsLoading(false)
-        console.log(uploadFileResponse.error);
-        return
-      }
-      postData.fileId = uploadFileResponse.fileId;
-    }
+    
+    const postImageFileId = image ? await uploadFile({token: user.token,file:image}) : null;
+
+    postData.postImageFileId = postImageFileId;
+    
     const createPostResponse = await postApi.create(
       postData, 
       {

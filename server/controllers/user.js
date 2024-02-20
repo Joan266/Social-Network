@@ -130,14 +130,15 @@ module.exports = userController =  {
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
-  updatePrivacyStatus: async (req, res) => {
+  updateProfileData: async (req, res) => {
     try {
-      const { privacyStatus, username } = req.body;
+      const { updateData, userId } = req.body;
 
       // Use Mongoose to search for user
-      const user = await User.findOneAndUpdate({ username }, { privacyStatus }, { new: true });
+      const userUpdated = await User.findByIdAndUpdate(userId, { ...updateData }, { new: true });
 
-      if (user) {
+      if (userUpdated) {
+        console.log(`user succesfully updated ${userUpdated}`)
         res.status(200).json();
       } else {
         res.status(404).json({ error: "User not found" });
