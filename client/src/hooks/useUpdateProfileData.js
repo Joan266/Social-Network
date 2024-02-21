@@ -12,17 +12,18 @@ export const useUpdateProfileData = () => {
     try {
       const { info, profilePicFile, bannerFile } = data;
       
-      const profilePicFileId = profilePicFile ? await uploadFile({token: user.token,file:profilePicFile}) : null;
-      const bannerFileId = bannerFile ? await uploadFile({token: user.token,file:bannerFile}) : null;
-    
-      const updateData = {
-        ...info,
-        profilePicFileId,
-        bannerFileId
+      const userDataUpdate = {
+        ...info
       };
+      if(profilePicFile) {
+        userDataUpdate.profilePicFileId = await uploadFile({token: user.token,file:profilePicFile});
+      }
+      if(bannerFile) {
+        userDataUpdate.bannerFileId = await uploadFile({token: user.token,file:bannerFile});
+      }
 
       const updateProfileDataResponse = await userApi.updateProfileData(
-        {updateData, userId:user._id}, 
+        {userDataUpdate, userId:user._id}, 
         {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${user.token}`,

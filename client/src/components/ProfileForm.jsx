@@ -39,11 +39,11 @@ const ProfileForm = ({setIsProfileFormVisible,  userData}) => {
   const handleSaveUserData = () => {
     const data = {
       info: {
-        inputBio,
-        inputName,
-        inputLocation,
-        inputBirthDate,
-        inputPrivacyStatus
+        bio: inputBio,
+        name: inputName,
+        location: inputLocation,
+        birthDate: inputBirthDate,
+        privacyStatus: inputPrivacyStatus
       },
       profilePicFile:null,
       bannerImage:null,

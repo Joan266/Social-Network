@@ -132,10 +132,10 @@ module.exports = userController =  {
   },
   updateProfileData: async (req, res) => {
     try {
-      const { updateData, userId } = req.body;
-
+      const { userDataUpdate, userId } = req.body;
+      console.log(userDataUpdate)
       // Use Mongoose to search for user
-      const userUpdated = await User.findByIdAndUpdate(userId, { ...updateData }, { new: true });
+      const userUpdated = await User.findByIdAndUpdate(userId, { ...userDataUpdate }, { new: true });
 
       if (userUpdated) {
         console.log(`user succesfully updated ${userUpdated}`)
