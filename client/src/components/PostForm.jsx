@@ -6,7 +6,6 @@ import { faUser, faXmark, faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
 import { timeSince } from "../utils/useTimeSinceString";
 import { useNavigate } from 'react-router-dom'; 
 import DynamicTextarea from "./DynamicTextarea";
-import {readImageId} from '../utils/useReadImageId'
 
 const FileContainer = ({file, removeImage}) => {
   return (

@@ -10,4 +10,7 @@ router.post('/upload', upload.single('file'), requireAuth,  filesController.uplo
 // get image route
 router.get('/image', requireAuth,  filesController.image);
 
+// delete file route
+router.delete('/delete', requireAuth,  filesController.delete);
+
 module.exports = router;

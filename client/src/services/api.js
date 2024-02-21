@@ -40,6 +40,22 @@ export class filesApi {
             console.log("Error showing image:", response.error);
         }
     }
+    static async delete({fileId,userToken}) {
+        try {
+            const auth = axios.create({
+                baseURL: URL,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userToken}`,
+                  }, 
+            });
+            await auth.delete("/files/delete", {
+                params: { fileId }
+            });
+        } catch ({response}) {
+            console.log("Error deleting file:", response.error);
+        }
+    }
 }
 
 export class postApi {

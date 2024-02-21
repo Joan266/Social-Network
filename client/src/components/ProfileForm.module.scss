@@ -10,6 +10,13 @@
   align-items: center;
   z-index: 1;
 }
+.imgOverlay{
+  top: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); 
+}
 .profileFormContainer {
   position: relative;
   display: flex;
@@ -29,10 +36,11 @@
     .navContainer {
       top: 0;
       position: sticky; 
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: rgba(255, 255, 255, 0.7);
       display: flex;
       font-size: 17px;
       min-height: 58px;
+      backdrop-filter: blur(10px);
       align-items: center;
       z-index: 3;
       padding: 0 18px;
@@ -58,6 +66,21 @@
       }
       .saveButton {
         width: 73px;
+        button {
+          cursor: pointer;
+          border-radius: 25px;
+          font-weight: 600;
+          font-size: 15px;
+          height: 35px;
+          padding: 0 18px;
+          border: none;
+          color: white;
+          background-color: #0f1419;
+          transition: background-color 0.3s;
+          &:hover{
+           background-color: #0f1419ee;
+          }
+        }
       }
     }
     .mediaDropLink {
@@ -65,7 +88,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-color: #0f141959;
+      background-color: #0f1419af;
       height: 45px;
       border-radius: 50%;
       display: flex;
@@ -73,9 +96,9 @@
       align-items: center;
       width: 45px;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: background-color 0.3s;
       &:hover {
-        background-color: #0f141949;
+        background-color: #0f141993;
       }
       svg {
         color:white;

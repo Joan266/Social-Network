@@ -25,6 +25,15 @@ const seedUsers = async () => {
     // Delete all existing posts
     await Post.deleteMany({});
     console.log('All existing posts deleted.');
+
+    // Delete all documents in fs.files
+    await mongoose.connection.db.collection('fs.files').deleteMany({});
+    console.log('All documents in fs.files deleted.');
+
+    // Delete all documents in fs.chunks
+    await mongoose.connection.db.collection('fs.chunks').deleteMany({});
+    console.log('All documents in fs.chunks deleted.');
+
     let count = 0;
     for (let i = 1; i <= 200; i++) {
       const casual_email = casual.email;
@@ -36,11 +45,12 @@ const seedUsers = async () => {
       const password = 'passworD123!';
       const existingUser = await User.findOne({ $or: [ { email },{ username }] });
       if(existingUser) continue;
+      console.log(`User: ${username}, email: ${email}`);
       const user = await User.signup({ email, username, password });
       count++;
     
       if (user) {
-        console.log(`User: ${user.username}, email: ${user.email} added.`);
+        console.log(`User added succesfully.`);
       }
     }
     for (let i = 1; i <= 300; i++) {
@@ -52,10 +62,12 @@ const seedUsers = async () => {
       const password = 'passworD123!';
       const existingUser = await User.findOne({ $or: [ { email },{ username }] });
       if(existingUser) continue;
+      
+      console.log(`User: ${username}, email: ${email}`);
       const user = await User.signup({ email, username, password });
       count++;
       if (user) {
-        console.log(`User: ${user.username}, email: ${user.email} added.`);
+        console.log(`User added succesfully.`);
       }
     }
 

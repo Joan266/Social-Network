@@ -49,7 +49,7 @@ const useFetchUserData = (username) => {
         const { profilePicFileId, bannerFileId, ...rest } = userDataResponse;
         const profilePicUrl = profilePicFileId ? await readImageId({ fileId: profilePicFileId, userToken: user.token }) : null;
         const bannerUrl = bannerFileId ? await readImageId({ fileId:bannerFileId, userToken: user.token }) : null;
-        setUserData({ profilePicUrl, bannerUrl, ...rest });
+        setUserData({ profilePicUrl, bannerUrl,profilePicFileId, bannerFileId, ...rest });
 
         // Check if the logged-in user is following this user
         if (username !== user.username) {

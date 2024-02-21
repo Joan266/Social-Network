@@ -19,7 +19,7 @@ export default function EditMedia({ imgSrc, endOfEdit, inputImageType }) {
   useEffect(()=>{
     if (inputImageType === "banner") {
       setAspect(3);  
-    } else if (inputImageType === "userpic") {
+    } else if (inputImageType === "profilepic") {
       setAspect(1);  
     }
   },[inputImageType])

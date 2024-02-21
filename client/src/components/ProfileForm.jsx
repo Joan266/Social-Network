@@ -6,81 +6,89 @@ import DynamicTextarea from "./DynamicTextarea";
 import EditMedia from "./EditMedia";
 import { useUpdateProfileData } from "../hooks/useUpdateProfileData";
 
-const ProfileForm = ({setIsProfileFormVisible,  userData}) => {
-
+const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
   const { updateProfileData, isLoading } = useUpdateProfileData();
-
-  const [ inputBio, setInputBio ] = useState("");
-  const [ inputName, setInputName ] = useState("");
-  const [inputLocation,setInputLocation] = useState("");
-  const [ inputBirthDate, setInputBirthDate ] = useState("1901-01-01");  
-  const [ inputPrivacyStatus, setInputPrivacyStatus ] = useState(null);
-  const [ inputBannerFile, setInputBannerFile ] = useState(null);
-  const [ inputProfilePicFile, setInputProfilePicFile ] = useState(null);
-  const [ inputBannerUrl, setInputBannerUrl ] = useState(null);
-  const [ inputProfilePicUrl, setInputProfilePicUrl ] = useState(null);
-
+  const [inputData, setInputData] = useState({
+    bio: '',
+    name: '',
+    location: '',
+    birthDate: '1901-01-01',
+    privacyStatus: null,
+    bannerFile: null,
+    profilePicFile: null,
+    bannerFileId: null,
+    profilePicFileId: null,
+  });
+  
   const fileInputRef = useRef(null);
   const [imgSrc, setImgSrc] = useState(null);
+  const [bannerUrl , setBannerUrl]= useState(null);
+  const [profilePicUrl , setProfilePicUrl]= useState(null);
   const [ inputImageType, setInputImageType ] = useState(null);
   const [ editingImage, setEditingImage] = useState(false);
 
-  useEffect(()=>{
-    const { bio, name, location, birthDate, bannerImage, profilePic, privacyStatus } = userData
-    setInputBio(bio)
-    setInputName(name)
-    setInputLocation(location)
-    setInputBirthDate(birthDate)
-    setInputBannerUrl(bannerImage)
-    setInputProfilePicUrl(profilePic)
-    setInputPrivacyStatus(privacyStatus)
-  },[userData])
+  
+  useEffect(() => {
+    if(userData.profilePicUrl){
+      setProfilePicUrl(userData.profilePicUrl)
+    }
+    if(userData.bannerUrl){
+      setBannerUrl(userData.bannerUrl)
+    }
+    // Filter out undefined or null values from the userData object
+    const filteredUserData = Object.fromEntries(
+      Object.entries(userData).filter(([key, value]) => value !== undefined && value !== null)
+    );
+  
+    // Convert birthDate to ISO string format if it exists
+    if (filteredUserData.birthDate) {
+      const date = new Date(filteredUserData.birthDate);
+      filteredUserData.birthDate = date.toISOString().split('T')[0];
+    }
+  
+    // Update state with filteredUserData
+    setInputData((prevInputData) => (filteredUserData));
+  }, [userData]);
+  
 
   const handleSaveUserData = () => {
-    const data = {
-      info: {
-        bio: inputBio,
-        name: inputName,
-        location: inputLocation,
-        birthDate: inputBirthDate,
-        privacyStatus: inputPrivacyStatus
-      },
-      profilePicFile:null,
-      bannerImage:null,
+    const data = { inputData };
+    if (profilePicUrl !== userData.profilePicUrl) {
+      data.profilePicFile = inputData.profilePicFile;
+      data.profilePicFileId = userData.profilePicFileId;
     }
-    if(inputProfilePicUrl !== userData.inputProfilePicUrl){
-      data.profilePicFile = inputProfilePicFile;
+    if (bannerUrl !== userData.bannerUrl) {
+      data.bannerFile = inputData.bannerFile;
+      data.bannerFileId = userData.bannerFileId;
     }
-    if(inputBannerUrl !== userData.inputBannerUrl){
-      data.bannerFile = inputBannerFile;
-    }
-    updateProfileData(data)
-  }
+    updateProfileData(data);
+  };
+
   const handleFileSelect = (type) => {
-    setInputImageType(type)
+    setInputImageType(type);
     fileInputRef.current.click();
   };
 
-  const handleFileChange = async (event) => { 
+  const handleFileChange = async (event) => {
     if (event.target.files && event.target.files.length > 0) {
-      const reader = new FileReader()
-      reader.addEventListener('load', () =>
-        setImgSrc(reader.result?.toString() || ''),
-      )
-      reader.readAsDataURL(event.target.files[0])
+      const reader = new FileReader();
+      reader.addEventListener('load', () => setImgSrc(reader.result?.toString() || ''));
+      reader.readAsDataURL(event.target.files[0]);
       setEditingImage(true);
     }
   };
-const endOfEdit = ({file,imageUrl}) => {
-  if (inputImageType === "banner") {
-    setInputBannerUrl(imageUrl); 
-    setInputBannerFile(file); 
-  } else if (inputImageType === "userpic") {
-    setInputProfilePicUrl(imageUrl); 
-    setInputProfilePicFile(file);  
-  }
-  setEditingImage(false);
-};
+
+  const endOfEdit = ({ file, imageUrl }) => {
+    if(inputImageType==="banner"){
+      setBannerUrl(imageUrl)
+      setInputData({...inputData, bannerFile: file})
+    } else if (inputImageType==="profilepic"){
+      setProfilePicUrl(imageUrl)
+      setInputData({...inputData, profilePicFile: file})
+    }
+    setEditingImage(false);
+  };
+
   if(isLoading){
     return (
     <div className={styles.profileFormOverlay} onClick={(e)=>e.stopPropagation()}>
@@ -126,32 +134,41 @@ const endOfEdit = ({file,imageUrl}) => {
             accept="image/*">
           </input>
           <div className={styles.banner}>
-            {inputBannerUrl && <img src={inputBannerUrl} alt="banner" />}
+            {bannerUrl && <img src={bannerUrl} alt="banner" />}
+            <div className={styles.imgOverlay}></div>
             <div className={styles.mediaDropLink} onClick={(e) => { handleFileSelect("banner");  e.stopPropagation() }}>
               <FontAwesomeIcon icon={faCameraRetro} />
             </div>
           </div>  
           <div className={styles.picAndControls}>
             <div className={styles.profilePic}>
-               {inputProfilePicUrl && <img src={inputProfilePicUrl} alt="userpicture" />}
-              <div className={styles.mediaDropLink} onClick={(e) => { handleFileSelect("userpic");  e.stopPropagation() }}>
+              {profilePicUrl && <img src={profilePicUrl} alt="userpicture" />}
+              <div className={styles.imgOverlay}></div>
+              <div className={styles.mediaDropLink} onClick={(e) => { handleFileSelect("profilepic");  e.stopPropagation() }}>
                 <FontAwesomeIcon icon={faCameraRetro} />
               </div>
             </div>
             <div className={styles.settingsContainer} >
-              <div className={styles.lock} onClick={() => setInputPrivacyStatus(!inputPrivacyStatus)}>
-                <FontAwesomeIcon icon={inputPrivacyStatus ? faLock : faUnlock} />{inputPrivacyStatus ? "Private" : "Public"}
-              </div>
+            <div className={styles.lock} onClick={() => setInputData(prevData => ({
+              ...prevData,
+              privacyStatus: !prevData.privacyStatus,
+            }))}>
+              <FontAwesomeIcon icon={inputData.privacyStatus ? faLock : faUnlock} />
+              {inputData.privacyStatus ? "Private" : "Public"}
+            </div>
             </div>
           </div>
           <div className={styles.container}>
             <div className={styles.name}>
               <label>Name</label>
               <input 
-                  type="text" 
-                  maxLength="30" 
-                  onChange={(event) => setInputName(event.target.value)} 
-                  value={inputName}
+                type="text" 
+                maxLength="30" 
+                onChange={(event) => setInputData(prevData => ({
+                  ...prevData,
+                  name: event.target.value
+                }))} 
+                value={inputData.name}
               />
             </div>
           </div>
@@ -160,9 +177,12 @@ const endOfEdit = ({file,imageUrl}) => {
               <label>Bio</label>
               <DynamicTextarea  
                 type="text"
-                setContent={setInputBio}
+                setContent={(event) => setInputData(prevData => ({
+                  ...prevData,
+                  bio: event
+                }))}
                 maxLength="160"
-                value={inputBio}
+                value={inputData.bio}
               />
             </div>
           </div>
@@ -172,8 +192,11 @@ const endOfEdit = ({file,imageUrl}) => {
               <input 
                   type="text" 
                   maxLength="30" 
-                  onChange={(event) => setInputLocation(event.target.value)} 
-                  value={inputLocation}
+                  onChange={(event) => setInputData(prevData => ({
+                    ...prevData,
+                    location: event.target.value
+                  }))} 
+                  value={inputData.location}
               />
             </div>
           </div>
@@ -184,8 +207,11 @@ const endOfEdit = ({file,imageUrl}) => {
                 type="date" 
                 min="1900-01-01" 
                 max={new Date().toISOString().split('T')[0]} 
-                onChange={(event) => setInputBirthDate(event.target.value)} 
-                value={inputBirthDate}
+                onChange={(event) => setInputData(prevData => ({
+                  ...prevData,
+                  birthDate: event.target.value
+                }))} 
+                value={inputData.birthDate}
               />
             </div>
           </div>

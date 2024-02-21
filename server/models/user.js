@@ -45,12 +45,10 @@ const userSchema = new Schema(
       type: Date,
     },
     bannerFileId: {
-      type: Schema.Types.ObjectId,
-      ref: 'File',
+      type: String,
     },
     profilePicFileId: {
-      type: Schema.Types.ObjectId,
-      ref: 'File',
+      type: String,
     },
     privacyStatus: {
       type:Boolean,
@@ -115,7 +113,7 @@ userSchema.statics.signup = async function ({ email, password, username }) {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
 
-  const user = await this.create({_id: new mongoose.Types.ObjectId(), email, password: hash, username });
+  const user = await this.create({_id: new mongoose.Types.ObjectId(), email, password: hash, username,name:username });
 
   return user;
 };
