@@ -90,12 +90,32 @@
       font-size: 0.8rem;
       cursor: pointer;
       .profilePic {
+        position: relative;
         background-color: #ccc;
         border-radius: 50%;
         display: flex;
         color: white;
-        padding: 10px;
         font-size: 1.1rem;
+        width: 44px;
+        justify-content: center;
+        align-items: center;
+        height: 44px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-right: 8px;
+        svg {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          height: 25px;
+          width: 25px;
+        }
+        img {
+          width: 100%;
+          height: auto;
+          z-index: 2;
+        }
       }
 
       .logout {

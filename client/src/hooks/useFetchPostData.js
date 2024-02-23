@@ -45,7 +45,6 @@ const useFetchPostData = ({isVisible, postId}) => {
         const { profilePicFileId, postImageFileId, ...rest } = postDataResponse.postData;
         const postImageUrl = postImageFileId ? await readImageId({ fileId: postImageFileId, userToken:user.token}) : null;
         const profilePicUrl = profilePicFileId ? await readImageId({ fileId: profilePicFileId, userToken:user.token}) : null;
-        console.log(postImageUrl,profilePicUrl)
         setPostData({profilePicUrl,postImageUrl,...rest});
         const isLikingResponse = await postApi.isLiking({ userId: user._id, postId }, headers);
         setIsPostLiked(isLikingResponse);

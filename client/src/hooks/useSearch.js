@@ -16,8 +16,6 @@ export const useSearch = () => {
   };
   useEffect(() => {
     const fetchData = async (query) => {
-      setIsLoading(true);
-
       try {
         setLastSearch(query);
         const headers = {
@@ -25,39 +23,28 @@ export const useSearch = () => {
           'Authorization': `Bearer ${user.token}`,
         };
         const data = await userApi.searchUser({query, userId: user._id}, headers);
-        return data;
+        setSearchResults(data);
       } catch (error) {
         console.log("Error searching for users:", error);
-        return [];
       }
     };
-
-    const handleSearchResults = (data) => {
-      setSearchResults(data);
-    };
-
     const handleEmptyQuery = () => {
       setSearchResults([]);
       setLastSearch("");
-    };
-
-    const search = async () => {
-      const query = searchQuery.trim();
-
-      if (lastSearch === query) return;
-
-      if (query === "") {
-        handleEmptyQuery();
-        return;
-      }
-
-      const data = await fetchData(query);
-      if (data) {
-        handleSearchResults(data);
-      }
       setIsLoading(false);
     };
-    search();
+
+    setIsLoading(true);
+    const query = searchQuery.trim();
+
+    if (lastSearch === query) return;
+
+    if (query === "") {
+      handleEmptyQuery();
+      return;
+    }
+    fetchData(query); 
+    setIsLoading(false);
   }, [searchQuery, lastSearch, isLoading, searchResults, user]);
   return { searchQuery, setSearchQuery, searchResults, isLoading, clearSearch };
 };

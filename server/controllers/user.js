@@ -29,12 +29,12 @@ module.exports = userController =  {
   
     try {
       const user = await User.login({emailOrUsername, password})
-      const { _id, username, email } = user;
+      const { _id, username, name, profilePicFileId } = user;
 
       // create a token
       const token = createToken(_id)
 
-      res.status(200).json({ _id, email, token, username})
+      res.status(200).json({ _id, token, username, name, profilePicFileId})
     } catch (error) {
       res.status(400).json({
         error: 'Bad Request',
@@ -50,12 +50,7 @@ module.exports = userController =  {
       // Use Mongoose to search for users
       const users = await User.find({
         $and: [
-          { 
-            $or: [
-              { username: { $regex: new RegExp(query, 'i') } },
-              { email: { $regex: new RegExp(query, 'i') } },
-            ]
-          },
+          { username: { $regex: new RegExp(query, 'i') } },
           { 
             $or: [
               { following: userId }, 
@@ -64,8 +59,9 @@ module.exports = userController =  {
           }
         ]
       })
-        .select('-_id -__v -password')
+        .select('profilePicFileId name username')
         .limit(10)
+      console.log(users)
       res.status(200).json(users);
     } catch (error) {
       console.error("Error searching for users:", error);
