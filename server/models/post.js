@@ -17,9 +17,6 @@ const postSchema = new Schema(
     content: {
       type: String,
     },
-    file: {
-      type:String,
-    },
     likes: [
       {
         type: Schema.Types.ObjectId,
@@ -41,8 +38,7 @@ const postSchema = new Schema(
       default:0,
     },
     postImageFileId: {
-      type: Schema.Types.ObjectId,
-      ref: 'File',
+      type: String,
     },
   },
   {

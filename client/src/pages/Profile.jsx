@@ -1,7 +1,7 @@
 import { useState} from 'react';
 import { useParams } from 'react-router-dom'
 import { faCalendarDays } from '@fortawesome/free-regular-svg-icons';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Profile.module.scss';
 import useFetchUserData from '../hooks/useFetchProfileData';
@@ -17,7 +17,6 @@ const Profile = () => {
   useFetchUserPosts(username);
   const [followHover, setFollowHover] = useState(false);
   const [isProfileFormVisible, setIsProfileFormVisible] = useState(false);
-  const date = formatDate(userData.createdAt);
   if(!userData || loading) return;
 
   return (
@@ -42,8 +41,8 @@ const Profile = () => {
           <div className={styles.body}>
             <div className={styles.picAndControls}>
               <div className={styles.profilePic}>
-                {userData.profilePicUrl && <img src={userData.profilePicUrl} alt="profilepic" />}
                 <FontAwesomeIcon icon={faUser} />
+                {userData.profilePicUrl && <img src={userData.profilePicUrl} alt="profilepic" />}
               </div>
               <div className={styles.settingsContainer} >
                 {isUserProfile ? 
@@ -67,11 +66,24 @@ const Profile = () => {
               </div>
             </div>
             <div className={styles.header}>
-              <div className={styles.nameContainer}>{userData.username}</div>
+              <div className={styles.nameContainer}>{userData.name}</div>
               <div className={styles.usernameContainer}>@{userData.username}</div>
             </div>
+            { userData.bio && 
+            <div className={styles.bio}>
+              {userData.bio}
+            </div>}
             <div className={styles.data}>
-            <FontAwesomeIcon icon={faCalendarDays} /> {date}
+              {userData.location && 
+              <div className={styles.location}>
+                <FontAwesomeIcon icon={faLocationDot} />{userData.location}
+              </div>}
+              {userData.birthDate && <div className={styles.birthDate}>
+                <FontAwesomeIcon icon={faCalendarDays} />Born {formatDate(userData.birthDate)}
+              </div>}
+              <div className={styles.joinDate}>
+                <FontAwesomeIcon icon={faCalendarDays} />Joined {formatDate(userData.createdAt)}
+              </div>
             </div>
             <div className={styles.following}>
               <span>{userData.followingCount}</span> Following <span>{userData.followersCount}</span> Followers

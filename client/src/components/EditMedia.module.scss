@@ -1,8 +1,8 @@
 .editMediaContainer {
   height: auto;
-  width: 100%;
   display:flex;
   flex-direction: column;
+  padding: 0 8px;
   overflow-y: auto;
   .navContainer {
     top: 0;
@@ -35,6 +35,21 @@
     }
     .applyButton {
       width: 73px;
+      button {
+        cursor: pointer;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 15px;
+        height: 35px;
+        padding: 0 18px;
+        border: none;
+        color: white;
+        background-color: #0f1419;
+        transition: background-color 0.3s;
+        &:hover{
+          background-color: #0f1419ee;
+        }
+      }
     }
   }
   .controls {

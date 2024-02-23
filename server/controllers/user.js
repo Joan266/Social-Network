@@ -66,7 +66,6 @@ module.exports = userController =  {
       })
         .select('-_id -__v -password')
         .limit(10)
-       console.log(users)
       res.status(200).json(users);
     } catch (error) {
       console.error("Error searching for users:", error);
@@ -81,6 +80,7 @@ module.exports = userController =  {
       const user = await User.findOne({ username: query }).select('-_id -__v -password -following -followers');
 
       if (user) {
+        console.log(user)
         res.status(200).json(user);
       } else {
         res.status(404).json({ error: "User not found" });

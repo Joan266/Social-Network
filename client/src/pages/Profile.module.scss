@@ -40,6 +40,7 @@
         flex-wrap: wrap;
         align-items: flex-start;
         .profilePic {
+          position: relative;
           margin-top: -15%;
           display: flex;
           width: 135px;
@@ -49,15 +50,25 @@
           margin-bottom: 13px;
           overflow: hidden;
           border: white 4px solid;
+          svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 45px;
+            width: 45px;
+          }
           img {
             width: 100%;
             height: auto;
+            z-index: 0;
           }
         }
         .settingsContainer {
           display: flex;
           justify-content: center;
           height: 38px;
+          align-items: center;
           .sharedFollow {
             font-size: 17px;
             display: flex;
@@ -93,29 +104,11 @@
               background-color: rgba(250, 128, 114, 0.092);
             }
           }
-          .lock {
-            padding: 0 20px;
-            cursor: pointer;
-            display: flex;
-            color: #333;
-            align-items: center;
-            font-weight: 600;
-            border-radius: 25px;
-            border: #ccc 1px solid;
-            margin-right: 8px;
-            &:hover{
-              background-color: whitesmoke;
-            }
-            svg {
-              margin-right: 8px;
-            }
-          }
           .edit {
-            padding: 0 20px;
+            padding: 10px 20px;
             cursor: pointer;
-            display: flex;
             color: #333;
-            align-items: center;
+            display: flex;
             font-weight: 600;
             border-radius: 25px;
             border: #ccc 1px solid;
@@ -136,11 +129,22 @@
       }
       .bio {
         margin-bottom: 13px;
+        font-size: 17px;
+        color: #0f1419;
       }
       .data {
         margin-bottom: 13px;
+        font-size: 17px;
+        color: #536471;
         svg {
-          margin-left: 8px;
+          margin-right: 4px;
+          font-size: smaller;
+        }
+        div{
+          display: flex;
+          align-items: center;
+          text-align: center;
+          margin-right: 8px;
         }
       }
       .following {

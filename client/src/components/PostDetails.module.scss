@@ -13,16 +13,32 @@
   }
   .profilePicContainer{
     .profilePic {
+      position: relative;
       margin-right: 13px;
       background-color: #ccc;
       border-radius: 50%;
       display: flex;
       color: white;
       font-size: 1.1rem;
-      width: 50px;
+      width: 44px;
       justify-content: center;
       align-items: center;
-      height: 50px;
+      height: 44px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 25px;
+        width: 25px;
+      }
+      img {
+        width: 100%;
+        height: auto;
+        z-index: 2;
+      }
     }
   }
   .body{
@@ -69,22 +85,6 @@
           align-items: center;
         }
       }
-      .delete{
-        cursor: pointer;
-        height: 40px;
-        width: 40px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        font-size: 14px;
-        margin-top: -5%;
-        transition: background-color 0.3s, color 0.3s;
-        &:hover{
-          background-color: rgba(255, 0, 0, 0.073);
-          color:red;
-        }
-      }
     }
     .replyInfo{
       color:#536471;
@@ -111,6 +111,7 @@
       overflow: hidden;
       position: relative;
       margin-top: 13px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       img {
         max-width: 500px;
         max-height: 1000px;

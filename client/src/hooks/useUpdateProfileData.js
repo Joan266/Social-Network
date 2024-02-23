@@ -1,25 +1,31 @@
 import { useState } from 'react';
 import { useAuthContext } from './useAuthContext';
 import { userApi } from '../services/api';
+import { filesApi } from '../services/api';
 import { uploadFile } from '../utils/useUploadFile';
+import { useNavigate } from 'react-router-dom';
 export const useUpdateProfileData = () => {
   const { user } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate(); 
+  const navigateString = `/profile`;
+  
 
   const updateProfileData = async (data) => {
     setIsLoading(true);
     try {
-      const { info, profilePicFile, bannerFile } = data;
-      
+      const { inputData, profilePicFile, bannerFile, bannerFileId, profilePicFileId } = data;
+      console.log(`bannerFileId:${bannerFileId}, profilePicFileId:${profilePicFileId}`)
       const userDataUpdate = {
-        ...info
+        ...inputData
       };
       if(profilePicFile) {
         userDataUpdate.profilePicFileId = await uploadFile({token: user.token,file:profilePicFile});
+        await filesApi.delete({userToken: user.token,fileId:profilePicFileId});
       }
       if(bannerFile) {
         userDataUpdate.bannerFileId = await uploadFile({token: user.token,file:bannerFile});
+        await filesApi.delete({userToken: user.token,fileId:bannerFileId});
       }
 
       const updateProfileDataResponse = await userApi.updateProfileData(
@@ -36,6 +42,7 @@ export const useUpdateProfileData = () => {
 
       console.log(updateProfileDataResponse);
       setIsLoading(false);
+      navigate(navigateString);
     } catch (error) {
       setIsLoading(false);
       console.error(error.message);

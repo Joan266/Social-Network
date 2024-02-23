@@ -22,7 +22,7 @@
     "validator": "^13.11.0"
   },
   "devDependencies": {
-    "casual": "^1.6.2",
+    "faker": "^5.5.3",
     "nodemon": "^3.0.3"
   }
 }

@@ -1,9 +1,8 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
-const { GridFSBucket } = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const connection = mongoose.connection;
-const File = require('../models/file');
 
 let gfs;
 
@@ -12,30 +11,29 @@ connection.once('open', () => {
 });
 
 module.exports = filesController = {
+
     upload: async (req, res) => {
         try {
             const { file } = req;
-            console.log(file, file.originalname);
             // Check if the file is an image based on its MIME type
             if (!file.mimetype.startsWith('image/')) {
                 return res.status(400).json({ error: 'Only image files are allowed' });
             }
-            const newFile = new File({
-                filename: file.originalname,
-                contentType: file.mimetype
+
+            // Generate an encrypted version of the original filename
+            const saltRounds = 7;
+            const encryptedFilename = await bcrypt.hash(file.originalname, saltRounds);
+            const uploadStream = gfs.openUploadStream(encryptedFilename,{
+                chunkSizeBytes: 262144,
+                metadata: {contentType: file.mimetype}
             });
-
-            await newFile.save();
-            console.log(newFile);
-
-            const uploadStream = gfs.openUploadStream(newFile._id.toString());
 
             const readStream = fs.createReadStream(file.path);
             readStream.pipe(uploadStream);
 
             uploadStream.on('finish', () => {
                 fs.unlink(file.path, () => {
-                    res.status(201).json({fileId: newFile._id});
+                    res.status(201).json({ fileId: encryptedFilename });
                 });
             });
         } catch (error) {
@@ -49,17 +47,39 @@ module.exports = filesController = {
         const { fileId } = req.query;
         
         try {
+            // Find the files by filename:fileId
             const files = await gfs.find({ filename: fileId }).toArray();
-            
+
+            // Check if file is not found
             if (!files || files.length === 0) {
                 return res.status(404).json({ error: 'File not found' });
             }
-            console.log("file",files[0])
-            const fileData = await File.findById(fileId);
-            res.set('Content-Type', fileData.contentType);  
-            // Assuming you want the first file found
+            
+            // Open a download stream for the specified fileId
             const readstream = gfs.openDownloadStream(files[0]._id);
-            readstream.pipe(res); // Pipe the file data directly to the response
+            
+            // Set content type based on file metadata
+            res.set('Content-Type', files[0].metadata.contentType );  
+            // Pipe the file data directly to the response
+            readstream.pipe(res);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    
+    delete: async (req, res) => {
+        const { fileId } = req.query;
+        try {
+            // Find the files by filename:fileId
+            const files = await gfs.find({ filename: fileId }).toArray();
+            // Check if file is not found
+            if (!files || files.length === 0) {
+                return res.status(404).json({ error: 'File not found' });
+            }
+            // Delete the file from GridFS
+            await gfs.delete(files[0]._id);
+            res.status(200).json({ message: 'File deleted successfully' });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ error: 'Internal server error' });

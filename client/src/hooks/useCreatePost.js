@@ -9,11 +9,11 @@ export const useCreatePost = () => {
   const { dispatch } = usePostsContext()
   const [isLoading, setIsLoading] = useState(false)
 
-  const createPost = async ({content, postId, image}) => {
+  const createPost = async ({content, postId, postImageFile}) => {
     setIsLoading(true);
     let postData = { postId, content, userId: user._id };
     
-    const postImageFileId = image ? await uploadFile({token: user.token,file:image}) : null;
+    const postImageFileId = postImageFile ? await uploadFile({token: user.token,file:postImageFile}) : null;
 
     postData.postImageFileId = postImageFileId;
     
