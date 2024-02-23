@@ -24,7 +24,7 @@ module.exports = filesController = {
             const saltRounds = 7;
             const encryptedFilename = await bcrypt.hash(file.originalname, saltRounds);
             const uploadStream = gfs.openUploadStream(encryptedFilename,{
-                chunkSizeBytes: 1048576,
+                chunkSizeBytes: 262144,
                 metadata: {contentType: file.mimetype}
             });
 

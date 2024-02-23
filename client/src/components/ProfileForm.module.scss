@@ -23,10 +23,11 @@
   width: 600px;
   height: auto;
   border-radius: 20px;
-  background-color: white;
+  background-color: transparent;
   z-index: 2;
   overflow: hidden;
   .profileForm {
+    background-color: white;
     max-height: 650px;
     width: 100%;
     display:flex;
@@ -213,14 +214,15 @@
   }
   
   .profileForm::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: aliceblue;
   }
   
   .profileForm::-webkit-scrollbar-thumb {
-    background: #888888b4;
+    cursor: pointer;
+    background: rgba(104, 117, 140, 0.292);
   }
   
   .profileForm::-webkit-scrollbar-thumb:hover {
-    background: #888;
+    background: rgba(104, 117, 140, 0.58);
   }
 }

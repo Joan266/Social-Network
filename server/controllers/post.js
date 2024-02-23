@@ -44,7 +44,7 @@ module.exports = postController =  {
       // Use Mongoose to search for post
       const post = await Post.findOne({ _id: query })
       .select('-likes -__v')
-      .populate({ path: 'user', select: 'username -_id' })
+      .populate({ path: 'user', select: 'username -_id profilePicFileId' })
       .exec()
       const { user, ...rest } = post.toObject(); 
       const modifiedPost = { ...rest, ...user };

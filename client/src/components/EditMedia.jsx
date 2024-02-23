@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Cropper from 'react-easy-crop';
 import styles from './EditMedia.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,6 +21,8 @@ export default function EditMedia({ imgSrc, endOfEdit, inputImageType }) {
       setAspect(3);  
     } else if (inputImageType === "profilepic") {
       setAspect(1);  
+    } else if (inputImageType === "postimage") {
+      setAspect(1);  
     }
   },[inputImageType])
   
@@ -34,6 +36,7 @@ export default function EditMedia({ imgSrc, endOfEdit, inputImageType }) {
   const handleApply = () => {
     if (!croppedArea || !imgSrc) {
         // If cropped area is invalid or image source is missing, return
+        endOfEdit()
         return;
     }
 
@@ -79,7 +82,7 @@ export default function EditMedia({ imgSrc, endOfEdit, inputImageType }) {
           <FontAwesomeIcon icon={faXmark} />
         </div>
         <div className={styles.editMediaLabel}>Edit media</div>
-        <button onClick={handleApply}>Apply</button>
+        <div className={styles.applyButton}><button onClick={handleApply}>Apply</button></div>
       </div>
       <div className={styles.cropContainer}>
         <Cropper

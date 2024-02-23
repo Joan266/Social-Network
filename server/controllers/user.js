@@ -66,7 +66,6 @@ module.exports = userController =  {
       })
         .select('-_id -__v -password')
         .limit(10)
-       console.log(users)
       res.status(200).json(users);
     } catch (error) {
       console.error("Error searching for users:", error);

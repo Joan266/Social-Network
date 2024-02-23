@@ -17,9 +17,6 @@ const postSchema = new Schema(
     content: {
       type: String,
     },
-    file: {
-      type:String,
-    },
     likes: [
       {
         type: Schema.Types.ObjectId,

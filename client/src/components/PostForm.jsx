@@ -6,24 +6,7 @@ import { faUser, faXmark, faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
 import { timeSince } from "../utils/useTimeSinceString";
 import { useNavigate } from 'react-router-dom'; 
 import DynamicTextarea from "./DynamicTextarea";
-
-const FileContainer = ({file, removeImage}) => {
-  return (
-    <div className={styles.file}>
-      <div className={styles.removeFile} 
-          onClick={()=>removeImage()}>
-        <FontAwesomeIcon
-          icon={faXmark}
-          className="rounded me-2"
-        />
-      </div>
-      <img
-        src={URL.createObjectURL(file)}
-        alt={file.name}
-      />
-    </div>
-  );
-}
+import EditMedia from "./EditMedia";
 
 const PostTargeted = ({postData}) => {
   return (
@@ -50,10 +33,10 @@ const PostTargeted = ({postData}) => {
         {postData.content}
       </div>
       {postData.postImageUrl && (
-            <div className={styles.imageContainer}>
-              <img src={postData.postImageUrl} alt="postcomment"/>
-            </div>
-          )}
+        <div className={styles.imageContainer}>
+          <img src={postData.postImageUrl} alt="postcomment"/>
+        </div>
+      )}
     </div>
   </div>
   )
@@ -64,35 +47,49 @@ const PostTargeted = ({postData}) => {
 const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount}) => {
   const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
+  const [ imgSrc, setImgSrc ] = useState(null);
+  const [ editingImage, setEditingImage ] = useState(false);
+  const [ postImageUrl, setPostImageUrl ] = useState(null);
+  const [ postImageFile, setPostImageFile ] = useState(null);
   const navigate = useNavigate(); 
   const fileInputRef = useRef(null);
-  const [image, setImage] = useState(null);
   const handleFileSelect = (event) => {
     event.stopPropagation();
     fileInputRef.current.click();
   };
 
+  const handleFileChange = async (event) => {
+    if (event.target.files && event.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => setImgSrc(reader.result?.toString() || ''));
+      reader.readAsDataURL(event.target.files[0]);
+      setEditingImage(true);
+    }
+  };
+  const endOfEdit = (data) => {
+    if (!data) {
+      setEditingImage(false);
+      return;
+    }
+    const { file, imageUrl } = data
+    setPostImageUrl(imageUrl)
+    setPostImageFile(file)
+    setEditingImage(false);
+  };
   const removeImage = () => {
     // Remove file selected
-    setImage(null);
+    setPostImageUrl(null)
+    setPostImageFile(null)
   }
 
-  const handleFileChange = async (event) => { 
-    // File selected
-    const file = event.target.files[0];
-    if(!file) return;
-    console.log(file)
-
-    setImage(file);
-  };
 
   const handlePostSubmit = async () => {
-    if(isLoading || (content.trim() === "" && !image))return;
-    console.log(`image ${image}`);
+    if(isLoading || (content.trim() === "" && !postImageFile))return;
+    console.log(`image ${postImageFile}`);
     createPost({
       content,
       postId: postIsCommentData ?  postIsCommentData._id:false,
-      image,
+      postImageFile,
     })
     postIsCommentData && increaseCommentsCount()
     setContent("")
@@ -101,19 +98,31 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
     navigate(navigateString); 
     console.log(postIsCommentData)
   }
-   
+  if(editingImage){
+    return (
+      <div className={styles.postFormOverlay} onClick={(e)=>e.stopPropagation()}>
+        <div className={styles.postFormContainer}>
+          <div className={styles.postForm}>
+            <EditMedia imgSrc={imgSrc} endOfEdit={(file)=> endOfEdit(file)} inputImageType={"postimage"}/>
+          </div>
+        </div>
+      </div>
+    )
+  }
   return (
     <div className={styles.postFormOverlay}onClick={(e)=>e.stopPropagation()}>
-      <div className={styles.postFormContainer} >
-        <div className={styles.header}>
-        <FontAwesomeIcon
-          className={styles.cancelSearch}
-          onClick={()=>setIsPostFormVisible(false)}
-          icon={faXmark}
-        />
-        </div>
-        <div className={styles.body}>
-          <div className={styles.upperContainer}>
+      <div className={styles.postFormContainer}>
+        <div className={styles.postForm} >
+          <div className={styles.navContainer}>
+            <div className={styles.xMark}>
+              <FontAwesomeIcon
+                className={styles.cancelSearch}
+                onClick={()=>setIsPostFormVisible(false)}
+                icon={faXmark}
+              />
+            </div>
+          </div>
+          <div className={styles.body}>
             {postIsCommentData && <PostTargeted postData={postIsCommentData}/>}
             <div className={styles.container}>
               <div className={styles.profilePic}>
@@ -130,27 +139,39 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
                     placeholder={postIsCommentData ? "Add another post" : "What is happening?!"}
                   />
                 </div>
-                {image && (
-                  <div className={styles.filesContainer}>
-                    <FileContainer file={image} removeImage={()=>removeImage()} />
+                {postImageUrl && (
+                  <div className={styles.postImageContainer}>
+                    <div className={styles.postImage}>
+                      <div className={styles.removePostImage} 
+                          onClick={()=>removeImage()}>
+                        <FontAwesomeIcon
+                          icon={faXmark}
+                          className="rounded me-2"
+                        />
+                      </div>
+                      <img
+                        src={postImageUrl}
+                        alt={"postimage"}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
             </div>
           </div>
-          <div className={styles.bottomContainer}>
-           <input
+          <div className={styles.controls}>
+            <input 
               type="file"
               ref={fileInputRef}
               style={{ display: 'none' }}
               onChange={handleFileChange}
-              accept="image/*"
-            />
+              accept="image/*">
+            </input>
             <div className={styles.mediaDropLink} onClick={handleFileSelect}>
               <FontAwesomeIcon icon={faPhotoFilm} className="rounded me-2"/>
             </div>
             <div className={styles.postButtonContainer}>
-              <button disabled={content.trim() === "" && !image} onClick={handlePostSubmit}>Post</button>
+              <button disabled={content.trim() === "" && !postImageFile} onClick={handlePostSubmit}>Post</button>
             </div>
           </div>
         </div>

@@ -78,7 +78,12 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
     }
   };
 
-  const endOfEdit = ({ file, imageUrl }) => {
+  const endOfEdit = (data) => {
+    if (!data) {
+      setEditingImage(false);
+      return;
+    }
+    const { file, imageUrl } = data
     if(inputImageType==="banner"){
       setBannerUrl(imageUrl)
       setInputData({...inputData, bannerFile: file})
@@ -86,7 +91,7 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
       setProfilePicUrl(imageUrl)
       setInputData({...inputData, profilePicFile: file})
     }
-    setEditingImage(false);
+    setEditingImage(false)
   };
 
   if(isLoading){
@@ -103,7 +108,9 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
     return (
       <div className={styles.profileFormOverlay} onClick={(e)=>e.stopPropagation()}>
         <div className={styles.profileFormContainer} >
-          <EditMedia imgSrc={imgSrc} endOfEdit={(file)=> endOfEdit(file)} inputImageType={inputImageType}/>
+          <div className={styles.profileForm}>
+           <EditMedia imgSrc={imgSrc} endOfEdit={(file)=> endOfEdit(file)} inputImageType={inputImageType}/>
+          </div>
         </div>
       </div>
     )
