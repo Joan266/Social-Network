@@ -129,7 +129,7 @@ export class postApi {
             return response.data;
         }
     }
-    static async fetchHomePosts(userId,headers) {
+    static async fetchHomePosts(data, headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
@@ -137,7 +137,7 @@ export class postApi {
             });
 
             const response = await auth.get("/post/homeposts",{
-                params: { userId },
+                params: data,
             });
             return response.data;
         } catch ({response}) {

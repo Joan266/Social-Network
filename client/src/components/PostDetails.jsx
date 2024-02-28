@@ -1,4 +1,4 @@
-import { useEffect, useRef,useState } from 'react';
+import {  useRef, useState } from 'react';
 import styles from './PostDetails.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -8,42 +8,16 @@ import useFetchPostData from '../hooks/useFetchPostData';
 import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { usePostObserve } from '../hooks/usePostObserve';
 
-const PostDetails = ({ postId }) => {
+const PostDetails = ({ postId, isPostObserve }) => {
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({isVisible, postId});
+  const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({postId});
   const postRef = useRef(null);
+  usePostObserve({ isPostObserve, currentPostRef:postRef.current})
   const navigate = useNavigate(); 
   
-  useEffect(() => {
-    // Store the current value of postRef.current in a variable inside the effect
-    const currentPostRef = postRef.current;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(entry.isIntersecting);
-      },
-      {
-        root: null, // Use the viewport as the root
-        threshold: 0.1, // Trigger when 50% of the component is visible
-      }
-      );
-      
-      // Start observing the PostDetails component
-      if (currentPostRef) {
-        observer.observe(currentPostRef);
-      }
-      
-      // Cleanup function
-      return () => {
-        if (currentPostRef) {
-          observer.unobserve(currentPostRef);
-          setIsVisible(false); // Update isVisible to false when component is no longer observed
-        }
-      };
-    }, [postId, postRef]); // Include postRef in the dependency array
-    
     const handlePostLink = () => {
       navigate(`/post/${postId}`); 
     };
@@ -52,14 +26,14 @@ const PostDetails = ({ postId }) => {
       setCommentsCount(commentsCount + 1);
     };
 
-  if (isLoading || !postData || !isVisible  ) return (
-    <div className={styles.postDetailsContainer} ref={postRef}>
+  if (isLoading || !postData) return (
+    <div className={styles.postDetailsContainer}>
 
     </div>
   );
   
   return (
-      <div className={styles.postDetailsContainer} ref={postRef} onClick={() => handlePostLink()}>
+      <div className={styles.postDetailsContainer} ref={isPostObserve ? postRef : null} onClick={() => handlePostLink()}>
         {isPostFormVisible && (
           <PostForm
             setIsPostFormVisible={setIsPostFormVisible}
@@ -95,11 +69,11 @@ const PostDetails = ({ postId }) => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          {postData.postImageUrl && (
-            <div className={styles.imageContainer}>
-              <img src={postData.postImageUrl} alt='post'/>
-            </div>
-          )}
+          <div className={styles.imageContainer}>
+            {postData.postImageUrl && (
+              <img src={postData.postImageUrl} alt='post' />
+            )}
+          </div>
           <div className={styles.settings}>
             <div className={styles.commentContainer}>
               <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>

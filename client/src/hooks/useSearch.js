@@ -18,33 +18,29 @@ export const useSearch = () => {
     const fetchData = async (query) => {
       try {
         setLastSearch(query);
-        const headers = {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`,
-        };
-        const data = await userApi.searchUser({query, userId: user._id}, headers);
-        setSearchResults(data);
+        setIsLoading(true);
+        if (query.trim() === "") {
+          setSearchResults([]);
+          setLastSearch("");
+        } else {
+          const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`,
+          };
+          const data = await userApi.searchUser({ query, userId: user._id }, headers);
+          setSearchResults(data);
+        }
       } catch (error) {
-        console.log("Error searching for users:", error);
+        console.error("Error searching for users:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
-    const handleEmptyQuery = () => {
-      setSearchResults([]);
-      setLastSearch("");
-      setIsLoading(false);
-    };
-
-    setIsLoading(true);
-    const query = searchQuery.trim();
-
-    if (lastSearch === query) return;
-
-    if (query === "") {
-      handleEmptyQuery();
-      return;
+  
+    if (searchQuery !== lastSearch) {
+      fetchData(searchQuery.trim());
     }
-    fetchData(query); 
-    setIsLoading(false);
-  }, [searchQuery, lastSearch, isLoading, searchResults, user]);
+  }, [searchQuery, lastSearch, user]);
+  
   return { searchQuery, setSearchQuery, searchResults, isLoading, clearSearch };
 };

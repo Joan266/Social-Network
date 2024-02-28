@@ -133,7 +133,11 @@ const uploadPostImages = async (url) => {
 
     // Use Promise.all() to upload images concurrently
     const uploadPromises = JSON.parse(decompressedData.toString('utf8')).map(async ({ download_url }) => {
-      const { encryptedFilename: postImageFileId } = await uploadImage(download_url);
+      const [height, width, id] = download_url.split("/").reverse();
+      const scaledHeight =  Math.floor(parseInt(height) * 500 / parseInt(width));
+      const download_url_modified = `https://picsum.photos/id/${id}/500/${scaledHeight}.webp`;
+      console.log(download_url_modified);
+      const { encryptedFilename: postImageFileId } = await uploadImage(download_url_modified);
       return postImageFileId;
     });
 

@@ -24,7 +24,6 @@ module.exports = postController =  {
       post.postImageFileId = postImageFileId || null;
       await post.save();
       if(post){
-        console.log("post",post)
         res.status(200).json({_id: post._id})
       }else {
         console.log(`Post create operation failed`)
@@ -48,7 +47,6 @@ module.exports = postController =  {
       .exec()
       const { user, ...rest } = post.toObject(); 
       const modifiedPost = { ...rest, ...user };
-      console.log(modifiedPost)
       if (modifiedPost) {
         res.status(200).json({postData:modifiedPost});
       } else {
@@ -71,7 +69,6 @@ module.exports = postController =  {
       );
       
       if (post) {
-        console.log(post);
         res.status(200).json();
       } else {
         res.status(404).json({ error: "Post not found" });
@@ -93,7 +90,6 @@ module.exports = postController =  {
         { new: true }
       );
       if (post) {
-        console.log(post);
         res.status(200).json();
       } else {
         res.status(404).json({ error: "Post not found" });
@@ -122,21 +118,34 @@ module.exports = postController =  {
   },
   homePosts: async (req, res) => {
     try {
-        const { userId } = req.query;
+        const { userId, nextCursor, lastTimestamp } = req.query;
+        console.log(req.query)
+        if(!nextCursor){
+          res.status(404).json({ error: "Next cursor required" });
+        }
+        const pageSize = 5; 
+        const skip = (parseInt(nextCursor) - 1) * pageSize; // Parse to integer
+        const query = {};
+
+        if (lastTimestamp) { // Check for the presence of lastTimestamp
+            query.createdAt = { $lt: new Date(parseInt(lastTimestamp)) }; // Parse to Date
+        }
+
         // Use Mongoose to search for posts of users with privacyStatus set to false
         const posts = await Post.find()
-          .or([
-              { 'user.following': userId }, // Posts from users followed by userId
-              { 'user.privacyStatus': { $exists: false } } // Posts from users with no privacyStatus
-          ])
-          .sort({ createdAt: -1 }) // Sort posts by createdAt in descending order
-          .select('_id') // Select only the _id field of the posts
-
+                                .or([
+                                    { 'user.following': userId }, // Posts from users followed by userId
+                                    { 'user.privacyStatus': { $exists: false } } // Posts from users with no privacyStatus
+                                ])
+                                .sort({ createdAt: -1 }) // Sort posts by createdAt in descending order
+                                .select('_id createdAt') // Select only the _id field of the posts
+                                .skip(skip)
+                                .limit(pageSize);
         // Check if posts were found
         if (posts.length > 0) {
-            console.log(posts);
-            // Send the retrieved posts in the response
-            res.status(200).json(posts);
+          const timestamp = !lastTimestamp ? posts[0].createdAt : lastTimestamp
+          // Send the retrieved posts in the response
+          res.status(200).json({posts, timestamp});
         } else {
             // Send a 404 error if no posts were found
             res.status(404).json({ error: "User posts not found" });
@@ -155,7 +164,6 @@ postReplies: async (req, res) => {
       .select('comments -_id')
       .populate({ path: 'comments', select: '_id' })
       .exec()
-      console.log(postId)
       // Check if posts were found
       if (post && post.comments) {
           console.log(post.comments);

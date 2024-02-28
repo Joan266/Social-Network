@@ -3,7 +3,7 @@ import { postApi } from '../services/api';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { readImageId } from '../utils/useReadImageId';
 
-const useFetchPostData = ({isVisible, postId}) => {
+const useFetchPostData = ({ postId}) => {
   const { user } = useAuthContext();
   const [postData, setPostData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -39,7 +39,7 @@ const useFetchPostData = ({isVisible, postId}) => {
       const headers = getHeaders();
       try {
         setLoading(true);
-
+        console.log("gge")
         // Fetch user data
         const postDataResponse = await postApi.fetchPostData(postId, headers);
         const { profilePicFileId, postImageFileId, ...rest } = postDataResponse.postData;
@@ -55,13 +55,9 @@ const useFetchPostData = ({isVisible, postId}) => {
         setLoading(false);
       }
     };
+    fetchPostData()
 
-    if(isVisible) {
-      fetchPostData()
-      return
-    };
-    setPostData(null);
-  }, [postId, user, isVisible]);
+  }, [postId, user]);
 
   const getHeaders = () => ({
     'Content-Type': 'application/json',
