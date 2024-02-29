@@ -211,7 +211,7 @@ export class userApi {
             return response.data;
         }
     }
-    static async fetchUserPosts(query, headers) {
+    static async fetchUserPosts(data, headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
@@ -219,11 +219,11 @@ export class userApi {
             });
 
             const response = await auth.get("/user/fetchposts", {
-                params: { query },
+                params: data,
             });
             return response.data;
         } catch ({response}) {
-            console.log("Error user not found:", response.data);
+            console.log("Error user posts not found:", response.data);
             return response.data;
         }
     }

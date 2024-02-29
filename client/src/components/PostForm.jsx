@@ -4,7 +4,6 @@ import styles from './PostForm.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faXmark, faPhotoFilm } from '@fortawesome/free-solid-svg-icons';
 import { timeSince } from "../utils/useTimeSinceString";
-import { useNavigate } from 'react-router-dom'; 
 import DynamicTextarea from "./DynamicTextarea";
 import EditMedia from "./EditMedia";
 
@@ -44,14 +43,13 @@ const PostTargeted = ({postData}) => {
 
 
 
-const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount}) => {
+const PostForm = ({setIsPostFormVisible, postIsResponseComment,increaseCommentsCount}) => {
   const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
   const [ imgSrc, setImgSrc ] = useState(null);
   const [ editingImage, setEditingImage ] = useState(false);
   const [ postImageUrl, setPostImageUrl ] = useState(null);
   const [ postImageFile, setPostImageFile ] = useState(null);
-  const navigate = useNavigate(); 
   const fileInputRef = useRef(null);
   const handleFileSelect = (event) => {
     event.stopPropagation();
@@ -85,18 +83,14 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
 
   const handlePostSubmit = async () => {
     if(isLoading || (content.trim() === "" && !postImageFile))return;
-    console.log(`image ${postImageFile}`);
     createPost({
       content,
-      postId: postIsCommentData ?  postIsCommentData._id:false,
+      postId: postIsResponseComment ?  postIsResponseComment._id:false,
       postImageFile,
     })
-    postIsCommentData && increaseCommentsCount()
+    postIsResponseComment && increaseCommentsCount()
     setContent("")
     setIsPostFormVisible(false)
-    const navigateString = `/${postIsCommentData && postIsCommentData._id ? `post/${postIsCommentData._id}` : ""}`;
-    navigate(navigateString); 
-    console.log(postIsCommentData)
   }
   if(editingImage){
     return (
@@ -123,7 +117,7 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
             </div>
           </div>
           <div className={styles.body}>
-            {postIsCommentData && <PostTargeted postData={postIsCommentData}/>}
+            {postIsResponseComment && <PostTargeted postData={postIsResponseComment}/>}
             <div className={styles.container}>
               <div className={styles.profilePic}>
                 <FontAwesomeIcon icon={faUser} className="rounded me-2"/>
@@ -136,7 +130,7 @@ const PostForm = ({setIsPostFormVisible, postIsCommentData,increaseCommentsCount
                     setContent={setContent}
                     maxLength="200"
                     value={content}
-                    placeholder={postIsCommentData ? "Add another post" : "What is happening?!"}
+                    placeholder={postIsResponseComment ? "Add another post" : "What is happening?!"}
                   />
                 </div>
                 {postImageUrl && (

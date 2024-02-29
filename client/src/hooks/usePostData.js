@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { postApi } from '../services/api';
-import { useAuthContext } from '../hooks/useAuthContext';
+import { useAuthContext } from './useAuthContext';
 import { readImageId } from '../utils/useReadImageId';
 
 const useFetchPostData = ({ postId}) => {

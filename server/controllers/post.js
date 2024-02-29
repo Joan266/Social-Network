@@ -132,24 +132,25 @@ module.exports = postController =  {
         }
 
         // Use Mongoose to search for posts of users with privacyStatus set to false
-        const posts = await Post.find()
-                                .or([
-                                    { 'user.following': userId }, // Posts from users followed by userId
-                                    { 'user.privacyStatus': { $exists: false } } // Posts from users with no privacyStatus
-                                ])
-                                .sort({ createdAt: -1 }) // Sort posts by createdAt in descending order
-                                .select('_id createdAt') // Select only the _id field of the posts
-                                .skip(skip)
-                                .limit(pageSize);
+        const posts = await Post
+          .find()
+          .and([
+              { user: { $ne: userId } }, // Exclude posts belonging to userId
+              {
+                  $or: [
+                      { 'user.following': userId }, // Posts from users followed by userId
+                      { 'user.privacyStatus': { $exists: false } } // Posts from users with no privacyStatus
+                  ]
+              }
+          ])
+          .sort({ createdAt: -1 }) // Sort posts by createdAt in descending order
+          .select('_id createdAt') // Select only the _id field of the posts
+          .skip(skip)
+          .limit(pageSize);
         // Check if posts were found
-        if (posts.length > 0) {
-          const timestamp = !lastTimestamp ? posts[0].createdAt : lastTimestamp
-          // Send the retrieved posts in the response
-          res.status(200).json({posts, timestamp});
-        } else {
-            // Send a 404 error if no posts were found
-            res.status(404).json({ error: "User posts not found" });
-        }
+        const timestamp = !lastTimestamp ? posts[0]?.createdAt : lastTimestamp
+        // Send the retrieved posts in the response
+        res.status(200).json({posts, timestamp});
     } catch (error) {
         // Handle errors and send a 500 error response
         console.error("Error getting home posts:", error);

@@ -1,31 +1,31 @@
-import { postApi } from '../services/api';
+import { userApi } from '../services/api';
 import { useAuthContext } from './useAuthContext';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-const fetchHomePosts = async ({ pageParam, userId, userToken}) => {
+const fetchProfilePosts = async ({ username, userToken, pageParam }) => {
   const { nextCursor, lastTimestamp } = pageParam
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${userToken}`,
   };
-  const homePostsResponse = await postApi.fetchHomePosts({ 
-    userId, 
-    nextCursor, 
+  // Fetch user posts
+  const profilePostsResponse = await userApi.fetchUserPosts({
+    username,
+    nextCursor,
     lastTimestamp,
-  }
-    , headers);
+  }, headers);
   return {
-    posts: homePostsResponse.posts,
-    nextCursor: homePostsResponse.posts.length === 5 && pageParam.nextCursor < 4 ? pageParam.nextCursor + 1 : undefined,
-    lastTimestamp: homePostsResponse.timestamp
+    posts: profilePostsResponse.posts,
+    nextCursor: profilePostsResponse.posts.length === 5 && pageParam.nextCursor < 4 ? pageParam.nextCursor + 1 : undefined,
+    lastTimestamp: profilePostsResponse.timestamp
   };
 };
 
-const useHomePosts = () => {
+const useFetchUserPosts = (username) => { 
   const { user } = useAuthContext();
   const { isLoading, isError, data, refetch, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ['home_posts'],
-    queryFn: async ({ pageParam }) => fetchHomePosts({ userId: user._id, userToken: user.token, pageParam }),
+    queryKey: ['profile_posts'],
+    queryFn: async ({ pageParam }) => fetchProfilePosts({ username, userToken: user.token, pageParam }),
     initialPageParam: { nextCursor:1 },
     refetchOnWindowFocus: false,
     getNextPageParam: (lastPage) => {
@@ -36,12 +36,10 @@ const useHomePosts = () => {
         return null; // Return null if there are no more pages
       }
     }
-  }
-  );
-
-  const posts = data?.pages?.flatMap(page => page.posts) ?? []
+  })
   
-  return { isLoading, isError, refetch, fetchNextPage, hasNextPage, posts };
+  const posts = data?.pages?.flatMap(page => page.posts) ?? [];
+  return { isLoading, isError, posts, refetch, fetchNextPage, hasNextPage };
 };
 
-export default useHomePosts;
+export default useFetchUserPosts;

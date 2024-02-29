@@ -88,22 +88,34 @@ module.exports = userController =  {
   },
   fetchUserPosts: async (req, res) => {
     try {
-      const { query } = req.query;
+      const { username, nextCursor, lastTimestamp } = req.query;
+      console.log(req.query)
+      if(!nextCursor){
+        res.status(404).json({ error: "Next cursor required" });
+      }
+      const pageSize = 5; 
+      const skip = (parseInt(nextCursor) - 1) * pageSize; // Parse to integer
+      const query = {};
+
+      if (lastTimestamp) { // Check for the presence of lastTimestamp
+          query.createdAt = { $lt: new Date(parseInt(lastTimestamp)) }; // Parse to Date
+      }
 
       // Use Mongoose to search for user
-      const user = await User.findOne({ username: query })
+      const { posts } = await User
+        .findOne({ username })
         .select('posts')
         .populate({ 
             path: 'posts',
             options: { sort: { createdAt: -1 } },
-            select: '_id' 
+            select: '_id createdAt' ,
+            skip,
+            limit: pageSize,
         });
-      console.log(user.posts);
-      if (user) {
-        res.status(200).json(user.posts);
-      } else {
-        res.status(404).json({ error: "User posts not found" });
-      }
+      // Check if posts were found
+      const timestamp = !lastTimestamp ? posts[0]?.createdAt : lastTimestamp
+      // Send the retrieved posts in the response
+      res.status(200).json({posts, timestamp});
     } catch (error) {
       console.error("Error getting user posts:", error);
       res.status(500).json({ error: "Internal Server Error" });

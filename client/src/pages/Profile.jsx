@@ -4,20 +4,29 @@ import { faCalendarDays } from '@fortawesome/free-regular-svg-icons';
 import { faUser, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Profile.module.scss';
-import useFetchUserData from '../hooks/useFetchProfileData';
-import useFetchUserPosts from '../hooks/useFetchUserPosts';
+import useProfileData from '../hooks/useProfileData';
+import useProfilePosts from '../hooks/useProfilePosts';
 import PostList from '../components/PostList';
 import ProfileForm from '../components/ProfileForm';
+import { useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react';
 // date 
 import {formatDate} from '../utils/useFormatDate';
 
 const Profile = () => {
   const { username } = useParams();
-  const { userData, loading, isUserFollowed, isUserProfile, handleFollowToggle, handlePrivacyStatus } = useFetchUserData(username);
-  useFetchUserPosts(username);
+  const { userData, isUserFollowed, isUserProfile, handleFollowToggle, handlePrivacyStatus } = useProfileData(username);
+  const { isLoading, isError, posts } = useProfilePosts(username);
   const [followHover, setFollowHover] = useState(false);
   const [isProfileFormVisible, setIsProfileFormVisible] = useState(false);
-  if(!userData || loading) return;
+  const queryClient = useQueryClient()
+  
+  useEffect(()=>{
+    queryClient.resetQueries({ 
+      queryKey:["profile_posts"],
+      exact: true,
+    })
+  },[queryClient])
 
   return (
     <>
@@ -95,7 +104,14 @@ const Profile = () => {
             Posts
           </div>
         </div>
-        <PostList />
+        {posts.length > 0 && 
+        <PostList posts={posts}/>}
+        
+        {isLoading && <strong>Cargando...</strong>}
+
+        {isError && <p>Ha habido un error</p>}
+
+        {!isLoading && !isError && posts.length === 0 && <p>No hay posts</p>}  
       </div>
     </>
   );

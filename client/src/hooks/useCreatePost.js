@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
 import { postApi } from '../services/api'
-import { usePostsContext } from './usePostsContext'
 import { uploadFile } from '../utils/useUploadFile';
+import { useQueryClient } from '@tanstack/react-query'
 
 export const useCreatePost = () => {
   const { user } = useAuthContext()
-  const { dispatch } = usePostsContext()
   const [isLoading, setIsLoading] = useState(false)
+  const queryClient = useQueryClient()
 
   const createPost = async ({content, postId, postImageFile}) => {
     setIsLoading(true);
@@ -31,7 +31,6 @@ export const useCreatePost = () => {
     }
     console.log(createPostResponse)
     setIsLoading(false)
-    dispatch({type: 'ADD_POST', payload: createPostResponse})
   }
   return { createPost, isLoading }
 }

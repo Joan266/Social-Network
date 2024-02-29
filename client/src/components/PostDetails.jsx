@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart, faComment } from '@fortawesome/free-regular-svg-icons';
 import { timeSince } from '../utils/useTimeSinceString';
-import useFetchPostData from '../hooks/useFetchPostData';
+import useFetchPostData from '../hooks/usePostData';
 import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
@@ -33,18 +33,18 @@ const PostDetails = ({ postId, isPostObserve }) => {
   );
   
   return (
-      <div className={styles.postDetailsContainer} ref={isPostObserve ? postRef : null} onClick={() => handlePostLink()}>
+      <div className={styles.postDetailsContainer} ref={isPostObserve ? postRef : null} onClick={() => handlePostLink()} style={{marginBottom:isPostObserve? "30px":""}}>
         {isPostFormVisible && (
           <PostForm
             setIsPostFormVisible={setIsPostFormVisible}
-            postIsCommentData={postData ? postData : false}
+            postIsResponseComment={postData ? postData : null}
             increaseCommentsCount={increaseCommentsCount}
           />
         )}
         <div className={styles.profilePicContainer}>
           <div className={styles.profilePic}>
-            {postData.profilePicUrl && <img src={postData.profilePicUrl} alt='post-profile-pic'></img>}
-            <FontAwesomeIcon icon={faUser} className="rounded me-2" />
+            {postData.profilePicUrl ? <img src={postData.profilePicUrl} alt='post-profile-pic'></img>:
+            <FontAwesomeIcon icon={faUser} className="rounded me-2" />}
           </div>
         </div>
         <div className={styles.body}>
