@@ -10,7 +10,6 @@ const Home = () => {
   const { isLoading, isError, posts } = useHomePosts();
   const queryClient = useQueryClient()
   useEffect(()=>{
-    console.log(posts,newPostId)
     queryClient.resetQueries({ 
       queryKey:["home_posts"],
       exact: true,

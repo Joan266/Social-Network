@@ -1,10 +1,12 @@
 import { useEffect  } from "react";
 import useHomePosts from "./useHomePosts";
-export const usePostObserve = ({isPostObserve, currentPostRef}) => {
+
+export const usePostObserve = ({isPostObserve, currentPostRef, index}) => {
   
-  const { fetchNextPage, hasNextPage } = useHomePosts();
+  const { fetchNextPage, hasNextPage, fetchPreviousPage, hasPreviousPage } = useHomePosts();
 
   useEffect(() => {
+    console.log(isPostObserve, index)
     // Early return with logging
     if (!isPostObserve) {
       console.log("Not observing post.");
@@ -16,8 +18,13 @@ export const usePostObserve = ({isPostObserve, currentPostRef}) => {
       return;
     }
 
-    if ( !hasNextPage) {
+    if ( !hasNextPage && index >= 4) {
       console.log("Cannot observe post. No next page.");
+      return;
+    }
+
+    if ( !hasPreviousPage && index === 0) {
+      console.log("Cannot observe post. No previous page.");
       return;
     }
     console.log("Observing post...");
@@ -26,7 +33,7 @@ export const usePostObserve = ({isPostObserve, currentPostRef}) => {
       ([entry]) => {
         // Ensure that the entry is intersecting and is the target element
         if (entry.isIntersecting) {
-          fetchNextPage();
+          index === 0 ? fetchPreviousPage() :fetchNextPage();
           console.log("entry is intersecting")
         }
       },

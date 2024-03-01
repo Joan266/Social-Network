@@ -7,12 +7,12 @@ const PostDetails = lazy(() => import('../components/PostDetails'));
 const PostList = ({posts}) => {
   return (
     <div className={styles.postsContainer}>
-      {posts && posts.map((post,index) => (
-        <Suspense fallback={""}>
+      {posts && posts.map(( post, index ) => (
+        <Suspense key={post._id} fallback={""}>
           <PostDetails 
-            key={`${post._id}${index}`} 
+            index={index} 
             postId={post._id} 
-            isPostObserve={posts.length >= 5 && posts.length === index + 1 ? true : false}
+            isPostObserve={posts.length >= 5 && ( posts.length === index + 1 || index === 0 ) ? true : false}
             />
         </Suspense>
       ))}

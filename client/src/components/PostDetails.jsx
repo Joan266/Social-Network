@@ -10,12 +10,12 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import { usePostObserve } from '../hooks/usePostObserve';
 
-const PostDetails = ({ postId, isPostObserve }) => {
+const PostDetails = ({ postId, isPostObserve, index }) => {
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
   const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({postId});
   const postRef = useRef(null);
-  usePostObserve({ isPostObserve, currentPostRef:postRef.current})
+  usePostObserve({ isPostObserve, currentPostRef:postRef.current, index})
   const navigate = useNavigate(); 
   
     const handlePostLink = () => {
