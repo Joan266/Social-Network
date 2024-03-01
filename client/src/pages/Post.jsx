@@ -1,22 +1,22 @@
-import { useState,useEffect } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom'
 import styles from './Post.module.scss';
-import useFetchPostReplies from '../hooks/useFetchPostReplies';
+import usePostReplies from '../hooks/usePostReplies';
 import PostList from '../components/PostList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart, faComment } from '@fortawesome/free-regular-svg-icons';
 import { timeSince } from '../utils/useTimeSinceString';
-import useFetchPostData from '../hooks/useFetchPostData';
+import usePostData from '../hooks/usePostData';
 import { Link } from 'react-router-dom';
 import PostForm from '../components/PostForm';
 
 const Post = () => {
   const { postId } = useParams();
-  useFetchPostReplies(postId);
+  usePostReplies(postId);
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
-  const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({isVisible:true, postId});
+  const {  postData, isLoading, handleLikeToggle, isPostLiked } = usePostData({isVisible:true, postId});
 
   const increaseCommentsCount = () => {
     setCommentsCount(commentsCount + 1);

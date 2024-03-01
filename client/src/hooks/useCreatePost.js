@@ -1,12 +1,10 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
 import { postApi } from '../services/api'
-import { usePostsContext } from './usePostsContext'
 import { uploadFile } from '../utils/useUploadFile';
 
 export const useCreatePost = () => {
   const { user } = useAuthContext()
-  const { dispatch } = usePostsContext()
   const [isLoading, setIsLoading] = useState(false)
 
   const createPost = async ({content, postId, postImageFile}) => {
@@ -31,7 +29,7 @@ export const useCreatePost = () => {
     }
     console.log(createPostResponse)
     setIsLoading(false)
-    dispatch({type: 'ADD_POST', payload: createPostResponse})
+    return createPostResponse
   }
   return { createPost, isLoading }
 }

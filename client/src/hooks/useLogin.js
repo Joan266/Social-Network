@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
 import { userApi } from '../services/api' 
-
+import { readImageId } from '../utils/useReadImageId'
 export const useLogin = () => {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -11,17 +11,19 @@ export const useLogin = () => {
     setIsLoading(true)
     setError(null)
 
-    const response = await userApi.login({emailOrUsername, password});
+    const loginResponse = await userApi.login({emailOrUsername, password});
 
-    if (response.error) {
+    if (loginResponse.error) {
       setIsLoading(false)
-      setError(response.message)
+      setError(loginResponse.message)
       return
     }
-    console.log(response);
-    
+    console.log(loginResponse);
+    const { profilePicFileId, ...rest } = loginResponse;
+    const profilePicUrl = profilePicFileId ? await readImageId({ fileId: profilePicFileId, userToken:loginResponse.token}) : null;
+   
     // update the auth context
-    dispatch({type: 'LOGIN', payload: response})
+    dispatch({type: 'LOGIN', payload:{profilePicUrl,...rest} })
 
     // update loading state
     setIsLoading(false)

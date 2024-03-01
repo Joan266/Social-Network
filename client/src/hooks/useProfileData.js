@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 import { userApi } from '../services/api';
-import { useAuthContext } from '../hooks/useAuthContext';
+import { useAuthContext } from './useAuthContext';
 import {readImageId} from '../utils/useReadImageId';
 
 const useFetchUserData = (username) => {
   const { user } = useAuthContext();
   const [userData, setUserData] = useState({});
-  const [loading, setLoading] = useState(false);
   const [ isUserProfile, setIsUserProfile ] = useState(false);
   const [ isUserFollowed, setIsUserFollowed ] = useState(false);
 
@@ -42,8 +41,6 @@ const useFetchUserData = (username) => {
     const fetchProfileData = async () => {
       const headers = getHeaders();
       try {
-        setLoading(true);
-
         // Fetch user data
         const userDataResponse = await userApi.fetchUserData(username, headers);
         const { profilePicFileId, bannerFileId, ...rest } = userDataResponse;
@@ -60,9 +57,7 @@ const useFetchUserData = (username) => {
         
       } catch (error) {
         console.error('Error fetching profile data:', error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     fetchProfileData();
@@ -73,7 +68,7 @@ const useFetchUserData = (username) => {
     'Authorization': `Bearer ${user.token}`,
   });
 
-  return { userData, loading, isUserFollowed, isUserProfile,handleFollowToggle };
+  return { userData, isUserFollowed, isUserProfile,handleFollowToggle };
 };
 
 export default useFetchUserData;

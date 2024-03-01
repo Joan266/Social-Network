@@ -60,7 +60,7 @@ export class filesApi {
 
 export class postApi {
     
-    static async fetchPostData(query, headers) {
+    static async fetchPostData(data, headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
@@ -68,7 +68,7 @@ export class postApi {
             });
 
             const response = await auth.get("/post/fetchdata", {
-                params: { query },
+                params: data,
             });
             return response.data;
         } catch ({response}) {
@@ -129,7 +129,7 @@ export class postApi {
             return response.data;
         }
     }
-    static async fetchHomePosts(userId,headers) {
+    static async fetchHomePosts(data, headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
@@ -137,7 +137,7 @@ export class postApi {
             });
 
             const response = await auth.get("/post/homeposts",{
-                params: { userId },
+                params: data,
             });
             return response.data;
         } catch ({response}) {
@@ -211,7 +211,7 @@ export class userApi {
             return response.data;
         }
     }
-    static async fetchUserPosts(query, headers) {
+    static async fetchUserPosts(data, headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
@@ -219,11 +219,11 @@ export class userApi {
             });
 
             const response = await auth.get("/user/fetchposts", {
-                params: { query },
+                params: data,
             });
             return response.data;
         } catch ({response}) {
-            console.log("Error user not found:", response.data);
+            console.log("Error user posts not found:", response.data);
             return response.data;
         }
     }

@@ -16,48 +16,31 @@ export const useSearch = () => {
   };
   useEffect(() => {
     const fetchData = async (query) => {
-      setIsLoading(true);
-
       try {
         setLastSearch(query);
-        const headers = {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user.token}`,
-        };
-        const data = await userApi.searchUser({query, userId: user._id}, headers);
-        return data;
+        setIsLoading(true);
+        if (query.trim() === "") {
+          setSearchResults([]);
+          setLastSearch("");
+        } else {
+          const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`,
+          };
+          const data = await userApi.searchUser({ query, userId: user._id }, headers);
+          setSearchResults(data);
+        }
       } catch (error) {
-        console.log("Error searching for users:", error);
-        return [];
+        console.error("Error searching for users:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
-
-    const handleSearchResults = (data) => {
-      setSearchResults(data);
-    };
-
-    const handleEmptyQuery = () => {
-      setSearchResults([]);
-      setLastSearch("");
-    };
-
-    const search = async () => {
-      const query = searchQuery.trim();
-
-      if (lastSearch === query) return;
-
-      if (query === "") {
-        handleEmptyQuery();
-        return;
-      }
-
-      const data = await fetchData(query);
-      if (data) {
-        handleSearchResults(data);
-      }
-      setIsLoading(false);
-    };
-    search();
-  }, [searchQuery, lastSearch, isLoading, searchResults, user]);
+  
+    if (searchQuery !== lastSearch) {
+      fetchData(searchQuery.trim());
+    }
+  }, [searchQuery, lastSearch, user]);
+  
   return { searchQuery, setSearchQuery, searchResults, isLoading, clearSearch };
 };
