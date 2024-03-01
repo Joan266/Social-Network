@@ -41,7 +41,7 @@ const useFetchPostData = ({ postId}) => {
         setLoading(true);
         console.log("gge")
         // Fetch user data
-        const postDataResponse = await postApi.fetchPostData(postId, headers);
+        const postDataResponse = await postApi.fetchPostData({ postId }, headers);
         const { profilePicFileId, postImageFileId, ...rest } = postDataResponse.postData;
         const postImageUrl = postImageFileId ? await readImageId({ fileId: postImageFileId, userToken:user.token}) : null;
         const profilePicUrl = profilePicFileId ? await readImageId({ fileId: profilePicFileId, userToken:user.token}) : null;

@@ -1,18 +1,21 @@
 import styles from './Home.module.scss';
+import { useParams } from 'react-router-dom'
 import PostList from '../components/PostList';
 import  useHomePosts  from '../hooks/useHomePosts'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react';
-
+import PostDetails from '../components/PostDetails';
 const Home = () => {
+  const { newPostId } = useParams();
   const { isLoading, isError, posts } = useHomePosts();
   const queryClient = useQueryClient()
   useEffect(()=>{
+    console.log(posts,newPostId)
     queryClient.resetQueries({ 
       queryKey:["home_posts"],
       exact: true,
     })
-  },[queryClient])
+  },[])
 
   return (
     <div className={styles.homeContainer}>
@@ -21,8 +24,14 @@ const Home = () => {
           Home
         </div>
       </div>
-      {posts.length>0 && 
-      <PostList posts={posts}/>}
+      { newPostId && 
+       <PostDetails 
+          key={`${newPostId}`} 
+          postId={newPostId} 
+        /> 
+      }
+
+      {posts.length>0 && <PostList posts={ posts }/>}
       
       {isLoading && <strong>Cargando...</strong>}
 

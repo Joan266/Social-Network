@@ -60,7 +60,7 @@ export class filesApi {
 
 export class postApi {
     
-    static async fetchPostData(query, headers) {
+    static async fetchPostData(data, headers) {
         try {
             const auth = axios.create({
                 baseURL: URL,
@@ -68,7 +68,7 @@ export class postApi {
             });
 
             const response = await auth.get("/post/fetchdata", {
-                params: { query },
+                params: data,
             });
             return response.data;
         } catch ({response}) {

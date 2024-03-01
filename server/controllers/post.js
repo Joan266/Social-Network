@@ -38,13 +38,14 @@ module.exports = postController =  {
   },
   fetchPostData: async (req, res) => {
     try {
-      const { query } = req.query;
-
+      const { postId } = req.query;
+      console.log(postId)
       // Use Mongoose to search for post
-      const post = await Post.findOne({ _id: query })
+      const post = await Post.findOne({ _id: postId })
       .select('-likes -__v')
       .populate({ path: 'user', select: 'username -_id profilePicFileId' })
       .exec()
+      console.log(post)
       const { user, ...rest } = post.toObject(); 
       const modifiedPost = { ...rest, ...user };
       if (modifiedPost) {

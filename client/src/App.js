@@ -48,7 +48,7 @@ function App() {
             element={user ? <PrincipalLayout><Profile /></PrincipalLayout> : <Navigate to="/login" />}
           />
           <Route 
-            path="/home" 
+            path='/home/:newPostId?' 
             element={!user ? <Navigate to="/login" /> :  <PrincipalLayout><Home /></PrincipalLayout>} 
           />
           <Route 

@@ -1,4 +1,5 @@
 import { useState, useRef } from "react"
+import { useNavigate } from 'react-router-dom'; 
 import { useCreatePost } from "../hooks/useCreatePost"
 import styles from './PostForm.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -43,7 +44,7 @@ const PostTargeted = ({postData}) => {
 
 
 
-const PostForm = ({setIsPostFormVisible, postIsResponseComment,increaseCommentsCount}) => {
+const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseCommentsCount}) => {
   const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
   const [ imgSrc, setImgSrc ] = useState(null);
@@ -51,6 +52,7 @@ const PostForm = ({setIsPostFormVisible, postIsResponseComment,increaseCommentsC
   const [ postImageUrl, setPostImageUrl ] = useState(null);
   const [ postImageFile, setPostImageFile ] = useState(null);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate()
   const handleFileSelect = (event) => {
     event.stopPropagation();
     fileInputRef.current.click();
@@ -83,13 +85,15 @@ const PostForm = ({setIsPostFormVisible, postIsResponseComment,increaseCommentsC
 
   const handlePostSubmit = async () => {
     if(isLoading || (content.trim() === "" && !postImageFile))return;
-    createPost({
+    const newPostResponse = await createPost({
       content,
       postId: postIsResponseComment ?  postIsResponseComment._id:false,
       postImageFile,
     })
     postIsResponseComment && increaseCommentsCount()
     setContent("")
+    const navigateString = `/home/${newPostResponse._id}`;
+    navigate(navigateString); 
     setIsPostFormVisible(false)
   }
   if(editingImage){
