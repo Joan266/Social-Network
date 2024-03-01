@@ -17,9 +17,9 @@ const generateFakeUser = () => {
   const password = faker.internet.password();
   const bio = faker.lorem.sentence(); 
   // Generate birthdate between 1930 and 2015
-  const minDate = new Date('1930-01-01'); 
-  const maxDate = new Date('2015-01-01'); 
-  const birthDate = faker.date.between(minDate, maxDate);
+  const minBirthDate = new Date('1930-01-01'); 
+  const maxBirthDate = new Date('2015-01-01'); 
+  const birthDate = faker.date.between(minBirthDate, maxBirthDate);
   const location = faker.address.country();
 
   return {
@@ -28,7 +28,7 @@ const generateFakeUser = () => {
     birthDate,
     email,
     location,
-    password
+    password,
   };
 };
 
@@ -156,6 +156,7 @@ const seedUsers = async () => {
     // Delete all existing users
     await User.deleteMany({});
     console.log('All existing users deleted.');
+    
     // Delete all existing posts
     await Post.deleteMany({});
     console.log('All existing posts deleted.');
@@ -168,27 +169,28 @@ const seedUsers = async () => {
     await mongoose.connection.db.collection('fs.chunks').deleteMany({});
     console.log('All documents in fs.chunks deleted.');
 
-    const USERS_NUM = 20;
-    const POSTS_NUM = 20;
+    // Constants for seed data
+    const USERS_NUM = 5;
+    const POSTS_NUM = 5;
     const POSTS_PAGE = 2;
     const profilepicUrl = "https://picsum.photos/200.webp";
     const bannerUrl = "https://picsum.photos/600/200.webp";
     const postsUrl = `https://picsum.photos/v2/list?page=${POSTS_PAGE}&limit=${POSTS_NUM}`;
 
+    // Upload post images
     const postImageFileIds = await uploadPostImages(postsUrl);
+
     // Generate fake users
     const fakeUsers = [];
-
     for (let i = 0; i < USERS_NUM; i++) {
       const fakeUser = generateFakeUser();
       fakeUsers.push(fakeUser);
-      console.log(fakeUser)
+      console.log(fakeUser);
     }
-    
+
     // Upload profile pictures and banner images
     const profilePicFilesInfo = [];
     const bannerFilesInfo = [];
-
     for (let i = 0; i < USERS_NUM; i++) {
       const { encryptedFilename: profilePicEncryptedFilename, picsumID: profilePicPicsumID } = await uploadImage(profilepicUrl);
       profilePicFilesInfo.push({ profilePicEncryptedFilename, profilePicPicsumID });
@@ -199,13 +201,11 @@ const seedUsers = async () => {
 
     // Create users
     const usersIds = [];
-
-    
     for (let i = 0; i < USERS_NUM; i++) {
       const { password, email, username, ...rest } = fakeUsers[i];
-      const user = await User.signup({ email, username, password:"1qa2ws3ed!Q" }); // Use faker to generate password
+      const user = await User.signup({ email, username, password: "1qa2ws3ed!Q" });
       const userDataUpdate = { ...rest };
-      
+
       userDataUpdate.profilePicFileId = profilePicFilesInfo[i].profilePicEncryptedFilename;
       userDataUpdate.bannerFileId = bannerFilesInfo[i].bannerEncryptedFilename;
 
@@ -213,40 +213,44 @@ const seedUsers = async () => {
       usersIds.push(userUpdated._id);
     }
 
-    // Shuffle function to shuffle the array
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-    shuffleArray(postImageFileIds)
-    console.log(`postImageFileIds: ${postImageFileIds}`)
-    
-    console.log(`usersIds: ${usersIds}`)
-    for (const postImageFileId of postImageFileIds) {
-    // Shuffle the usersIds array before each iteration
-    shuffleArray(usersIds);
+    // Shuffle post image file ids
+    shuffleArray(postImageFileIds);
+    console.log(`postImageFileIds: ${postImageFileIds}`);
 
-    const randomNum = Math.floor(Math.random() * usersIds.length); //random number between min and max usersIds indices
-    const userId = usersIds[randomNum];
-    const likes = usersIds.slice(0, randomNum); // Slice the shuffled array to get random user IDs
-    console.log(`postImageFileId:${postImageFileId}, randomNume: ${randomNum}, userId:${userId},likes:${likes}`)
-    const post = await Post.create({
-      _id: new mongoose.Types.ObjectId(),
-      postImageFileId,
-      likesCount: likes.length,
-      likes,
-      user: userId,
-    });
-    console.log(`post:${post}`)
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { $push: { posts: post._id } }
-      , { new: true }
-    );
-    console.log(`user:${user}`)
-  }
+    // Seed posts data
+    console.log(`usersIds: ${usersIds}`);
+    for (const postImageFileId of postImageFileIds) {
+      shuffleArray(usersIds); // Shuffle the usersIds array before each iteration
+      
+      const threeDaysAgo = new Date();
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3); // Subtract 3 days from the current date
+      const createdAt = faker.date.between(threeDaysAgo, new Date());
+
+      const randomNum = Math.floor(Math.random() * usersIds.length); // Random number between min and max usersIds indices
+      const userId = usersIds[randomNum];
+      const likes = usersIds.slice(0, randomNum); // Slice the shuffled array to get random user IDs
+
+      console.log(`postImageFileId:${postImageFileId}, randomNum: ${randomNum}, userId:${userId}, likes:${likes}`);
+      
+      const post = await Post.create({
+        _id: new mongoose.Types.ObjectId(),
+        postImageFileId,
+        likesCount: likes.length,
+        likes,
+        user: userId,
+        createdAt,
+      });
+      
+      console.log(`post:${post}`);
+      
+      const user = await User.findByIdAndUpdate(
+        userId,
+        { $push: { posts: post._id } },
+        { new: true }
+      );
+      
+      console.log(`user:${user}`);
+    }
 
     console.log(`Seed data successfully added!`);
   } catch (error) {
@@ -255,5 +259,14 @@ const seedUsers = async () => {
     mongoose.disconnect();
   }
 };
+
+// Function to shuffle array
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 
 seedUsers();

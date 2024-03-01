@@ -40,9 +40,10 @@ const postSchema = new Schema(
     postImageFileId: {
       type: String,
     },
-  },
-  {
-    timestamps: { createdAt: true, updatedAt: false }
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
   }
 );
 
