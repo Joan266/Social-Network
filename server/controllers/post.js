@@ -8,13 +8,12 @@ module.exports = postController =  {
     console.log(req.body)
     try {
       const post = await Post.create({ _id: new mongoose.Types.ObjectId(), content});
-      const user = await User.findByIdAndUpdate(
+      await User.findByIdAndUpdate(
         userId,
         { $push: { posts: post._id } }
       );
       if(postId){
-        post.reply._id = postId
-        post.reply.username = user.username
+        post.parentPost = postId
         await Post.findByIdAndUpdate(
           postId,
           { $push: { comments: post._id }, $inc: { commentsCount: 1 } },
@@ -119,13 +118,13 @@ module.exports = postController =  {
   },
   homePosts: async (req, res) => {
     try {
-        const { userId, nextCursor, lastTimestamp } = req.query;
+        const { userId, cursor, lastTimestamp } = req.query;
         console.log(req.query)
-        if(!nextCursor){
-          res.status(404).json({ error: "Next cursor required" });
+        if(!cursor){
+          res.status(404).json({ error: "Cursor required" });
         }
         const pageSize = 5; 
-        const skip = (parseInt(nextCursor) - 1) * pageSize; // Parse to integer
+        const skip = (parseInt(cursor) - 1) * pageSize; // Parse to integer
         const query = {};
 
         if (lastTimestamp) { // Check for the presence of lastTimestamp
@@ -134,24 +133,24 @@ module.exports = postController =  {
 
         // Use Mongoose to search for posts of users with privacyStatus set to false
         const posts = await Post
-          .find()
-          .and([
-              { user: { $ne: userId } }, // Exclude posts belonging to userId
-              {
-                  $or: [
-                      { 'user.following': userId }, // Posts from users followed by userId
-                      { 'user.privacyStatus': { $exists: false } } // Posts from users with no privacyStatus
-                  ]
-              }
-          ])
+          .find({
+            user: { $ne: userId }, // Exclude posts belonging to userId
+            $or: [
+              { 'user.following': userId }, // Posts from users followed by userId
+              { 'user.privacyStatus': { $exists: false } } // Posts from users with no privacyStatus
+            ],
+            parentPost: undefined // Filter out replies (where parentPost is undefined)
+          })
           .sort({ createdAt: -1 }) // Sort posts by createdAt in descending order
           .select('_id createdAt') // Select only the _id field of the posts
           .skip(skip)
           .limit(pageSize);
         // Check if posts were found
         const timestamp = !lastTimestamp ? posts[0]?.createdAt : lastTimestamp
+        console.log(`posts: ${posts}`)
         // Send the retrieved posts in the response
-        res.status(200).json({posts, timestamp});
+        res.status(200).json({ posts: posts.length !==0 ? posts : [], timestamp });
+
     } catch (error) {
         // Handle errors and send a 500 error response
         console.error("Error getting home posts:", error);

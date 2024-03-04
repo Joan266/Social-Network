@@ -5,12 +5,9 @@ const Schema = mongoose.Schema
 const postSchema = new Schema(
   {
     _id: Schema.Types.ObjectId,
-    reply: {
-      _id : {
-        type: Schema.Types.ObjectId,
-        ref: 'Post',
-      },
-      username: { type: String },
+    parentPost: {
+      type: Schema.Types.ObjectId,
+      ref: 'Post',
     },
     user: {
       type: Schema.Types.ObjectId,

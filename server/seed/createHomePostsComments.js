@@ -1,19 +1,27 @@
 const faker = require('faker');
-const shuffleArray = require('./shuffleArray');
-const Post = require('../models/post');
-const User = require('../models/user');
 const mongoose = require('mongoose');
 
+const Post = require('../models/post');
+const User = require('../models/user');
+
+const shuffleArray = require('./shuffleArray');
+
 // Function to create comments for picture posts
-const createPostComments = async ({ homePosts, usersIds }) => {
-  for (const post of homePosts) {
+const createPostComments = async ({ homePostsInfo, usersIds }) => {
+  for (const post of homePostsInfo) {
     const { _id, createdAt: picPostCreatedAt, likesCount } = post;
 
-    // Shuffle the usersIds array before each iteration
-    shuffleArray(usersIds);
+    // If there are no likes on the post, skip creating comments
+    if (likesCount <= 0) continue;
 
     // Generate a random number of comments for the post
     const randomNumOfComments = Math.floor(Math.random() * likesCount);
+
+    // If there are no comments to create, skip to the next post
+    if (randomNumOfComments <= 0) continue;
+
+    // Shuffle the usersIds array before each iteration
+    shuffleArray(usersIds);
 
     for (let i = 1; i <= randomNumOfComments; i++) {
       // Generate a random creation date for the comment within the range of the picture post creation date and now
@@ -32,18 +40,18 @@ const createPostComments = async ({ homePosts, usersIds }) => {
       // Create a new comment using the Post model
       const comment = await Post.create({
         _id: new mongoose.Types.ObjectId(),
-        content: "this is a comment",
+        content: "This is a comment",
         likesCount: likes.length,
         likes,
-        reply: _id, // Reference to the parent post
+        parentPost: _id, // Reference to the parent post
         user: userId,
         createdAt,
       });
       
-      // Update the comments array of the parent post
+      // Update the comments array of the parent post and increment commentsCount
       await Post.findByIdAndUpdate(
         _id,
-        { $push: { comments: comment._id }, $inc: { commentsCount: 1 } } // Increment commentsCount by 1
+        { $push: { comments: comment._id }, $inc: { commentsCount: 1 } }
       );
 
       // Update the user document to include the new comment ID in the posts array
@@ -51,8 +59,6 @@ const createPostComments = async ({ homePosts, usersIds }) => {
         userId,
         { $push: { posts: comment._id } }
       );
-
-      console.log(`Comment created succesfully: ${comment}`);
     }
   }
 };

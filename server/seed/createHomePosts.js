@@ -13,6 +13,8 @@ const createHomePosts = async ({ usersIds, postImageFileIds }) => {
   const threeDaysAgo = new Date();
   threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
 
+  shuffleArray(postImageFileIds); // Shuffle the postImageFileIds array
+
   // Iterate over each post image file id
   for (const postImageFileId of postImageFileIds) {
     shuffleArray(usersIds); // Shuffle the usersIds array before each iteration
@@ -26,19 +28,20 @@ const createHomePosts = async ({ usersIds, postImageFileIds }) => {
 
     // Create a list of users who liked the post
     const likes = usersIds.slice(0, randomNum);
+    const likesCount = likes.length
 
     // Create a new post document using the Post model
     const post = await Post.create({
       _id: new mongoose.Types.ObjectId(), // Generate a new object ID
       postImageFileId,
-      likesCount: likes.length,
+      likesCount,
       likes,
       user: userId,
       createdAt,
     });
     
     // Store the created post in the homePostsInfo array
-    homePostsInfo.push({ _id: post._id, createdAt: post.createdAt });
+    homePostsInfo.push({ _id: post._id, createdAt: post.createdAt, likesCount });
     
     // Update the user document to include the new post ID in the posts array
     await User.findByIdAndUpdate(

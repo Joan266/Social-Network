@@ -36,8 +36,8 @@ const seedUsers = async () => {
     console.log('All documents in fs.chunks deleted.');
 
     // Constants for seed data
-    const USERS_NUM = 5;
-    const POSTS_NUM = 5;
+    const USERS_NUM = 15;
+    const POSTS_NUM = 90;
     const POSTS_PAGE = 2;
     const profilePicUrl = "https://picsum.photos/200.webp";
     const bannerUrl = "https://picsum.photos/600/200.webp";
@@ -63,10 +63,10 @@ const seedUsers = async () => {
     const homePostsInfo = await createHomePosts({ usersIds, postImageFileIds });
     console.log('Home posts created successfully.');
 
-    // Create home post comments (if needed)
-    // console.log('Creating home post comments...');
-    // await createHomePostsComments({ homePostsInfo, usersIds });
-    // console.log('Home post comments created successfully.');
+    // Create home post comments
+    console.log('Creating home post comments...');
+    await createHomePostsComments({ homePostsInfo, usersIds });
+    console.log('Home post comments created successfully.');
 
     console.log('Seed data successfully added!');
   } catch (error) {
