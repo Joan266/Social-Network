@@ -33,7 +33,7 @@ const PostDetails = ({ postId, isPostObserve, index }) => {
   );
   
   return (
-      <div className={styles.postDetailsContainer} ref={isPostObserve ? postRef : null} onClick={() => handlePostLink()} style={{marginBottom:isPostObserve? "30px":""}}>
+      <div className={styles.postDetailsContainer} ref={isPostObserve ? postRef : null} onClick={() => handlePostLink()} style={{marginBottom:isPostObserve && index !== 0? "30px":""}}>
         {isPostFormVisible && (
           <PostForm
             setIsPostFormVisible={setIsPostFormVisible}

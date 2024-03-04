@@ -6,8 +6,10 @@ const postSchema = new Schema(
   {
     _id: Schema.Types.ObjectId,
     reply: {
-      _id : {type: Schema.Types.ObjectId,
-      ref: 'Post',},
+      _id : {
+        type: Schema.Types.ObjectId,
+        ref: 'Post',
+      },
       username: { type: String },
     },
     user: {
