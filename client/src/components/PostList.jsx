@@ -7,7 +7,7 @@ const PostDetails = lazy(() => import('../components/PostDetails'));
 const PostList = ({posts, isLoading}) => {
   const topRef = useRef(null);
   const bottomRef = useRef(null);
-  usePostListObserve({ topRef, bottomRef })
+  // usePostListObserve({ topRef, bottomRef })
 
   return (
     <div id="post-list" className={styles.postsContainer}>

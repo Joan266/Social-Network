@@ -7,6 +7,8 @@ const useFetchPostData = ({ postId, userId }) => {
   const { user } = useAuthContext();
   const [postData, setPostData] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [postImageUrl, setPostImageUrl] = useState(null);
+  const [profilePicImgUrl, setProfilePicImgUrl] = useState(null);
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -21,9 +23,21 @@ const useFetchPostData = ({ postId, userId }) => {
         ]);
 
         const { postImageData, postImageMetadata } = postImageResponse;
-        const postImageUrl = URL.createObjectURL(postImageData);
-        const profilePicImgUrl = URL.createObjectURL(profilePicResponse);
-        setPostData({...postDataResponse, profilePicImgUrl, postImageUrl, ...postImageMetadata});
+        const newPostImageUrl = URL.createObjectURL(postImageData);
+        const newProfilePicImgUrl = URL.createObjectURL(profilePicResponse);
+
+        // Revoke previous URLs
+        if (postImageUrl) {
+          URL.revokeObjectURL(postImageUrl);
+        }
+        if (profilePicImgUrl) {
+          URL.revokeObjectURL(profilePicImgUrl);
+        }
+
+        // Set new URLs and metadata
+        setPostImageUrl(newPostImageUrl);
+        setProfilePicImgUrl(newProfilePicImgUrl);
+        setPostData({...postDataResponse, profilePicImgUrl: newProfilePicImgUrl, postImageUrl: newPostImageUrl, ...postImageMetadata});
       } catch (error) {
         console.error('Error fetching post data:', error);
       } finally {
@@ -32,6 +46,16 @@ const useFetchPostData = ({ postId, userId }) => {
     };
 
     fetchPostData();
+
+    // Cleanup function to revoke URLs when component unmounts
+    return () => {
+      if (postImageUrl) {
+        URL.revokeObjectURL(postImageUrl);
+      }
+      if (profilePicImgUrl) {
+        URL.revokeObjectURL(profilePicImgUrl);
+      }
+    };
 
   }, [postId, user]);
 
