@@ -52,12 +52,11 @@ const useHomePosts = () => {
     refetchOnWindowFocus: false,
     getNextPageParam: (lastPage) => lastPage?.nextCursor ? {cursor: lastPage.nextCursor,lastTimestamp: lastPage.lastTimestamp} :undefined,
     getPreviousPageParam: (firstPage) => firstPage.previousCursor ? { cursor: firstPage.previousCursor, lastTimestamp: firstPage.lastTimestamp } : undefined,
-    maxPages: 2,
+    maxPages:2,
   }
   );
 
   const posts = data?.pages?.flatMap(page => page.posts) ?? []
-  console.log(posts)
   return { isLoading, isError, fetchNextPage, hasNextPage, posts, fetchPreviousPage, hasPreviousPage };
 };
 
