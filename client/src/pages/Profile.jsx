@@ -5,6 +5,8 @@ import { faUser, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './Profile.module.scss';
 import useProfileData from '../hooks/useProfileData';
+import useProfileFollow from '../hooks/useProfileFollow';
+import { useAuthContext } from '../hooks/useAuthContext';
 import useProfilePosts from '../hooks/useProfilePosts';
 import PostList from '../components/PostList';
 import ProfileForm from '../components/ProfileForm';
@@ -14,12 +16,16 @@ import { useEffect } from 'react';
 import {formatDate} from '../utils/useFormatDate';
 
 const Profile = () => {
+  const { user } = useAuthContext();
   const { username } = useParams();
-  const { userData, isUserFollowed, isUserProfile, handleFollowToggle, handlePrivacyStatus } = useProfileData(username);
+  const { userData } = useProfileData(username);
+  const { isUserFollowed, handleFollowToggle } = useProfileFollow({username,isLoggedInUserProfile:username === user.username});
   const { isLoading, isError, posts } = useProfilePosts(username);
+
   const [followHover, setFollowHover] = useState(false);
   const [isProfileFormVisible, setIsProfileFormVisible] = useState(false);
   const queryClient = useQueryClient()
+
   
   useEffect(()=>{
     queryClient.resetQueries({ 
@@ -33,7 +39,6 @@ const Profile = () => {
       {isProfileFormVisible && (
           <ProfileForm
             setIsProfileFormVisible={setIsProfileFormVisible}
-            handlePrivacyStatus={handlePrivacyStatus}
             userData={userData}
           />
       )}
@@ -54,7 +59,7 @@ const Profile = () => {
                 {userData.profilePicUrl && <img src={userData.profilePicUrl} alt="profilepic" />}
               </div>
               <div className={styles.settingsContainer} >
-                {isUserProfile ? 
+                {username === user.username ? 
                   <div className={styles.edit} onClick={(e) => {e.stopPropagation(); setIsProfileFormVisible(true);}}>
                     Edit Profile
                   </div> 

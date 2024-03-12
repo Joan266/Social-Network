@@ -5,14 +5,14 @@ import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart, faComment } from '@fortawesome/free-regular-svg-icons';
 import { timeSince } from '../utils/useTimeSinceString';
 import useFetchPostData from '../hooks/usePostData';
-import usePostLikes from '../hooks/usePostLikes';
+import usePostLike from '../hooks/usePostLike';
 import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const PostDetails = ({ postId, userId }) => {
   const {  postData, isLoading } = useFetchPostData({postId, userId});
-  const {  isLoading: isPostLikesLoading, handleLikeToggle, isPostLiked } = usePostLikes({postId});
+  const {  isLoading: isPostLikesLoading, handleLikeToggle, isPostLiked } = usePostLike({postId});
   const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
   const [ commentsCount, setCommentsCount ] = useState(0);
   const navigate = useNavigate(); 

@@ -89,10 +89,10 @@ export class userApi {
           return response.data;
       }
   }
-  static async isFollowing(data, headers) {
+  static async isFollowingUser(data, headers) {
       try {
           const auth = createCustomAxios(headers)
-          const response = await auth.post("/user/isfollowing", data);
+          const response = await auth.post("/user/isfollowinguser", data);
           return response.data;
       } catch ({response}) {
           console.log("Error checking if user profile is being followed by user:", response.data);

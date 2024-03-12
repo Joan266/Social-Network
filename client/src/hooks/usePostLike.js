@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { postApi } from '../services/postApi';
 import { useAuthContext } from './useAuthContext';
 
-const usePostLikes = ({ postId}) => {
+const usePostLike = ({ postId}) => {
   
   const { user } = useAuthContext();
   const [isLoading, setIsLoading] = useState(false);
@@ -54,4 +54,4 @@ const usePostLikes = ({ postId}) => {
   return { isLoading, handleLikeToggle, isPostLiked};
 };
 
-export default usePostLikes;
+export default usePostLike;
