@@ -1,4 +1,4 @@
-import { http, createCustomAxios } from './apiConfig'
+import { createCustomAxios } from './apiConfig'
 
 export class filesApi {
   static async upload(formData,headers) {
@@ -10,31 +10,50 @@ export class filesApi {
           console.log("Error uploading file:", response.error);
       }
   }
-  static async image(fileId, headers) {
+  static async profilePic(userId, headers) {
       try {
           const auth = createCustomAxios(headers)
-          
-          // Make a request to get JSON metadata
-          const imgMetadataResponse = await auth.get("/files/img_metadata", {
-              params: { fileId },
-          });
-  
+
           // Make a request to get Blob image data
-          const imgDataResponse = await auth.get("/files/img_data", {
-              params: { fileId },
+          const profilePicResponse = await auth.get("/files/profilepicdata", {
+              params: { userId },
               responseType: 'blob'
           });
   
-          // Return both JSON metadata and Blob image data
-          return {
-              imgMetadata: imgMetadataResponse.data,
-              imgData: imgDataResponse.data
-          };
+          // Return Blob image data
+          return profilePicResponse.data;
+
       } catch (error) {
           console.log("Error showing image:", error);
           throw error; // Re-throw the error to be caught by the caller
       }
-  }    
+  }  
+  static async postImage(postId, headers) {
+    try {
+        const auth = createCustomAxios(headers)
+
+        // Make a request to get Blob image data
+        const postImageBlobResponse = await auth.get("/files/postimagedata", {
+            params: { postId },
+            responseType: 'blob'
+        });
+
+        // Make a request to get Json data
+        const postImageJsonResponse = await auth.get("/files/postimagemetadata", {
+            params: { postId },
+        });
+
+        // Return Blob image data
+        return {
+            postImageData: postImageBlobResponse.data,
+            postImageMetadata: postImageJsonResponse.data,
+        };
+        
+    } catch (error) {
+        console.log("Error showing image:", error);
+        throw error; // Re-throw the error to be caught by the caller
+    }
+}    
   static async delete({fileId,userToken}) {
       try {
           const auth = createCustomAxios({

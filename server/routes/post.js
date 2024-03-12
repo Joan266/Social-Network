@@ -7,7 +7,7 @@ const router = express.Router()
 router.post('/create', requireAuth,  postController.create);
 
 // get post data route
-router.get('/fetchdata', requireAuth, postController.fetchPostData);
+router.get('/fetchpostdata', requireAuth, postController.fetchPostData);
 
 // like post route
 router.put('/like', requireAuth, postController.likePost);

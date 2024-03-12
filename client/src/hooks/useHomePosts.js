@@ -1,4 +1,4 @@
-import { postApi } from '../services/api';
+import { postApi } from '../services/postApi';
 import { useAuthContext } from './useAuthContext';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -45,7 +45,7 @@ const fetchHomePosts = async ({ pageParam, userId, userToken }) => {
 
 const useHomePosts = () => {
   const { user } = useAuthContext();
-  const { isLoading, isError, data, refetch, fetchNextPage, hasNextPage, fetchPreviousPage, hasPreviousPage } = useInfiniteQuery({
+  const { isLoading, isError, data, fetchNextPage, hasNextPage, fetchPreviousPage, hasPreviousPage } = useInfiniteQuery({
     queryKey: ['home_posts'],
     queryFn: async ({ pageParam }) => fetchHomePosts({ userId: user._id, userToken: user.token, pageParam }),
     initialPageParam: { cursor:1 },
@@ -57,8 +57,8 @@ const useHomePosts = () => {
   );
 
   const posts = data?.pages?.flatMap(page => page.posts) ?? []
-  
-  return { isLoading, isError, refetch, fetchNextPage, hasNextPage, posts, fetchPreviousPage, hasPreviousPage };
+  console.log(posts)
+  return { isLoading, isError, fetchNextPage, hasNextPage, posts, fetchPreviousPage, hasPreviousPage };
 };
 
 export default useHomePosts;

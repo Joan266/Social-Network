@@ -1,38 +1,22 @@
-import { http, createCustomAxios } from './apiConfig'
+import { createCustomAxios } from './apiConfig'
 
 export class postApi {
     
-  static async fetchPostData(data, headers) {
+  static async fetchPostData(postId, headers) {
       try {
           const auth = createCustomAxios(headers)
-          // Make a request to get Blob image data
-          const postImgResponse = await auth.get("/files/post_img_data", {
-              params: data,
-              responseType: 'blob'
+
+          const postResponseData = await auth.get("/post/fetchpostdata", {
+              params: { postId },
           });
 
-          // Make a request to get Blob image data
-          const postUserProfilePicResponse = await auth.get("/files/post_profilepic_data", {
-              params: data,
-              responseType: 'blob'
-          });
-          
-          const postResponseData = await auth.get("/post/fetchdata", {
-              params: data,
-          });
-
-          // Return both JSON metadata and Blob image data
-          return {
-              postData: postResponseData.data,
-              postImgData: postImgResponse.data,
-              postUserProfilePicData: postUserProfilePicResponse.data,
-          };
+          return postResponseData.data;
       } catch ({response}) {
-          console.log("Error post not found:", response.data);
-          return response.data;
+          console.log("Error post not found:", response);
+          return response;
       }
   }
-  static async create(data,headers) {
+  static async create(data, headers) {
       try {
           const auth = createCustomAxios(headers)
           const response = await auth.post("/post/create", data);
