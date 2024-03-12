@@ -8,7 +8,10 @@ const router = express.Router()
 router.post('/upload', upload.single('file'), requireAuth,  filesController.upload);
 
 // get image route
-router.get('/image', requireAuth,  filesController.image);
+router.get('/img_data', requireAuth,  filesController.imgData);
+
+// get image route
+router.get('/img_metadata', requireAuth,  filesController.imgMetadata);
 
 // delete file route
 router.delete('/delete', requireAuth,  filesController.delete);

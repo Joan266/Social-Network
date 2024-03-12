@@ -15,7 +15,6 @@ const Home = () => {
       exact: true,
     })
   },[])
-
   return (
     <div className={styles.homeContainer}>
       <div className={styles.navContainer}>
@@ -30,7 +29,7 @@ const Home = () => {
         /> 
       }
 
-      {posts.length>0 && <PostList posts={ posts }/>}
+      {posts.length>0 && <PostList posts={ posts } isLoading={isLoading}/>}
       
       {isLoading && <strong>Cargando...</strong>}
 

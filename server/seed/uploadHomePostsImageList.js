@@ -28,7 +28,7 @@ const uploadHomePostsImageList = async (url) => {
       const download_url_modified = `https://picsum.photos/id/${id}/500/${scaledHeight}.webp`;
       
       // Upload Picsum Image to DB
-      const { encryptedFilename: postImageFileId } = await uploadPicsumImage(download_url_modified);
+      const { encryptedFilename: postImageFileId } = await uploadPicsumImage({url: download_url_modified, width:500,height:scaledHeight});
 
       return postImageFileId;
     });

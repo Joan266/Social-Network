@@ -13,13 +13,14 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.7",
     "dotenv": "^16.4.1",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.0",
     "react-dom": "^18.2.0",
     "react-easy-crop": "^5.0.5",
     "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
-    "sass": "^1.70.0",
+    "sass": "^1.71.1",
     "web-vitals": "^3.5.2"
   },
   "scripts": {

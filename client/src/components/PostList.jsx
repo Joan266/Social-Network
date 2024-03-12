@@ -1,21 +1,26 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useRef } from 'react';
 import styles from './PostList.module.scss';
-
+import { usePostListObserve } from '../hooks/usePostListObserve';
 // Lazy load the component containing the image
 const PostDetails = lazy(() => import('../components/PostDetails'));
 
-const PostList = ({posts}) => {
+const PostList = ({posts, isLoading}) => {
+  const topRef = useRef(null);
+  const bottomRef = useRef(null);
+  usePostListObserve({ topRef, bottomRef })
+
   return (
-    <div className={styles.postsContainer}>
-      {posts && posts.map(( post, index ) => (
+    <div id="post-list" className={styles.postsContainer}>
+     { !isLoading && <div id='top-observer' ref={topRef}/>}
+
+      {posts && posts.map(( post ) => (
         <Suspense key={post._id} fallback={""}>
           <PostDetails 
-            index={index} 
             postId={post._id} 
-            isPostObserve={posts.length >= 5 && ( posts.length === index + 1 || index === 0 ) ? true : false}
-            />
+          />
         </Suspense>
       ))}
+      {!isLoading && <div id='bottom-observer' ref={bottomRef} style={{minHeight:"200px",marginBottom: "30px"}}/>}
     </div>
   )
 }

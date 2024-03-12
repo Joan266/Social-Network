@@ -1,4 +1,4 @@
-import {  useRef, useState } from 'react';
+import { useState } from 'react';
 import styles from './PostDetails.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -8,32 +8,30 @@ import useFetchPostData from '../hooks/usePostData';
 import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { usePostObserve } from '../hooks/usePostObserve';
 
-const PostDetails = ({ postId, isPostObserve, index }) => {
+const PostDetails = ({ postId }) => {
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
   const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({postId});
-  const postRef = useRef(null);
-  usePostObserve({ isPostObserve, currentPostRef:postRef.current, index})
   const navigate = useNavigate(); 
   
-    const handlePostLink = () => {
-      navigate(`/post/${postId}`); 
-    };
-    
-    const increaseCommentsCount = () => {
-      setCommentsCount(commentsCount + 1);
-    };
+  const handlePostLink = () => {
+    navigate(`/post/${postId}`); 
+  };
+  
+  const increaseCommentsCount = () => {
+    setCommentsCount(commentsCount + 1);
+  };
+
 
   if (isLoading || !postData) return (
-    <div className={styles.postDetailsContainer}>
+    <div className={styles.postDetailsContainer} style={{ display: 'none' }}>
 
     </div>
   );
   
   return (
-      <div className={styles.postDetailsContainer} ref={isPostObserve ? postRef : null} onClick={() => handlePostLink()} style={{marginBottom:isPostObserve && index !== 0? "30px":""}}>
+      <div className={styles.postDetailsContainer} onClick={() => handlePostLink()} >
         {isPostFormVisible && (
           <PostForm
             setIsPostFormVisible={setIsPostFormVisible}
@@ -69,10 +67,10 @@ const PostDetails = ({ postId, isPostObserve, index }) => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          <div className={styles.imageContainer}>
-            {postData.postImageUrl && (
-              <img src={postData.postImageUrl} alt='post' />
-            )}
+          <div className={styles.imageContainer} >
+          {postData.postImageUrl && (
+            <img src={postData.postImageUrl} alt='post' style={{ width: postData.postImgWidth, height: postData.postImgHeight }}/>
+          )}
           </div>
           <div className={styles.settings}>
             <div className={styles.commentContainer}>

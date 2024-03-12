@@ -8,6 +8,7 @@ const createUsers = async ({ USERS_NUM, profilePicFilesInfo, bannerFilesInfo }) 
   for (let i = 0; i < USERS_NUM; i++) {
     // Extract fake data from fakeUsersData for user signup
     const { password, email, username, ...rest } = fakeUsersData[i];
+    console.log(username)
     const user = await User.signup({ email, username, password: "1qa2ws3ed!Q" });
 
     // Prepare user data update for profile

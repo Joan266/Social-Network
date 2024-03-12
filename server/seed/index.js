@@ -39,7 +39,7 @@ const seedUsers = async () => {
     const USERS_NUM = 15;
     const POSTS_NUM = 90;
     const POSTS_PAGE = 2;
-    const profilePicUrl = "https://picsum.photos/200.webp";
+    const profilePicUrl = "https://picsum.photos/150.webp";
     const bannerUrl = "https://picsum.photos/600/200.webp";
     const homePostsUrl = `https://picsum.photos/v2/list?page=${POSTS_PAGE}&limit=${POSTS_NUM}`;
 

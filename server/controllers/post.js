@@ -42,7 +42,7 @@ module.exports = postController =  {
       // Use Mongoose to search for post
       const post = await Post.findOne({ _id: postId })
       .select('-likes -__v')
-      .populate({ path: 'user', select: 'username -_id profilePicFileId' })
+      .populate({ path: 'user', select: 'username -_id' })
       .exec()
       console.log(post)
       const { user, ...rest } = post.toObject(); 
@@ -123,7 +123,7 @@ module.exports = postController =  {
         if(!cursor){
           res.status(404).json({ error: "Cursor required" });
         }
-        const pageSize = 5; 
+        const pageSize = 4; 
         const skip = (parseInt(cursor) - 1) * pageSize; // Parse to integer
         const query = {};
 

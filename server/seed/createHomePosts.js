@@ -48,8 +48,6 @@ const createHomePosts = async ({ usersIds, postImageFileIds }) => {
       userId,
       { $push: { posts: post._id } }
     );
-    
-    console.log(`post created succesfully: ${post}`);
   }
   return homePostsInfo
 };
