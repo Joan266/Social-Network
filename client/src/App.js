@@ -17,6 +17,7 @@ const PrincipalLayout = ({ children }) => (
     </div>
     <div id='main' className='main'>
       <div className='dashboard'>
+        {children}
       </div>
       <div className='trending'>
         <SearchBar/>

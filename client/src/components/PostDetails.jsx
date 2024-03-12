@@ -39,7 +39,7 @@ const PostDetails = ({ postId, userId }) => {
         )}
         <div className={styles.profilePicContainer}>
           <div className={styles.profilePic}>
-            {postData.profilePicUrl ? <img src={postData.profilePicUrl} alt='post-profile-pic'></img>:
+            {postData.profilePicImgUrl ? <img src={postData.profilePicImgUrl} alt='post-profile-pic'></img>:
             <FontAwesomeIcon icon={faUser} className="rounded me-2" />}
           </div>
         </div>

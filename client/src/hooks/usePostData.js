@@ -9,7 +9,7 @@ const useFetchPostData = ({ postId, userId }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPostData = async () => {
       setLoading(true);
       try {
         const headers = getHeaders();
@@ -23,16 +23,15 @@ const useFetchPostData = ({ postId, userId }) => {
         const { postImageData, postImageMetadata } = postImageResponse;
         const postImageUrl = URL.createObjectURL(postImageData);
         const profilePicImgUrl = URL.createObjectURL(profilePicResponse);
-        
-        setPostData({...postDataResponse, postImageUrl, profilePicImgUrl, ...postImageMetadata});
+        setPostData({...postDataResponse, profilePicImgUrl, postImageUrl, ...postImageMetadata});
       } catch (error) {
-        console.error('Error fetching profile data:', error);
+        console.error('Error fetching post data:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    fetchPostData();
 
   }, [postId, user]);
 

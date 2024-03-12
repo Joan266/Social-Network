@@ -15,13 +15,13 @@ export class filesApi {
           const auth = createCustomAxios(headers)
 
           // Make a request to get Blob image data
-          const profilePicResponse = await auth.get("/files/profile_pic_data", {
+          const profilePicResponse = await auth.get("/files/profilepicdata", {
               params: { userId },
               responseType: 'blob'
           });
   
           // Return Blob image data
-          return profilePicResponse;
+          return profilePicResponse.data;
 
       } catch (error) {
           console.log("Error showing image:", error);
@@ -33,19 +33,19 @@ export class filesApi {
         const auth = createCustomAxios(headers)
 
         // Make a request to get Blob image data
-        const postImageBlobResponse = await auth.get("/files/post_image_data", {
+        const postImageBlobResponse = await auth.get("/files/postimagedata", {
             params: { postId },
             responseType: 'blob'
         });
 
         // Make a request to get Json data
-        const postImageJsonResponse = await auth.get("/files/post_image_metadata", {
+        const postImageJsonResponse = await auth.get("/files/postimagemetadata", {
             params: { postId },
         });
 
         // Return Blob image data
         return {
-            postImageData: postImageBlobResponse,
+            postImageData: postImageBlobResponse.data,
             postImageMetadata: postImageJsonResponse.data,
         };
         

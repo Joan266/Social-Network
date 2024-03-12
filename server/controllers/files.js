@@ -2,6 +2,7 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Post = require('../models/post')
+const User = require('../models/user')
 const connection = mongoose.connection;
 
 let gfs;
@@ -43,11 +44,86 @@ module.exports = filesController = {
             })
         }
     },
-    postImgData: async (req, res) => {
+    postImageData: async (req, res) => {
         const { postId } = req.query;
     
         try {
-            console.log(postId)
+            // Use Mongoose to search for post
+            const post = await Post.findById(postId)
+
+            // Check if file is not found
+            if (!post || !post.postImageFileId) {
+                return res.status(200).json({ msg: 'Post image id not found' });
+            }
+
+            // Find the files by filename:fileId
+            const files = await gfs.find({ filename: post.postImageFileId }).toArray();
+    
+            // Check if file is not found
+            if (!files || files.length === 0) {
+                return res.status(404).json({ error: 'File not found' });
+            }
+    
+             // Extract metadata
+            const { contentType } = files[0].metadata;
+
+            // Set content type for the file data
+            res.set('Content-Type', contentType);
+    
+            // Open a download stream for the specified fileId
+            const readstream = gfs.openDownloadStream(files[0]._id);
+    
+            // Pipe the file data directly to the response
+            readstream.pipe(res);
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+    profilePicData: async (req, res) => {
+        const { userId } = req.query;
+    
+        try {
+            // Use Mongoose to search for user
+            const user = await User.findById(userId);
+            console.log(`user:${user.profilePicFileId}`)
+            if (!user || !user.profilePicFileId) {
+                return res.status(404).json({ error: 'User profile picture not found' });
+            }
+    
+            // Find the profile picture file by filename:fileId
+            const files = await gfs.find({ filename: user.profilePicFileId }).toArray();
+    
+            if (!files || files.length === 0) {
+                return res.status(404).json({ error: 'Profile picture file not found' });
+            }
+    
+            // Extract metadata
+            const { contentType } = files[0].metadata;
+    
+            // Set content type for the file data
+            res.set('Content-Type', contentType);
+    
+            // Open a download stream for the specified fileId
+            const readstream = gfs.openDownloadStream(files[0]._id);
+    
+            // Handle stream errors
+            readstream.on('error', (error) => {
+                console.error('Stream error:', error);
+                res.status(500).json({ error: 'Error streaming profile picture data' });
+            });
+    
+            // Pipe the file data directly to the response
+            readstream.pipe(res);
+        } catch (err) {
+            console.error('Mongoose error:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },    
+    postImageMetadata: async (req, res) => {
+        const { postId } = req.query;
+    
+        try {
             // Use Mongoose to search for post
             const post = await Post.findById(postId)
 
@@ -65,80 +141,10 @@ module.exports = filesController = {
             }
     
             // Extract metadata
-            const { contentType } = files[0].metadata;
-    
-    
-            // Set content type for the file data
-            res.set('Content-Type', contentType);
-    
-            // Open a download stream for the specified fileId
-            const readstream = gfs.openDownloadStream(files[0]._id);
-    
-            // Pipe the file data directly to the response
-            readstream.pipe(res);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ error: 'Internal server error' });
-        }
-    },
-    profilePicData: async (req, res) => {
-        const { postId } = req.query;
-    
-        try {
-            console.log(postId)
-            // Use Mongoose to search for post
-            const post = await Post.findById(postId)
-            .populate({ path: 'user', select: 'profilePicId' })
-            .select('user')
-            .exec()
-
-            // Check if file is not found
-            if (!post || !post.user || !post.user.profilePicId) {
-                return res.status(200).json({ msg: 'User profile pic id post not found' });
-            }
-
-            // Find the files by filename:fileId
-            const files = await gfs.find({ filename: post.user.profilePicId }).toArray();
-    
-            // Check if file is not found
-            if (!files || files.length === 0) {
-                return res.status(404).json({ error: 'File not found' });
-            }
-    
-            // Extract metadata
-            const { contentType } = files[0].metadata;
-    
-    
-            // Set content type for the file data
-            res.set('Content-Type', contentType);
-    
-            // Open a download stream for the specified fileId
-            const readstream = gfs.openDownloadStream(files[0]._id);
-    
-            // Pipe the file data directly to the response
-            readstream.pipe(res);
-        } catch (err) {
-            console.error(err);
-            return res.status(500).json({ error: 'Internal server error' });
-        }
-    },
-    imgMetadata: async (req, res) => {
-        const { fileId } = req.query;
-    
-        try {
-            // Find the files by filename:fileId
-            const files = await gfs.find({ filename: fileId }).toArray();
-    
-            // Check if file is not found
-            if (!files || files.length === 0) {
-                return res.status(404).json({ error: 'File not found' });
-            }
-    
-            // Extract metadata
             const { width, height } = files[0].metadata;
     
             // Create a JSON object for metadata
-            const metadata = { width, height };
+            const metadata = { postImgWidth: width, postImgHeight: height };
     
             // Send the metadata as JSON
             res.status(200).json(metadata);

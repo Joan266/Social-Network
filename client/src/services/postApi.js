@@ -6,14 +6,14 @@ export class postApi {
       try {
           const auth = createCustomAxios(headers)
 
-          const postResponseData = await auth.get("/post/fetchdata", {
-              params: postId,
+          const postResponseData = await auth.get("/post/fetchpostdata", {
+              params: { postId },
           });
 
           return postResponseData.data;
       } catch ({response}) {
-          console.log("Error post not found:", response.data);
-          return response.data;
+          console.log("Error post not found:", response);
+          return response;
       }
   }
   static async create(data, headers) {

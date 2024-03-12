@@ -38,17 +38,16 @@ module.exports = postController =  {
   fetchPostData: async (req, res) => {
     try {
       const { postId } = req.query;
-      console.log(postId)
+      console.log(`postId:${postId}`)
       // Use Mongoose to search for post
-      const post = await Post.findOne({ _id: postId })
-      .select('-likes -__v')
+      const post = await Post.findById(postId)
+      .select('-likes -__v -comments -postImageFileId -_id')
       .populate({ path: 'user', select: 'username -_id' })
       .exec()
-      console.log(post)
       const { user, ...rest } = post.toObject(); 
       const modifiedPost = { ...rest, ...user };
       if (modifiedPost) {
-        res.status(200).json({postData:modifiedPost});
+        res.status(200).json(modifiedPost);
       } else {
         res.status(404).json({ error: "Post not found" });
       }
@@ -119,7 +118,6 @@ module.exports = postController =  {
   homePosts: async (req, res) => {
     try {
         const { userId, cursor, lastTimestamp } = req.query;
-        console.log(req.query)
         if(!cursor){
           res.status(404).json({ error: "Cursor required" });
         }
@@ -148,7 +146,6 @@ module.exports = postController =  {
           .limit(pageSize);
         // Check if posts were found
         const timestamp = !lastTimestamp ? posts[0]?.createdAt : lastTimestamp
-        console.log(`posts: ${posts}`)
         // Send the retrieved posts in the response
         res.status(200).json({ posts: posts.length !==0 ? posts : [], timestamp });
 
