@@ -17,6 +17,7 @@ const PostList = ({posts, isLoading}) => {
         <Suspense key={post._id} fallback={""}>
           <PostDetails 
             postId={post._id} 
+            userId={post.user._id}
           />
         </Suspense>
       ))}

@@ -5,14 +5,16 @@ import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart, faComment } from '@fortawesome/free-regular-svg-icons';
 import { timeSince } from '../utils/useTimeSinceString';
 import useFetchPostData from '../hooks/usePostData';
+import usePostLikes from '../hooks/usePostLikes';
 import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const PostDetails = ({ postId }) => {
-  const [isPostFormVisible, setIsPostFormVisible] = useState(false);
-  const [commentsCount, setCommentsCount] = useState(0);
-  const {  postData, isLoading, handleLikeToggle, isPostLiked } = useFetchPostData({postId});
+const PostDetails = ({ postId, userId }) => {
+  const {  postData, isLoading } = useFetchPostData({postId, userId});
+  const {  isLoading: isPostLikesLoading, handleLikeToggle, isPostLiked } = usePostLikes({postId});
+  const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
+  const [ commentsCount, setCommentsCount ] = useState(0);
   const navigate = useNavigate(); 
   
   const handlePostLink = () => {
@@ -24,11 +26,7 @@ const PostDetails = ({ postId }) => {
   };
 
 
-  if (isLoading || !postData) return (
-    <div className={styles.postDetailsContainer} style={{ display: 'none' }}>
-
-    </div>
-  );
+  if (isLoading || !postData) return "";
   
   return (
       <div className={styles.postDetailsContainer} onClick={() => handlePostLink()} >

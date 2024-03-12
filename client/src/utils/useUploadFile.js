@@ -1,4 +1,4 @@
-import { filesApi } from '../services/api';
+import { filesApi } from '../services/filesApi';
 
 export const uploadFile = async ({file, token}) => {
   const formData = new FormData();

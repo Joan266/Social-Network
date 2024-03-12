@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
-import { postApi } from '../services/api'
+import { postApi } from '../services/postApi'
 import { uploadFile } from '../utils/useUploadFile';
 
 export const useCreatePost = () => {

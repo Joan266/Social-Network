@@ -1,4 +1,4 @@
-import { postApi } from '../services/api';
+import { postApi } from '../services/postApi';
 import { useAuthContext } from './useAuthContext';
 import { useInfiniteQuery } from '@tanstack/react-query';
 

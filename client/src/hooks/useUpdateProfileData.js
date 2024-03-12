@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuthContext } from './useAuthContext';
-import { userApi } from '../services/api';
-import { filesApi } from '../services/api';
+import { userApi } from '../services/userApi';
+import { filesApi } from '../services/filesApi';
 import { uploadFile } from '../utils/useUploadFile';
 import { useNavigate } from 'react-router-dom';
 export const useUpdateProfileData = () => {

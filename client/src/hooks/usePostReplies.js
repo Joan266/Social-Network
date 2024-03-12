@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { postApi } from '../services/api';
+import { postApi } from '../services/postApi';
 import { useAuthContext } from './useAuthContext';
 
 const useFetchPostReplies = (postId) => {

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { userApi } from '../services/api';
+import { userApi } from '../services/userApi';
 import { useAuthContext } from './useAuthContext';
-import {readImageId} from '../utils/useReadImageId';
 
 const useFetchUserData = (username) => {
   const { user } = useAuthContext();
@@ -43,10 +42,8 @@ const useFetchUserData = (username) => {
       try {
         // Fetch user data
         const userDataResponse = await userApi.fetchUserData(username, headers);
-        const { profilePicFileId, bannerFileId, ...rest } = userDataResponse;
-        const profilePicUrl = profilePicFileId ? await readImageId({ fileId: profilePicFileId, userToken: user.token }) : null;
-        const bannerUrl = bannerFileId ? await readImageId({ fileId:bannerFileId, userToken: user.token }) : null;
-        setUserData({ profilePicUrl, bannerUrl,profilePicFileId, bannerFileId, ...rest });
+        const { ...rest } = userDataResponse;
+       setUserData({ ...userDataResponse });
 
         // Check if the logged-in user is following this user
         if (username !== user.username) {

@@ -3,7 +3,6 @@ import { faSearch as solidLens, faTimes as faXmark,faUser } from '@fortawesome/f
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSearch } from '../hooks/useSearch.js';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { readImageId } from '../utils/useReadImageId';
 import styles from './SearchBar.module.scss';
 import { useAuthContext } from '../hooks/useAuthContext.js';
 const User = ({user,handleUserInfoClick, userToken}) => {
@@ -12,9 +11,6 @@ const User = ({user,handleUserInfoClick, userToken}) => {
     const fetchProfilePic = async () => {
       try {
         const { profilePicFileId } = user;
-        const profilePicUrl = profilePicFileId ? await readImageId({ fileId: profilePicFileId, userToken }) : null;
-        console.log(profilePicUrl);
-        setProfilePicUrl(profilePicUrl);
       } catch (error) {
         console.error('Error fetching profile picture:', error);
       }
