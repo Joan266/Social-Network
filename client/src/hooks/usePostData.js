@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { postApi } from '../services/api';
+import { postApi } from '../services/apiConfig';
 import { useAuthContext } from './useAuthContext';
 import { readImageId } from '../utils/useReadImageId';
 
@@ -39,13 +39,18 @@ const useFetchPostData = ({ postId}) => {
       const headers = getHeaders();
       try {
         setLoading(true);
-        console.log("gge")
+
         // Fetch user data
+
         const postDataResponse = await postApi.fetchPostData({ postId }, headers);
-        const { profilePicFileId, postImageFileId, ...rest } = postDataResponse.postData;
-        const postImageUrl = postImageFileId ? await readImageId({ fileId: postImageFileId, userToken:user.token}) : null;
-        const profilePicUrl = profilePicFileId ? await readImageId({ fileId: profilePicFileId, userToken:user.token}) : null;
-        setPostData({profilePicUrl,postImageUrl,...rest});
+
+        const { postData, postImgData, postUserProfilePicData } = postDataResponse;
+
+        const postImgUrl = URL.createObjectURL(postImgData);
+        const profilePicImgUrl = URL.createObjectURL(postUserProfilePicData);
+
+        setPostData({...postData, postImgUrl,profilePicImgUrl});
+
         const isLikingResponse = await postApi.isLiking({ userId: user._id, postId }, headers);
         setIsPostLiked(isLikingResponse);
         

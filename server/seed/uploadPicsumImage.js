@@ -11,7 +11,7 @@ connection.once('open', () => {
 });
 
 // Function to upload image from URL
-const uploadPicsumImage = async (url) => {
+const uploadPicsumImage = async ({url, width, height}) => {
   try {
     // Fetch the image from the provided URL
     const response = await fetch(url);
@@ -39,7 +39,7 @@ const uploadPicsumImage = async (url) => {
     // Open a GridFS upload stream
     const uploadStream = gfs.openUploadStream(encryptedFilename, {
       chunkSizeBytes: 262144, // 256 KB
-      metadata: { contentType: response.headers.get('content-type'), picsumID }
+      metadata: { contentType: response.headers.get('content-type'), picsumID, width, height }
     });
 
     // Pipe the buffer data to the upload stream

@@ -60,7 +60,7 @@ module.exports = userController =  {
         ]
       })
         .select('profilePicFileId name username')
-        .limit(10)
+        .limit(3)
       console.log(users)
       res.status(200).json(users);
     } catch (error) {
@@ -93,7 +93,7 @@ module.exports = userController =  {
       if(!nextCursor){
         res.status(404).json({ error: "Next cursor required" });
       }
-      const pageSize = 5; 
+      const pageSize = 10; 
       const skip = (parseInt(nextCursor) - 1) * pageSize; // Parse to integer
       const query = {};
 

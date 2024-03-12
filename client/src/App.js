@@ -15,7 +15,7 @@ const PrincipalLayout = ({ children }) => (
     <div className='header'>
       <Navbar />
     </div>
-    <div className='main'>
+    <div id='main' className='main'>
       <div className='dashboard'>
         {children}
       </div>

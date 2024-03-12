@@ -29,9 +29,9 @@ const PostTargeted = ({postData}) => {
           {timeSince(postData.createdAt)}
         </div>
       </div>
-      <div className={styles.content}>
+      {postData.content && <div className={styles.content}>
         {postData.content}
-      </div>
+      </div>}
       {postData.postImageUrl && (
         <div className={styles.imageContainer}>
           <img src={postData.postImageUrl} alt="postcomment"/>
