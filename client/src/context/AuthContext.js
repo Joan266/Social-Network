@@ -4,7 +4,7 @@ export const AuthContext = createContext();
 
 // Define initial state outside the reducer function
 const initialState = {
-  user: null
+  user: null,
 };
 
 export const authReducer = (state, action) => {

@@ -13,7 +13,7 @@ export const useLogin = () => {
     setError(null);
 
     try {
-      const {profilePicData,loginResponseData,error} = await userApi.login({ emailOrUsername, password });
+      const {profilePicData, loginResponseData,error} = await userApi.login({ emailOrUsername, password });
       if(error){
         return console.log(error)
       }

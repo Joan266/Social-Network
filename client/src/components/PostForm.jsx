@@ -117,10 +117,9 @@ const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseComments
       <div className={styles.postFormContainer}>
         <div className={styles.postForm} >
           <div className={styles.navContainer}>
-            <div className={styles.xMark}>
+            <div className={styles.xMark} onClick={()=>setIsPostFormVisible(false)}>
               <FontAwesomeIcon
                 className={styles.cancelSearch}
-                onClick={()=>setIsPostFormVisible(false)}
                 icon={faXmark}
               />
             </div>

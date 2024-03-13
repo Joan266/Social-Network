@@ -1,5 +1,5 @@
 import { http, createCustomAxios } from './apiConfig'
-
+import axios from 'axios'
 export class userApi {
    
   static async signup(data) {
@@ -46,17 +46,37 @@ export class userApi {
         throw error;
     }
 }
+static async fetchUserProfilePic({ username, userToken }) {
+    try {
+        const auth = createCustomAxios({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+        });
 
-  static async searchUser(data, headers) {
-      try {
-          const auth = createCustomAxios(headers)
+        const { data: profilePicData } = await auth.get("/files/profilepicdata", {
+            params: { emailOrUsername: username },
+            responseType: 'blob'
+        });
 
-          const response = await auth.post("/user/search", data);
-          return response.data;
-      } catch (error) {
-          console.log("Error searching user:", error);
-      }
-  }
+        return profilePicData;
+    
+    } catch (error) {
+        console.error("Error during login:", error);
+        throw error;
+    }
+}
+
+static async searchUser(data, headers) {
+    try {
+        const auth = createCustomAxios(headers);
+
+        // Set the cancel token in the request configuration
+        const response = await auth.post("/user/search", data);
+        return response.data;
+    } catch (error) {
+        console.log("Error searching user:", error);
+    }
+}
   static async fetchUserData(query, headers) {
       try {
           const auth = createCustomAxios(headers)

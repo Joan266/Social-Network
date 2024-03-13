@@ -10,12 +10,12 @@ module.exports = userController =  {
     const {email, password, username} = req.body
     try {
       const user = await User.signup({email, password, username})
-      const { _id } = user;
+      const { _id, name } = user;
   
       // create a token
       const token = createToken(user._id)
 
-      res.status(200).json({ _id, email, token, username})
+      res.status(200).json({ _id, email, token, username, name})
     } catch (error) {
       res.status(400).json({
         error: 'Bad Request',
