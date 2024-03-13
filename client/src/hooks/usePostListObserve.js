@@ -1,89 +1,76 @@
 import { useEffect } from "react";
 import useHomePosts from "./useHomePosts";
-import { debounce } from "lodash"; // Import debounce function from lodash
+import _ from "lodash";
 
-export const usePostListObserve = ({topRef, bottomRef}) => {
-  const { fetchNextPage, hasNextPage, fetchPreviousPage, hasPreviousPage } = useHomePosts();
-
-  useEffect(() => {
-
-    const element = topRef ? topRef.current : null
-
-    if (!element) {
-      console.log("Missing top reference.");
-      return;
-    }
-
-    if (!hasPreviousPage) {
-      console.log("No previous page.");
-      return;
-    }
-
-    console.log("Observing top postList...");
-
-    const observer = new IntersectionObserver(
-      debounce(([entry]) => {
-        // Ensure that the entry is intersecting and is the target element
-        if (entry.isIntersecting) {
-          console.log("top entry is intersecting");
-          // Call fetchNextPage or fetchPreviousPage based on index after debounce
-          fetchPreviousPage();
-        }
-      }, 100), // Debounce the function with 1 second delay
-      {
-        root: null,
-        threshold: 0.1,
-      }
-    );
-
-    observer.observe(element);
-
-    // Cleanup function
-    return () => {
-      if (observer && element) {
-        observer.unobserve(element);
-      }
-    };
-  }, [topRef, fetchPreviousPage, hasPreviousPage]);
+export const usePostListObserve = ({ topRef, bottomRef }) => {
+  const {
+    fetchNextPage,
+    hasNextPage,
+    fetchPreviousPage,
+    hasPreviousPage,
+  } = useHomePosts();
 
   useEffect(() => {
+    let newTopPageMarkRef = null;
 
-    const element = bottomRef ? bottomRef.current : null
+    const debouncedHandleTopIntersection = _.debounce(handleTopIntersection, 700);
+    const debouncedHandleBottomIntersection = _.debounce(handleBottomIntersection, 1000);
 
-    if (!element) {
-      console.log("Missing bottom reference.");
-      return;
-    }
+    const bottomObserver = createObserver(debouncedHandleBottomIntersection, 0.1);
+    const topObserver = createObserver(debouncedHandleTopIntersection, 0.1);
 
-    if (!hasNextPage) {
-      console.log("No next page.");
-      return;
-    }
+    const topElement = topRef ? topRef.current : null;
+    const bottomElement = bottomRef ? bottomRef.current : null;
 
-    console.log("Observing bottom postList...");
-
-    const observer = new IntersectionObserver(
-      debounce(([entry]) => {
-        // Ensure that the entry is intersecting and is the target element
-        if (entry.isIntersecting) {
-          console.log("entry is intersecting");
-          // Call fetchNextPage or fetchPreviousPage based on index after debounce
-          fetchNextPage();
-        }
-      }, 100), // Debounce the function with 1 second delay
-      {
-        root: null,
-        threshold: 0.1,
+    if (topElement) {
+      if (hasPreviousPage) {
+        topObserver.observe(topElement);
+      } else {
+        topObserver.disconnect();
       }
-    );
+    }
 
-    observer.observe(element);
-    // Cleanup function
+    if (bottomElement) {
+      if (hasNextPage) {
+        bottomObserver.observe(bottomElement);
+      } else {
+        bottomObserver.disconnect();
+      }
+    }
+
     return () => {
-      if (observer && element) {
-        observer.unobserve(element);
-      }
+      topObserver.disconnect();
+      bottomObserver.disconnect();
     };
-  }, [bottomRef, fetchNextPage, hasNextPage]);
 
+    function handleTopIntersection(entry) {
+      if (entry.isIntersecting && hasPreviousPage) {
+        console.log("top entry is intersecting");
+        fetchPreviousPage();
+        newTopPageMarkRef = document.querySelector("#newTopPageMark");
+        if (newTopPageMarkRef) {
+          newTopPageMarkRef.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    }
+
+    function handleBottomIntersection(entry) {
+      if (entry.isIntersecting && hasNextPage) {
+        console.log("bottom entry is intersecting");
+        fetchNextPage();
+      }
+    }
+
+    function createObserver(callback, threshold) {
+      return new IntersectionObserver(
+        (entries) => {
+          entries.forEach(callback);
+        },
+        {
+          root: null,
+          threshold,
+        }
+      );
+    }
+  }, [topRef, bottomRef, fetchPreviousPage, fetchNextPage, hasPreviousPage, hasNextPage]);
 };

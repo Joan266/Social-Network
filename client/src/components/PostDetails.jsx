@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './PostDetails.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
@@ -11,12 +11,50 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const PostDetails = ({ postId, userId }) => {
+  const postRef = useRef(null);
   const {  postData, isLoading } = useFetchPostData({postId, userId});
-  const {  isLoading: isPostLikesLoading, handleLikeToggle, isPostLiked } = usePostLike({postId});
+  const { handleLikeToggle, isPostLiked } = usePostLike({postId});
   const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
   const [ commentsCount, setCommentsCount ] = useState(0);
+  const [ isPostVisible, setIsPostVisible ] = useState(false);
   const navigate = useNavigate(); 
-  
+  useEffect(() => {
+    const observePostRef = () => {
+      const element = postRef ? postRef.current : null;
+      if (!element || !postData) {
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          // Ensure that the entry is intersecting and is the target element
+          if (entry.isIntersecting) {
+            setIsPostVisible(true)
+          }else{
+            setIsPostVisible(false)
+          }
+        },
+        {
+          root: null,
+          threshold: 0.1,
+        }
+      );
+
+      observer.observe(element);
+
+      // Cleanup function
+      return () => {
+        if (observer && element) {
+          observer.unobserve(element);
+          setIsPostVisible(false)
+        }
+      };
+    };
+
+    observePostRef();
+
+  }, [postRef,postData]);
+
   const handlePostLink = () => {
     navigate(`/post/${postId}`); 
   };
@@ -29,7 +67,7 @@ const PostDetails = ({ postId, userId }) => {
   if (isLoading || !postData) return "";
   
   return (
-      <div className={styles.postDetailsContainer} onClick={() => handlePostLink()} >
+      <div className={styles.postDetailsContainer} ref={postRef} onClick={() => handlePostLink()} >
         {isPostFormVisible && (
           <PostForm
             setIsPostFormVisible={setIsPostFormVisible}
@@ -39,7 +77,7 @@ const PostDetails = ({ postId, userId }) => {
         )}
         <div className={styles.profilePicContainer}>
           <div className={styles.profilePic}>
-            {postData.profilePicImgUrl ? <img src={postData.profilePicImgUrl} alt='post-profile-pic'></img>:
+            {postData.profilePicImgUrl && isPostVisible ? <img src={postData.profilePicImgUrl} alt='post-profile-pic'></img>:
             <FontAwesomeIcon icon={faUser} className="rounded me-2" />}
           </div>
         </div>
@@ -65,8 +103,8 @@ const PostDetails = ({ postId, userId }) => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          <div className={styles.imageContainer} >
-          {postData.postImageUrl && (
+          <div className={styles.imageContainer} style={{ width: postData.postImgWidth, height: postData.postImgHeight }}>
+          {postData.postImageUrl && isPostVisible && (
             <img src={postData.postImageUrl} alt='post' style={{ width: postData.postImgWidth, height: postData.postImgHeight }}/>
           )}
           </div>
@@ -85,7 +123,7 @@ const PostDetails = ({ postId, userId }) => {
                   style={{ color: isPostLiked ? 'rgb(255, 0, 162)' : '' }}
                 />
               </div>
-              <span>{postData.likesCount}</span>
+              <span>{postData.likesCount + (isPostLiked ? 1 : 0)}</span>
             </div>
           </div>
         </div>
