@@ -25,7 +25,8 @@ module.exports = userController =  {
   },
 
   loginUser: async (req, res) => {
-    const {emailOrUsername, password} = req.body
+    
+    const { emailOrUsername, password } = req.query
   
     try {
       const user = await User.login({emailOrUsername, password})
@@ -34,7 +35,7 @@ module.exports = userController =  {
       // create a token
       const token = createToken(_id)
 
-      res.status(200).json({ _id, token, username, name, profilePicFileId})
+      res.status(200).json({ _id, token, username, name, profilePicFileId })
     } catch (error) {
       res.status(400).json({
         error: 'Bad Request',

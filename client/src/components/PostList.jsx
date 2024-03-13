@@ -18,7 +18,7 @@ const PostList = ({posts, isLoading}) => {
           {index === 0 && <div id='newTopPageMark'/>}
           <PostDetails 
             postId={post._id} 
-            userId={post.user._id}
+            username={post.user.username}
           />
         </Suspense>
       ))}

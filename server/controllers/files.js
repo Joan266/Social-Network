@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Post = require('../models/post')
 const User = require('../models/user')
+const validator = require('validator');
 const connection = mongoose.connection;
 
 let gfs;
@@ -81,11 +82,18 @@ module.exports = filesController = {
         }
     },
     profilePicData: async (req, res) => {
-        const { userId } = req.query;
-    
+        const {emailOrUsername} = req.query;
         try {
-            // Use Mongoose to search for user
-            const user = await User.findById(userId);
+            // Check if the provided value is an email or a username
+            const isEmail = validator.isEmail(emailOrUsername);
+
+            let user;
+            if (isEmail) {
+                user = await User.findOne({ email: emailOrUsername });
+            } else {
+                user = await User.findOne({ username: emailOrUsername });
+            }
+
             console.log(`user:${user.profilePicFileId}`)
             if (!user || !user.profilePicFileId) {
                 return res.status(404).json({ error: 'User profile picture not found' });

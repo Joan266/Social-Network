@@ -1,29 +1,54 @@
-import { useState } from 'react'
-import { useAuthContext } from './useAuthContext'
-import { userApi } from '../services/userApi' 
+import { useState } from 'react';
+import { useAuthContext } from './useAuthContext';
+import { userApi } from '../services/userApi';
+
 export const useLogin = () => {
-  const [error, setError] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const { dispatch } = useAuthContext()
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [profilePicImgUrl, setProfilePicImgUrl] = useState(null);
+  const { dispatch } = useAuthContext();
 
   const login = async (emailOrUsername, password) => {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
 
-    const loginResponse = await userApi.login({emailOrUsername, password});
+    try {
+      const {profilePicData,loginResponseData,error} = await userApi.login({ emailOrUsername, password });
+      if(error){
+        return console.log(error)
+      }
 
-    if (loginResponse.error) {
-      setIsLoading(false)
-      setError(loginResponse.message)
-      return
+      const newProfilePicImgUrl = setProfilePicUrl(profilePicData);
+      // // Update auth context
+      updateAuthContext(loginResponseData, newProfilePicImgUrl);
+    } catch (error) {
+      handleLoginError(error);
+    } finally {
+      setIsLoading(false);
     }
-    console.log(loginResponse);
-    // update the auth context
-    dispatch({type: 'LOGIN', payload:{...loginResponse} })
-    
-    // update loading state
-    setIsLoading(false)
-  }
+  };
 
-  return { login, isLoading, error }
-}
+  const setProfilePicUrl = (profilePicData) => {
+    if(!profilePicData) return null
+    const newProfilePicImgUrl = URL.createObjectURL(profilePicData);
+    if (profilePicImgUrl) {
+      URL.revokeObjectURL(profilePicImgUrl);
+    }
+    setProfilePicImgUrl(newProfilePicImgUrl);
+    return newProfilePicImgUrl;
+  };
+
+  const updateAuthContext = (loginResponseData, profilePicImgUrl) => {
+    dispatch({
+      type: 'LOGIN',
+      payload: { ...loginResponseData, profilePicImgUrl },
+    });
+  };
+
+  const handleLoginError = (error) => {
+    console.error("Error during login:", error);
+    setError(error);
+  };
+
+  return { login, isLoading, error };
+};

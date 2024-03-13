@@ -139,7 +139,7 @@ module.exports = postController =  {
             ],
             parentPost: undefined // Filter out replies (where parentPost is undefined)
           })
-          .populate({ path: 'user', select: '_id' })
+          .populate({ path: 'user', select: 'username' })
           .sort({ createdAt: -1 }) // Sort posts by createdAt in descending order
           .select('_id createdAt user') // Select only the _id field of the posts
           .skip(skip)

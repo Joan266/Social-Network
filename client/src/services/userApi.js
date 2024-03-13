@@ -11,15 +11,42 @@ export class userApi {
           return response.data;
       }
   }
-  static async login(data) {
-      try {
-          const response = await http.post("/user/login", data);
-          return response.data; 
-      } catch ({response}) {
-          console.log("Error logging in:", response.data);
-          return response.data;
-      }
-  }
+  static async login({ emailOrUsername, password }) {
+    try {
+        // Fetch login response data
+        const { data: loginResponseData } = await http.get("/user/login", {
+            params: { emailOrUsername, password }
+        });
+
+        // Check for error in login response
+        if (loginResponseData.error) {
+            return loginResponseData;
+        }
+
+        // Check if profile picture is available
+        if (loginResponseData.profilePicFileId) {
+            // Fetch profile picture data
+            const auth = createCustomAxios({
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${loginResponseData.token}`,
+            });
+
+            const { data: profilePicData } = await auth.get("/files/profilepicdata", {
+                params: { emailOrUsername },
+                responseType: 'blob'
+            });
+
+            return { profilePicData, loginResponseData };
+        }
+
+        return { loginResponseData };
+
+    } catch (error) {
+        console.error("Error during login:", error);
+        throw error;
+    }
+}
+
   static async searchUser(data, headers) {
       try {
           const auth = createCustomAxios(headers)

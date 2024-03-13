@@ -10,9 +10,9 @@ import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const PostDetails = ({ postId, userId }) => {
+const PostDetails = ({ postId, username }) => {
   const postRef = useRef(null);
-  const {  postData, isLoading } = useFetchPostData({postId, userId});
+  const {  postData, isLoading } = useFetchPostData({postId, username});
   const { handleLikeToggle, isPostLiked } = usePostLike({postId});
   const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
   const [ commentsCount, setCommentsCount ] = useState(0);

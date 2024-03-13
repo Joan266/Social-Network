@@ -10,13 +10,13 @@ export class filesApi {
           console.log("Error uploading file:", response.error);
       }
   }
-  static async profilePic(userId, headers) {
+  static async profilePic(username, headers) {
       try {
           const auth = createCustomAxios(headers)
 
           // Make a request to get Blob image data
           const profilePicResponse = await auth.get("/files/profilepicdata", {
-              params: { userId },
+              params: {emailOrUsername:username},
               responseType: 'blob'
           });
   
@@ -30,20 +30,20 @@ export class filesApi {
   }  
   static async postImage(postId, headers) {
     try {
-        const auth = createCustomAxios(headers)
+        const auth = createCustomAxios(headers);
 
-        // Make a request to get Blob image data
-        const postImageBlobResponse = await auth.get("/files/postimagedata", {
-            params: { postId },
-            responseType: 'blob'
-        });
+        // Make parallel requests to get Blob image data and Json data
+        const [postImageBlobResponse, postImageJsonResponse] = await Promise.all([
+            auth.get("/files/postimagedata", {
+                params: { postId },
+                responseType: 'blob'
+            }),
+            auth.get("/files/postimagemetadata", {
+                params: { postId },
+            })
+        ]);
 
-        // Make a request to get Json data
-        const postImageJsonResponse = await auth.get("/files/postimagemetadata", {
-            params: { postId },
-        });
-
-        // Return Blob image data
+        // Return both Blob image data and Json data
         return {
             postImageData: postImageBlobResponse.data,
             postImageMetadata: postImageJsonResponse.data,
@@ -53,7 +53,8 @@ export class filesApi {
         console.log("Error showing image:", error);
         throw error; // Re-throw the error to be caught by the caller
     }
-}    
+}
+
   static async delete({fileId,userToken}) {
       try {
           const auth = createCustomAxios({
