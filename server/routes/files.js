@@ -5,12 +5,15 @@ const upload = require('../multerConfig')
 const router = express.Router()
 
 // get profile pic data
+router.get('/profilebannerdata', requireAuth,  filesController.profileBannerData);
+
+// get profile pic data
 router.get('/profilepicdata', requireAuth,  filesController.profilePicData);
 
-// get port image data
+// get post image data
 router.get('/postimagedata', requireAuth,  filesController.postImageData);
 
-// get port image metadata
+// get post image metadata
 router.get('/postimagemetadata', requireAuth,  filesController.postImageMetadata);
 
 // ulpoad file route

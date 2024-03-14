@@ -121,7 +121,7 @@ module.exports = postController =  {
         if(!cursor){
           res.status(404).json({ error: "Cursor required" });
         }
-        const pageSize = 4; 
+        const pageSize = 10; 
         const skip = (parseInt(cursor) - 1) * pageSize; // Parse to integer
         const query = {};
 

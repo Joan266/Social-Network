@@ -60,7 +60,7 @@ const SearchBar = () => {
           {searchResults.length > 0 ? (
             <>
               {searchResults.map((user) => (
-                <UserSearchResult user={user} handleUserInfoClick={handleUserInfoClick} userToken={authUser.token}/>
+                <UserSearchResult key={user.username} user={user} handleUserInfoClick={handleUserInfoClick} userToken={authUser.token}/>
               ))}
             </>
           ) : (

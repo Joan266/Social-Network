@@ -5,6 +5,7 @@ import { useAuthContext } from './useAuthContext';
 const useFetchUserData = (username) => {
   const { user } = useAuthContext();
   const [userData, setUserData] = useState({});
+  const [profileBannerImgUrl, setProfileBannerImgUrl] = useState();
 
   useEffect(() => {
     if (!username || !user) return;
@@ -13,9 +14,24 @@ const useFetchUserData = (username) => {
       const headers = getHeaders();
       try {
         // Fetch user data
-        const userDataResponse = await userApi.fetchUserData(username, headers);
-        const { ...rest } = userDataResponse;
-       setUserData({ ...userDataResponse });
+        const userDataPromise = userApi.fetchUserData(username, headers);
+        const profileBannerPromise = userApi.fetchUserProfileBanner(username, headers);
+        
+        const [userDataResponse, profileBannerResponse ] = await Promise.all([
+          userDataPromise,
+          profileBannerPromise,
+        ]);
+        const newProfileBannerImgUrl = URL.createObjectURL(profileBannerResponse);
+
+        // Revoke previous URLs
+        if (profileBannerImgUrl) {
+          URL.revokeObjectURL(profileBannerImgUrl);
+        }
+
+        // Set new URLs and metadata
+        setProfileBannerImgUrl(newProfileBannerImgUrl);
+
+        setUserData({ ...userDataResponse, profileBannerImgUrl:newProfileBannerImgUrl });
       } catch (error) {
         console.error('Error fetching profile data:', error);
       } 

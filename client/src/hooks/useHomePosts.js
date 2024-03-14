@@ -20,7 +20,7 @@ const fetchHomePosts = async ({ pageParam, userId, userToken }) => {
   let previousCursor;
 
   // Determine next and previous cursors based on the number of posts returned
-  if (homePostsResponse.posts.length === 4) {
+  if (homePostsResponse.posts.length === 10) {
     nextCursor = cursor + 1;
     previousCursor = cursor - 1;
   } else {

@@ -65,7 +65,22 @@ static async fetchUserProfilePic({ username, userToken }) {
         throw error;
     }
 }
+static async fetchUserProfileBanner(data, headers) {
+    try {
+        const auth = createCustomAxios(headers);
 
+        const { data: profileBannerData } = await auth.get("/files/profilebannerdata", {
+            params: { emailOrUsername: data },
+            responseType: 'blob'
+        });
+
+        return profileBannerData;
+    
+    } catch (error) {
+        console.error("Error during login:", error);
+        throw error;
+    }
+}
 static async searchUser(data, headers) {
     try {
         const auth = createCustomAxios(headers);
