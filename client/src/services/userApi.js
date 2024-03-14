@@ -1,5 +1,4 @@
 import { http, createCustomAxios } from './apiConfig'
-import axios from 'axios'
 export class userApi {
    
   static async signup(data) {
@@ -35,11 +34,11 @@ export class userApi {
                 params: { emailOrUsername },
                 responseType: 'blob'
             });
-
-            return { profilePicData, loginResponseData };
+            const profilePicImgUrl = URL.createObjectURL(profilePicData);
+            return { profilePicImgUrl, ...loginResponseData };
         }
 
-        return { loginResponseData };
+        return loginResponseData;
 
     } catch (error) {
         console.error("Error during login:", error);
@@ -53,12 +52,12 @@ static async fetchUserProfilePic({ username, userToken }) {
             'Authorization': `Bearer ${userToken}`,
         });
 
-        const { data: profilePicData } = await auth.get("/files/profilepicdata", {
+        const profilePicResponse = await auth.get("/files/profilepicdata", {
             params: { emailOrUsername: username },
             responseType: 'blob'
         });
 
-        return profilePicData;
+        return profilePicResponse;
     
     } catch (error) {
         console.error("Error during login:", error);
@@ -69,12 +68,12 @@ static async fetchUserProfileBanner(data, headers) {
     try {
         const auth = createCustomAxios(headers);
 
-        const { data: profileBannerData } = await auth.get("/files/profilebannerdata", {
+        const profileBannerResponse = await auth.get("/files/profilebannerdata", {
             params: { emailOrUsername: data },
             responseType: 'blob'
         });
-
-        return profileBannerData;
+   
+        return profileBannerResponse;
     
     } catch (error) {
         console.error("Error during login:", error);

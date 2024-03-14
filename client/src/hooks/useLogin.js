@@ -5,7 +5,6 @@ import { userApi } from '../services/userApi';
 export const useLogin = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [profilePicImgUrl, setProfilePicImgUrl] = useState(null);
   const { dispatch } = useAuthContext();
 
   const login = async (emailOrUsername, password) => {
@@ -13,14 +12,16 @@ export const useLogin = () => {
     setError(null);
 
     try {
-      const {profilePicData, loginResponseData,error} = await userApi.login({ emailOrUsername, password });
-      if(error){
+      const loginReponseData = await userApi.login({ emailOrUsername, password });
+      if(loginReponseData.error){
         return console.log(error)
       }
 
-      const newProfilePicImgUrl = setProfilePicUrl(profilePicData);
       // // Update auth context
-      updateAuthContext(loginResponseData, newProfilePicImgUrl);
+      dispatch({
+        type: 'LOGIN',
+        payload: loginReponseData,
+      });
     } catch (error) {
       handleLoginError(error);
     } finally {
@@ -28,22 +29,6 @@ export const useLogin = () => {
     }
   };
 
-  const setProfilePicUrl = (profilePicData) => {
-    if(!profilePicData) return null
-    const newProfilePicImgUrl = URL.createObjectURL(profilePicData);
-    if (profilePicImgUrl) {
-      URL.revokeObjectURL(profilePicImgUrl);
-    }
-    setProfilePicImgUrl(newProfilePicImgUrl);
-    return newProfilePicImgUrl;
-  };
-
-  const updateAuthContext = (loginResponseData, profilePicImgUrl) => {
-    dispatch({
-      type: 'LOGIN',
-      payload: { ...loginResponseData, profilePicImgUrl },
-    });
-  };
 
   const handleLoginError = (error) => {
     console.error("Error during login:", error);

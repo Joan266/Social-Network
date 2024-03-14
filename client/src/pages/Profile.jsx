@@ -55,8 +55,8 @@ const Profile = () => {
           <div className={styles.body}>
             <div className={styles.picAndControls}>
               <div className={styles.profilePic}>
-                <FontAwesomeIcon icon={faUser} />
-                {user.profilePicImgUrl && <img src={user.profilePicImgUrl} alt="profilepic" />}
+                
+                {userData.profilePicImgUrl ? <img src={userData.profilePicImgUrl} alt="profilepic" />:<FontAwesomeIcon icon={faUser} />}
               </div>
               <div className={styles.settingsContainer} >
                 {username === user.username ? 

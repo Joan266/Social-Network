@@ -8,13 +8,13 @@ import PostDetails from '../components/PostDetails';
 const Home = () => {
   const { newPostId } = useParams();
   const { isLoading, isError, posts } = useHomePosts();
-  const queryClient = useQueryClient()
-  useEffect(()=>{
-    queryClient.resetQueries({ 
-      queryKey:["home_posts"],
-      exact: true,
-    })
-  },[])
+  // const queryClient = useQueryClient()
+  // useEffect(()=>{
+  //   queryClient.resetQueries({ 
+  //     queryKey:["home_posts"],
+  //     exact: true,
+  //   })
+  // },[])
   return (
     <div className={styles.homeContainer}>
       <div className={styles.navContainer}>
