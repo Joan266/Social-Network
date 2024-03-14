@@ -1,45 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { faSearch as solidLens, faTimes as faXmark,faUser } from '@fortawesome/free-solid-svg-icons';
+import { faSearch as solidLens, faTimes as faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useSearch } from '../hooks/useSearch.js';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import styles from './SearchBar.module.scss';
 import { useAuthContext } from '../hooks/useAuthContext.js';
-const User = ({user,handleUserInfoClick, userToken}) => {
-  const [ profilePicUrl, setProfilePicUrl ] =useState(null);
-  useEffect(() => {
-    const fetchProfilePic = async () => {
-      try {
-        const { profilePicFileId } = user;
-      } catch (error) {
-        console.error('Error fetching profile picture:', error);
-      }
-    };
-  
-    fetchProfilePic();
-  }, [user]);
-  
-  return (
-    <div
-      className={styles.userInfoContainer}
-      onClick={() => handleUserInfoClick(user.username)} 
-      key={user.username}
-    >
-      <div className={styles.profilePic}>
-        <FontAwesomeIcon icon={faUser} className="rounded me-2" />
-        {profilePicUrl && <img src={profilePicUrl} alt='search-profile-pic'></img>}
-      </div>
-      <div className={styles.userInfo}>
-        <div className={styles.name}>
-          <span>{user.name}</span>
-        </div>
-        <div className={styles.username}>
-          <span>@{user.username}</span>
-        </div>
-      </div>
-    </div>
-  )
-}
+import UserSearchResult from './UserSearchResult.jsx';
+
 const SearchBar = () => {
   const { searchQuery, setSearchQuery, searchResults, clearSearch, isLoading } = useSearch();
   const [selected, setSelected] = useState(false);
@@ -93,7 +60,7 @@ const SearchBar = () => {
           {searchResults.length > 0 ? (
             <>
               {searchResults.map((user) => (
-                <User user={user} handleUserInfoClick={handleUserInfoClick} userToken={authUser.token}/>
+                <UserSearchResult key={user.username} user={user} handleUserInfoClick={handleUserInfoClick} userToken={authUser.token}/>
               ))}
             </>
           ) : (

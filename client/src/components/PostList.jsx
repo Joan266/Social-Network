@@ -7,17 +7,18 @@ const PostDetails = lazy(() => import('../components/PostDetails'));
 const PostList = ({posts, isLoading}) => {
   const topRef = useRef(null);
   const bottomRef = useRef(null);
-  // usePostListObserve({ topRef, bottomRef })
+  usePostListObserve({ topRef, bottomRef });
 
   return (
     <div id="post-list" className={styles.postsContainer}>
      { !isLoading && <div id='top-observer' ref={topRef}/>}
 
-      {posts && posts.map(( post ) => (
+      {posts && posts.map(( post, index ) => (
         <Suspense key={post._id} fallback={""}>
+          {index === 0 && <div id='newTopPageMark'/>}
           <PostDetails 
             postId={post._id} 
-            userId={post.user._id}
+            username={post.user.username}
           />
         </Suspense>
       ))}
@@ -26,4 +27,4 @@ const PostList = ({posts, isLoading}) => {
   )
 }
 
-export default PostList
+export default PostList;

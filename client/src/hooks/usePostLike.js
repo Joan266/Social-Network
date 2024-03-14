@@ -5,13 +5,11 @@ import { useAuthContext } from './useAuthContext';
 const usePostLike = ({ postId}) => {
   
   const { user } = useAuthContext();
-  const [isLoading, setIsLoading] = useState(false);
   const [ isPostLiked, setIsPostLiked ] = useState(false);
 
   const handleLikeToggle = async () => {
     const headers = getHeaders();
     try {
-      setIsLoading(true);
       const response = await (isPostLiked
         ? postApi.unlikePost({ userId: user._id, postId }, headers)
         : postApi.likePost({ userId: user._id, postId }, headers));
@@ -24,8 +22,6 @@ const usePostLike = ({ postId}) => {
       setIsPostLiked(!isPostLiked);
     } catch (error) {
       console.error('Error liking/unliking user:', error);
-    }finally {
-      setIsLoading(false);
     }
   };
 
@@ -33,14 +29,11 @@ const usePostLike = ({ postId}) => {
     const fetchIsPostLiked = async () => {
       const headers = getHeaders();
       try {
-        setIsLoading(true);
         const isLikingResponse = await postApi.isLiking({ userId: user._id, postId }, headers);
         setIsPostLiked(isLikingResponse);
       } catch (error) {
         console.error('Error fetching profile data:', error);
-      } finally {
-        setIsLoading(false);
-      }
+      } 
     };
     fetchIsPostLiked()
 
@@ -51,7 +44,7 @@ const usePostLike = ({ postId}) => {
     'Authorization': `Bearer ${user.token}`,
   });
 
-  return { isLoading, handleLikeToggle, isPostLiked};
+  return { handleLikeToggle, isPostLiked};
 };
 
 export default usePostLike;

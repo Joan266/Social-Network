@@ -8,7 +8,7 @@ const router = express.Router()
 router.post('/signup', userController.signupUser)
 
 // login route
-router.post('/login', userController.loginUser)
+router.get('/login', userController.loginUser)
 
 // search user route
 router.post('/search', requireAuth, userController.searchUser);

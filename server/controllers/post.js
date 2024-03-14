@@ -121,7 +121,7 @@ module.exports = postController =  {
         if(!cursor){
           res.status(404).json({ error: "Cursor required" });
         }
-        const pageSize = 4; 
+        const pageSize = 10; 
         const skip = (parseInt(cursor) - 1) * pageSize; // Parse to integer
         const query = {};
 
@@ -139,7 +139,7 @@ module.exports = postController =  {
             ],
             parentPost: undefined // Filter out replies (where parentPost is undefined)
           })
-          .populate({ path: 'user', select: '_id' })
+          .populate({ path: 'user', select: 'username' })
           .sort({ createdAt: -1 }) // Sort posts by createdAt in descending order
           .select('_id createdAt user') // Select only the _id field of the posts
           .skip(skip)

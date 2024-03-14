@@ -1,5 +1,4 @@
 import { http, createCustomAxios } from './apiConfig'
-
 export class userApi {
    
   static async signup(data) {
@@ -11,25 +10,87 @@ export class userApi {
           return response.data;
       }
   }
-  static async login(data) {
-      try {
-          const response = await http.post("/user/login", data);
-          return response.data; 
-      } catch ({response}) {
-          console.log("Error logging in:", response.data);
-          return response.data;
-      }
-  }
-  static async searchUser(data, headers) {
-      try {
-          const auth = createCustomAxios(headers)
+  static async login({ emailOrUsername, password }) {
+    try {
+        // Fetch login response data
+        const { data: loginResponseData } = await http.get("/user/login", {
+            params: { emailOrUsername, password }
+        });
 
-          const response = await auth.post("/user/search", data);
-          return response.data;
-      } catch (error) {
-          console.log("Error searching user:", error);
-      }
-  }
+        // Check for error in login response
+        if (loginResponseData.error) {
+            return loginResponseData;
+        }
+
+        // Check if profile picture is available
+        if (loginResponseData.profilePicFileId) {
+            // Fetch profile picture data
+            const auth = createCustomAxios({
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${loginResponseData.token}`,
+            });
+
+            const { data: profilePicData } = await auth.get("/files/profilepicdata", {
+                params: { emailOrUsername },
+                responseType: 'blob'
+            });
+            const profilePicImgUrl = URL.createObjectURL(profilePicData);
+            return { profilePicImgUrl, ...loginResponseData };
+        }
+
+        return loginResponseData;
+
+    } catch (error) {
+        console.error("Error during login:", error);
+        throw error;
+    }
+}
+static async fetchUserProfilePic({ username, userToken }) {
+    try {
+        const auth = createCustomAxios({
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`,
+        });
+
+        const profilePicResponse = await auth.get("/files/profilepicdata", {
+            params: { emailOrUsername: username },
+            responseType: 'blob'
+        });
+
+        return profilePicResponse;
+    
+    } catch (error) {
+        console.error("Error during login:", error);
+        throw error;
+    }
+}
+static async fetchUserProfileBanner(data, headers) {
+    try {
+        const auth = createCustomAxios(headers);
+
+        const profileBannerResponse = await auth.get("/files/profilebannerdata", {
+            params: { emailOrUsername: data },
+            responseType: 'blob'
+        });
+   
+        return profileBannerResponse;
+    
+    } catch (error) {
+        console.error("Error during login:", error);
+        throw error;
+    }
+}
+static async searchUser(data, headers) {
+    try {
+        const auth = createCustomAxios(headers);
+
+        // Set the cancel token in the request configuration
+        const response = await auth.post("/user/search", data);
+        return response.data;
+    } catch (error) {
+        console.log("Error searching user:", error);
+    }
+}
   static async fetchUserData(query, headers) {
       try {
           const auth = createCustomAxios(headers)

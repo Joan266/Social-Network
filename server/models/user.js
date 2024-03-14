@@ -49,6 +49,7 @@ const userSchema = new Schema(
     },
     profilePicFileId: {
       type: String,
+      default:null
     },
     privacyStatus: {
       type:Boolean,

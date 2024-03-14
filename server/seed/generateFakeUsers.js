@@ -9,8 +9,8 @@ const generateFakeUsers = (USERS_NUM) => {
     // Generate username with symbols
     let usernameWithSymbols = faker.internet.userName();
     
-    // Remove symbols using regular expression
-    const username = usernameWithSymbols.replace(/[^\w]/g, '');
+    // Remove symbols and limit to 13 characters maximum
+    username = usernameWithSymbols.replace(/\W/g, '').slice(0, 17);
 
     // Generate fake user object
     const fakeUser = {

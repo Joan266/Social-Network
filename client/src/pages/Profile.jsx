@@ -50,13 +50,13 @@ const Profile = () => {
       <div className={styles.profileContainer}>
         <div className={styles.userContainer}>
           <div className={styles.banner}>
-            {userData.bannerUrl && <img src={userData.bannerUrl} alt="banner" />}
+            {userData.profileBannerImgUrl && <img src={userData.profileBannerImgUrl} alt="banner" />}
           </div>  
           <div className={styles.body}>
             <div className={styles.picAndControls}>
               <div className={styles.profilePic}>
-                <FontAwesomeIcon icon={faUser} />
-                {userData.profilePicUrl && <img src={userData.profilePicUrl} alt="profilepic" />}
+                
+                {userData.profilePicImgUrl ? <img src={userData.profilePicImgUrl} alt="profilepic" />:<FontAwesomeIcon icon={faUser} />}
               </div>
               <div className={styles.settingsContainer} >
                 {username === user.username ? 

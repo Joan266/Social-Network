@@ -40,7 +40,8 @@ export const useSearch = () => {
     if (searchQuery !== lastSearch) {
       fetchData(searchQuery.trim());
     }
-  }, [searchQuery, lastSearch, user]);
+
+  }, [searchQuery,lastSearch, user]);
   
   return { searchQuery, setSearchQuery, searchResults, isLoading, clearSearch };
 };

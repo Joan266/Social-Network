@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const Post = require('../models/post')
 const User = require('../models/user')
+const validator = require('validator');
 const connection = mongoose.connection;
 
 let gfs;
@@ -81,11 +82,18 @@ module.exports = filesController = {
         }
     },
     profilePicData: async (req, res) => {
-        const { userId } = req.query;
-    
+        const {emailOrUsername} = req.query;
         try {
-            // Use Mongoose to search for user
-            const user = await User.findById(userId);
+            // Check if the provided value is an email or a username
+            const isEmail = validator.isEmail(emailOrUsername);
+
+            let user;
+            if (isEmail) {
+                user = await User.findOne({ email: emailOrUsername });
+            } else {
+                user = await User.findOne({ username: emailOrUsername });
+            }
+
             console.log(`user:${user.profilePicFileId}`)
             if (!user || !user.profilePicFileId) {
                 return res.status(404).json({ error: 'User profile picture not found' });
@@ -120,6 +128,52 @@ module.exports = filesController = {
             res.status(500).json({ error: 'Internal server error' });
         }
     },    
+    profileBannerData: async (req, res) => {
+        const {emailOrUsername} = req.query;
+        try {
+            // Check if the provided value is an email or a username
+            const isEmail = validator.isEmail(emailOrUsername);
+
+            let user;
+            if (isEmail) {
+                user = await User.findOne({ email: emailOrUsername });
+            } else {
+                user = await User.findOne({ username: emailOrUsername });
+            }
+
+            if (!user || !user.bannerFileId) {
+                return res.status(404).json({ error: 'User profile banner not found' });
+            }
+    
+            // Find the profile banner file by filename:fileId
+            const files = await gfs.find({ filename: user.bannerFileId }).toArray();
+    
+            if (!files || files.length === 0) {
+                return res.status(404).json({ error: 'Profile banner file not found' });
+            }
+    
+            // Extract metadata
+            const { contentType } = files[0].metadata;
+    
+            // Set content type for the file data
+            res.set('Content-Type', contentType);
+    
+            // Open a download stream for the specified fileId
+            const readstream = gfs.openDownloadStream(files[0]._id);
+    
+            // Handle stream errors
+            readstream.on('error', (error) => {
+                console.error('Stream error:', error);
+                res.status(500).json({ error: 'Error streaming profile banner data' });
+            });
+    
+            // Pipe the file data directly to the response
+            readstream.pipe(res);
+        } catch (err) {
+            console.error('Mongoose error:', err);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    },   
     postImageMetadata: async (req, res) => {
         const { postId } = req.query;
     

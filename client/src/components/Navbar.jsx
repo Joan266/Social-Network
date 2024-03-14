@@ -36,8 +36,8 @@ const Navbar = () => {
       <div className={styles.accountMenu}>
         <div className={styles.container}>
           <div className={styles.profilePic}>
-            <FontAwesomeIcon icon={faUser} className="rounded me-2" />
-            {user.profilePicUrl && <img src={user.profilePicUrl} alt='menu-profile-pic'></img>}
+            
+            {user.profilePicImgUrl ? <img src={user.profilePicImgUrl} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
           </div>
           <span>@{user.username}</span>
           <div className={styles.logout} onClick={logout}>Log out</div>

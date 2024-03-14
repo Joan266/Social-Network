@@ -21,11 +21,11 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
   });
   
   const fileInputRef = useRef(null);
-  const [imgSrc, setImgSrc] = useState(null);
-  const [bannerUrl , setBannerUrl]= useState(null);
-  const [profilePicUrl , setProfilePicUrl]= useState(null);
+  const [ imgSrc, setImgSrc ] = useState(null);
+  const [ bannerUrl , setBannerUrl ]= useState(null);
+  const [ profilePicUrl , setProfilePicUrl ]= useState(null);
   const [ inputImageType, setInputImageType ] = useState(null);
-  const [ editingImage, setEditingImage] = useState(false);
+  const [ editingImage, setEditingImage ] = useState(false);
 
   
   useEffect(() => {

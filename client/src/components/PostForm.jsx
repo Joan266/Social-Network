@@ -7,44 +7,49 @@ import { faUser, faXmark, faPhotoFilm } from '@fortawesome/free-solid-svg-icons'
 import { timeSince } from "../utils/useTimeSinceString";
 import DynamicTextarea from "./DynamicTextarea";
 import EditMedia from "./EditMedia";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const PostTargeted = ({postData}) => {
   return (
     <div className={styles.container}>
-    <div className={styles.profilePic}>
-      <FontAwesomeIcon icon={faUser} className="rounded me-2"/>
-    </div>
-    <div className={styles.postInfo}>
-      <div className={styles.userInfo}>
-        <div className={styles.name}>
-        {postData.username}
-        </div>
-        <div className={styles.username}>
-        @{postData.username}
-        </div>
-        <div className={styles.dote}>
-          ·
-        </div>
-        <div className={styles.date}>
-          {timeSince(postData.createdAt)}
+      <div className={styles.profilePicContainer}>
+        <div className={styles.profilePic}>
+          {postData.profilePicImgUrl ? <img src={postData.profilePicImgUrl} alt='post-profile-pic'></img>:
+          <FontAwesomeIcon icon={faUser} className="rounded me-2" />}
         </div>
       </div>
-      {postData.content && <div className={styles.content}>
-        {postData.content}
-      </div>}
-      {postData.postImageUrl && (
-        <div className={styles.imageContainer}>
-          <img src={postData.postImageUrl} alt="postcomment"/>
+      <div className={styles.postInfo}>
+        <div className={styles.userInfo}>
+          <div className={styles.name}>
+          {postData.username}
+          </div>
+          <div className={styles.username}>
+          @{postData.username}
+          </div>
+          <div className={styles.dote}>
+            ·
+          </div>
+          <div className={styles.date}>
+            {timeSince(postData.createdAt)}
+          </div>
         </div>
-      )}
+        {postData.content && <div className={styles.content}>
+          {postData.content}
+        </div>}
+        {postData.postImageUrl && (
+          <div className={styles.imageContainer}>
+            <img src={postData.postImageUrl} alt="postcomment"/>
+          </div>
+        )}
+      </div>
     </div>
-  </div>
   )
 }
 
 
 
 const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseCommentsCount}) => {
+  const user = useAuthContext();
   const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
   const [ imgSrc, setImgSrc ] = useState(null);
@@ -112,10 +117,9 @@ const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseComments
       <div className={styles.postFormContainer}>
         <div className={styles.postForm} >
           <div className={styles.navContainer}>
-            <div className={styles.xMark}>
+            <div className={styles.xMark} onClick={()=>setIsPostFormVisible(false)}>
               <FontAwesomeIcon
                 className={styles.cancelSearch}
-                onClick={()=>setIsPostFormVisible(false)}
                 icon={faXmark}
               />
             </div>
@@ -123,10 +127,12 @@ const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseComments
           <div className={styles.body}>
             {postIsResponseComment && <PostTargeted postData={postIsResponseComment}/>}
             <div className={styles.container}>
-              <div className={styles.profilePic}>
-                <FontAwesomeIcon icon={faUser} className="rounded me-2"/>
+              <div className={styles.profilePicContainer}>
+                <div className={styles.profilePic}>
+                  {user.profilePicImgUrl ? <img src={user.profilePicImgUrl} alt='post-profile-pic'></img>:
+                  <FontAwesomeIcon icon={faUser} className="rounded me-2" />}
+                </div>
               </div>
-
               <div className={styles.inputContainer}>
                 <div className={styles.textareaContainer}>
                   <DynamicTextarea  

@@ -1,29 +1,39 @@
-import { useState } from 'react'
-import { useAuthContext } from './useAuthContext'
-import { userApi } from '../services/userApi' 
+import { useState } from 'react';
+import { useAuthContext } from './useAuthContext';
+import { userApi } from '../services/userApi';
+
 export const useLogin = () => {
-  const [error, setError] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const { dispatch } = useAuthContext()
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { dispatch } = useAuthContext();
 
   const login = async (emailOrUsername, password) => {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
 
-    const loginResponse = await userApi.login({emailOrUsername, password});
+    try {
+      const loginReponseData = await userApi.login({ emailOrUsername, password });
+      if(loginReponseData.error){
+        return console.log(error)
+      }
 
-    if (loginResponse.error) {
-      setIsLoading(false)
-      setError(loginResponse.message)
-      return
+      // // Update auth context
+      dispatch({
+        type: 'LOGIN',
+        payload: loginReponseData,
+      });
+    } catch (error) {
+      handleLoginError(error);
+    } finally {
+      setIsLoading(false);
     }
-    console.log(loginResponse);
-    // update the auth context
-    dispatch({type: 'LOGIN', payload:{...loginResponse} })
-    
-    // update loading state
-    setIsLoading(false)
-  }
+  };
 
-  return { login, isLoading, error }
-}
+
+  const handleLoginError = (error) => {
+    console.error("Error during login:", error);
+    setError(error);
+  };
+
+  return { login, isLoading, error };
+};
