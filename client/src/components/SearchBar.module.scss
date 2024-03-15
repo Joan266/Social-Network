@@ -6,16 +6,17 @@
   border-radius: 5px;
 
   .formContainer {
-    background-color: whitesmoke;
+    background-color: var(--container-hover-background);
     padding: 10px 15px;
     border-radius: 25px;
     .searchInputContainer {
       display: flex;
       align-items: center;
+      color: var(--light-text-color)
 
       svg {
         font-size: 0.95rem;
-        color: #ccc;
+        color: var(--light-text-color)
       }
 
       .cancelSearch {

@@ -1,6 +1,6 @@
 // Navbar.jsx
 
-import { useState } from 'react'
+import { useState,useRef,useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
@@ -13,7 +13,22 @@ const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const [isPostFormVisible, setIsPostFormVisible]=useState(false);
-
+  const [userControlsVisible, setUserControlsVisible] = useState(false);
+  const userControlsRef = useRef(null);
+  const ellipsisRef = useRef(null);
+  const handleClick = (event) => {
+    if (userControlsRef.current && !userControlsRef.current.contains(event.target)) {
+      setUserControlsVisible(false);
+    }else if (ellipsisRef.current.contains(event.target)){
+      setUserControlsVisible(true)
+    }
+  };
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClick);
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+    };
+  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.menu}>
@@ -33,7 +48,9 @@ const Navbar = () => {
         <button className={styles.postButton} onClick={()=>setIsPostFormVisible(true)}>Post</button>
         {isPostFormVisible && <PostForm setIsPostFormVisible={setIsPostFormVisible} />}
       </div>
-      <div className={styles.accountMenu}>
+      {userControlsVisible && <div className={styles.userControls} ref={userControlsRef}>
+        </div>}
+      <div className={`${styles.accountMenu} ${!userControlsVisible ? styles.pointer : ''}`}>
         <div className={styles.container}>
           <div className={styles.profilePic}>
             {user.profilePicImgUrl ? <img src={user.profilePicImgUrl} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
@@ -42,7 +59,7 @@ const Navbar = () => {
             <span className={styles.name}>{user.name}</span>
             <span className={styles.username}>@{user.username}</span>
           </div>
-          <div className={styles.controls} onClick={logout}><div className={styles.svgContainer}><FontAwesomeIcon icon={faEllipsis} className="rounded me-2"/></div></div>
+          <div className={styles.controls} ref={ellipsisRef}><div className={styles.svgContainer}><FontAwesomeIcon icon={faEllipsis} className="rounded me-2"/></div></div>
         </div>
       </div>
     </div>
