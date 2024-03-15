@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useLogout } from '../hooks/useLogout';
 import { useAuthContext } from '../hooks/useAuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faMagnifyingGlass as solidLens, faHouse as solidHouse, faBell as solidBell } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faHouse as solidHouse, faEllipsis } from '@fortawesome/free-solid-svg-icons';
 import PostForm from "../components/PostForm"
 import styles from './Navbar.module.scss';
 
@@ -24,10 +24,10 @@ const Navbar = () => {
         </div>
         <nav>
           <div className={styles.linkContainer}>
-            <Link to="/"><FontAwesomeIcon icon={solidHouse} className="rounded me-2"/> Home</Link>
+            <Link to="/"><div className={styles.svgContainer}><FontAwesomeIcon icon={solidHouse} className="rounded me-2"/></div> Home</Link>
           </div>
           <div className={styles.linkContainer}>
-            <Link to="/profile"><FontAwesomeIcon icon={faUser} className="rounded me-2"/>Profile</Link>
+            <Link to="/profile"><div className={styles.svgContainer}><FontAwesomeIcon icon={faUser} className="rounded me-2"/></div>Profile</Link>
           </div>
         </nav>
         <button className={styles.postButton} onClick={()=>setIsPostFormVisible(true)}>Post</button>
@@ -36,11 +36,13 @@ const Navbar = () => {
       <div className={styles.accountMenu}>
         <div className={styles.container}>
           <div className={styles.profilePic}>
-            
             {user.profilePicImgUrl ? <img src={user.profilePicImgUrl} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
           </div>
-          <span>@{user.username}</span>
-          <div className={styles.logout} onClick={logout}>Log out</div>
+          <div className={styles.infoContainer}>
+            <span className={styles.name}>{user.name}</span>
+            <span className={styles.username}>@{user.username}</span>
+          </div>
+          <div className={styles.controls} onClick={logout}><div className={styles.svgContainer}><FontAwesomeIcon icon={faEllipsis} className="rounded me-2"/></div></div>
         </div>
       </div>
     </div>
