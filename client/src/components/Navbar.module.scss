@@ -74,26 +74,50 @@
     }
   }
   .userControls {
-    padding: 15px 30px 20px 30px;
+    position: absolute;
+    width: 257px;
+    bottom: 10%;
+    z-index: 3;
+    padding: 5px 0;
     text-align: center;
     font-size: 0.8rem;
     display: flex;
-    background-color: #ccc;
+    box-shadow: 0 0 10px var(--strong-box-shadow-color);
+    border-radius: 10px;
     color: #0f0f0f82;
     height: 70px;
+    .userControlsContainer{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      font-size: 17px;
+      color: var(--strong-text-color);
+      font-weight: 600;
+      cursor: pointer;
+      padding-left: 22px;
+      span {
+        display: flex;
+        justify-content: left;
+      }
+      &:hover {
+        background-color: #cccccc23;
+        transition: background-color 0.3s ease; // Added transition
+      }
+    }
   }
-  .pointer{
+  .controlsVisible{
     cursor: pointer;
+    transition: background-color 0.3s;
+    &:hover {
+      background-color: var(--container-hover-background);
+    }
+
   }
   .accountMenu {
     display: flex;
     padding: 15px;
     border-radius: 40px;
-
-    &:hover {
-      background-color: var(--container-hover-background);
-    }
-
     .container {
       padding: 0;
       display: flex;
@@ -126,9 +150,8 @@
           width: 25px;
         }
         img {
-          width: 100%;
-          height: auto;
-          z-index: 2;
+          width: 44px;
+          height: 44px;
         }
       }
       .infoContainer {
