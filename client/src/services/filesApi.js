@@ -1,4 +1,5 @@
 import { createCustomAxios } from './apiConfig'
+import { blobToBase64 } from '../utils/useBlobToBase64'
 
 export class filesApi {
   static async upload(formData,headers) {
@@ -10,24 +11,6 @@ export class filesApi {
           console.log("Error uploading file:", response.error);
       }
   }
-  static async profilePic(username, headers) {
-      try {
-          const auth = createCustomAxios(headers)
-
-          // Make a request to get Blob image data
-          const profilePicResponse = await auth.get("/files/profilepicdata", {
-              params: {emailOrUsername:username},
-              responseType: 'blob'
-          });
-  
-          // Return Blob image data
-          return profilePicResponse.data;
-
-      } catch (error) {
-          console.log("Error showing image:", error);
-          throw error; // Re-throw the error to be caught by the caller
-      }
-  }  
   static async postImage(postId, headers) {
     try {
         const auth = createCustomAxios(headers);
@@ -43,9 +26,12 @@ export class filesApi {
             })
         ]);
 
+        // Convert blob to Base64
+        const postImageBase64 = await blobToBase64(postImageBlobResponse.data);
+
         // Return both Blob image data and Json data
         return {
-            postImageData: postImageBlobResponse.data,
+            postImageBase64,
             postImageMetadata: postImageJsonResponse.data,
         };
         
