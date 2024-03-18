@@ -5,6 +5,7 @@ import { useAuthContext } from './useAuthContext';
 const useFetchUserData = (username) => {
   const { user } = useAuthContext();
   const [userData, setUserData] = useState({});
+  const [isLoading, setIsLoading] = useState({});
 
   useEffect(() => {
     if (!username || !user) return;
@@ -43,9 +44,11 @@ const useFetchUserData = (username) => {
             setUserData({ ...userDataResponse, profileBannerImgUrl, profilePicImgUrl });
         } catch (error) {
             console.error('Error fetching profile data:', error);
+        }finally {
+            setIsLoading(false)
         }
     };
-
+    setIsLoading(true)
     fetchProfileData();
 }, [username, user]);
 
@@ -54,7 +57,7 @@ const useFetchUserData = (username) => {
     'Authorization': `Bearer ${user.token}`,
   });
 
-  return { userData };
+  return { userData, isLoading };
 };
 
 export default useFetchUserData;

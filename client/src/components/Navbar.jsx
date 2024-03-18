@@ -61,7 +61,7 @@ const Navbar = () => {
       <div className={`${styles.accountMenu} ${!userControlsVisible ? styles.controlsVisible : ''}`} ref={menuRef}>
         <div className={styles.container}>
           <div className={styles.profilePic}>
-            {user.profilePicImgUrl ? <img src={user.profilePicImgUrl} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
+            {user.profilePicBase64 ? <img src={user.profilePicBase64} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
           </div>
           <div className={styles.infoContainer}>
             <span className={styles.name}>{user.name}</span>

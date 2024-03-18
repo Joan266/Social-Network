@@ -29,11 +29,11 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
 
   
   useEffect(() => {
-    if(userData.profilePicUrl){
-      setProfilePicUrl(userData.profilePicUrl)
+    if(userData.profilePicImgUrl){
+      setProfilePicUrl(userData.profilePicImgUrl)
     }
-    if(userData.bannerUrl){
-      setBannerUrl(userData.bannerUrl)
+    if(userData.profileBannerImgUrl){
+      setBannerUrl(userData.profileBannerImgUrl)
     }
     // Filter out undefined or null values from the userData object
     const filteredUserData = Object.fromEntries(
@@ -140,18 +140,18 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
             onChange={handleFileChange}
             accept="image/*">
           </input>
-          <div className={styles.banner}>
+          <div className={styles.banner} onClick={(e) => { handleFileSelect("banner");  e.stopPropagation() }}>
             {bannerUrl && <img src={bannerUrl} alt="banner" />}
             <div className={styles.imgOverlay}></div>
-            <div className={styles.mediaDropLink} onClick={(e) => { handleFileSelect("banner");  e.stopPropagation() }}>
+            <div className={styles.mediaDropLink} >
               <FontAwesomeIcon icon={faCameraRetro} />
             </div>
           </div>  
           <div className={styles.picAndControls}>
-            <div className={styles.profilePic}>
+            <div className={styles.profilePic}onClick={(e) => { handleFileSelect("profilepic");  e.stopPropagation() }}>
               {profilePicUrl && <img src={profilePicUrl} alt="userpicture" />}
               <div className={styles.imgOverlay}></div>
-              <div className={styles.mediaDropLink} onClick={(e) => { handleFileSelect("profilepic");  e.stopPropagation() }}>
+              <div className={styles.mediaDropLink} >
                 <FontAwesomeIcon icon={faCameraRetro} />
               </div>
             </div>

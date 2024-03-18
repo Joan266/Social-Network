@@ -4,11 +4,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
+  background-color: rgba(0, 0, 0, 0.7); 
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1;
+  z-index: 3;
 }
 .imgOverlay{
   top: 0;
@@ -24,7 +24,7 @@
   height: auto;
   border-radius: 20px;
   background-color: transparent;
-  z-index: 2;
+  z-index: 4;
   overflow: hidden;
   .profileForm {
     background-color: white;
@@ -50,7 +50,7 @@
         width: 62px;
         align-items: center;
         svg{
-          font-size: 22px;
+          font-size: 25px;
           cursor: pointer;
           color: #0f1419d8;
           &:hover {
@@ -69,17 +69,17 @@
         width: 73px;
         button {
           cursor: pointer;
-          border-radius: 25px;
+          border-radius: 40px;
           font-weight: 600;
-          font-size: 15px;
-          height: 35px;
+          font-size: 17px;
+          height: 40px;
           padding: 0 18px;
           border: none;
           color: white;
-          background-color: #0f1419;
+          background-color: var(--strong-text-color);
           transition: background-color 0.3s;
           &:hover{
-           background-color: #0f1419ee;
+           background-color: var(--light-text-color);
           }
         }
       }
@@ -96,8 +96,8 @@
       justify-content: center;
       align-items: center;
       width: 45px;
-      cursor: pointer;
       transition: background-color 0.3s;
+      cursor: pointer;
       &:hover {
         background-color: #0f141993;
       }
@@ -110,6 +110,7 @@
       max-height: 195px;
       background-color: gainsboro;
       position: relative;
+      cursor: pointer;
       img {
         width: 100%;
         height: 195px;
@@ -133,6 +134,7 @@
         width: 130px;
         border: white 4px solid;
         overflow: hidden;
+        cursor: pointer;
         img {
           width: 100%;
           height: auto;

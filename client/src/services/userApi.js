@@ -1,4 +1,5 @@
 import { http, createCustomAxios } from './apiConfig'
+import { blobToBase64 } from '../utils/useBlobToBase64'
 export class userApi {
    
   static async signup(data) {
@@ -34,9 +35,13 @@ export class userApi {
                 params: { emailOrUsername },
                 responseType: 'blob'
             });
-            const profilePicImgUrl = URL.createObjectURL(profilePicData);
-            return { profilePicImgUrl, ...loginResponseData };
-        }
+
+            // Convert blob to Base64
+            const profilePicBase64 = await blobToBase64(profilePicData);
+
+            // Store profilePicBase64 in cache or use it directly
+            return { profilePicBase64, ...loginResponseData };
+        } 
 
         return loginResponseData;
 
@@ -45,6 +50,7 @@ export class userApi {
         throw error;
     }
 }
+
 static async fetchUserProfilePic({ username, userToken }) {
     try {
         const auth = createCustomAxios({

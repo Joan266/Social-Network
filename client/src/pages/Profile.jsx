@@ -18,7 +18,7 @@ import {formatDate} from '../utils/useFormatDate';
 const Profile = () => {
   const { user } = useAuthContext();
   const { username } = useParams();
-  const { userData } = useProfileData(username);
+  const { userData, isLoading: profileDataLoading } = useProfileData(username);
   const { isUserFollowed, handleFollowToggle } = useProfileFollow({username,isLoggedInUserProfile:username === user.username});
   const { isLoading, isError, posts } = useProfilePosts(username);
 
@@ -33,7 +33,7 @@ const Profile = () => {
       exact: true,
     })
   },[queryClient])
-
+  if(profileDataLoading)return null
   return (
     <>
       {isProfileFormVisible && (
@@ -43,9 +43,12 @@ const Profile = () => {
           />
       )}
       <div className={styles.navContainer}>
-          <div className={styles.profileLabel}>
-            Profile
-          </div>
+        <div className={styles.nameLabel}>
+          {userData.name}
+        </div>
+        <div className={styles.postCountLabel}>
+          0 posts
+        </div>
       </div>
       <div className={styles.profileContainer}>
         <div className={styles.userContainer}>
@@ -104,7 +107,7 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        <div className={styles.navContainer}>
+        <div className={styles.postLabelContainer}>
           <div className={styles.posts}>
             Posts
           </div>
