@@ -11,7 +11,7 @@ import useProfilePosts from '../hooks/useProfilePosts';
 import PostList from '../components/PostList';
 import ProfileForm from '../components/ProfileForm';
 import { useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 // date 
 import {formatDate} from '../utils/useFormatDate';
 
@@ -20,19 +20,19 @@ const Profile = () => {
   const { username } = useParams();
   const { userData, isLoading: profileDataLoading } = useProfileData(username);
   const { isUserFollowed, handleFollowToggle } = useProfileFollow({username,isLoggedInUserProfile:username === user.username});
-  const { isLoading, isError, posts } = useProfilePosts(username);
+  const { isLoading, isError, posts } = useProfilePosts({username, userToken:user.token});
 
   const [followHover, setFollowHover] = useState(false);
   const [isProfileFormVisible, setIsProfileFormVisible] = useState(false);
   const queryClient = useQueryClient()
 
   
-  useEffect(()=>{
-    queryClient.resetQueries({ 
-      queryKey:["profile_posts"],
-      exact: true,
-    })
-  },[queryClient])
+  // useEffect(()=>{
+  //   queryClient.resetQueries({ 
+  //     queryKey:["profile_posts"],
+  //     exact: true,
+  //   })
+  // },[queryClient])
   if(profileDataLoading)return null
   return (
     <>
@@ -113,7 +113,7 @@ const Profile = () => {
           </div>
         </div>
         {posts.length > 0 && 
-        <PostList posts={posts}/>}
+        <PostList posts={posts} isLoading={isLoading}/>}
         
         {isLoading && <strong>Cargando...</strong>}
 

@@ -170,12 +170,18 @@
     display: flex;
     height: 58px;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
     border-bottom: 0.1px solid rgba(0, 0, 0, 0.04);
     .posts{
       color: var(--strong-text-color);
       font-weight: 600;
       font-size: 17px;
+      margin-left: 22px;
     }
   }
+}
+p{
+  margin-left: 13px;
+  font-size: 16px;
+  color:var(--light-text-color)
 }

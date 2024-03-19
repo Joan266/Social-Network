@@ -89,34 +89,35 @@ module.exports = userController =  {
   },
   fetchUserPosts: async (req, res) => {
     try {
-      const { username, nextCursor, lastTimestamp } = req.query;
-      console.log(req.query)
-      if(!nextCursor){
-        res.status(404).json({ error: "Next cursor required" });
+      const { username, cursor, lastTimestamp } = req.query;
+      if(!cursor){
+        res.status(404).json({ error: "Cursor required" });
       }
       const pageSize = 10; 
-      const skip = (parseInt(nextCursor) - 1) * pageSize; // Parse to integer
+      const skip = (parseInt(cursor) - 1) * pageSize; // Parse to integer
       const query = {};
 
       if (lastTimestamp) { // Check for the presence of lastTimestamp
-          query.createdAt = { $lt: new Date(parseInt(lastTimestamp)) }; // Parse to Date
-      }
+        query.createdAt = { $lt: new Date(parseInt(lastTimestamp)) }; // Parse to Date
+       }
 
       // Use Mongoose to search for user
       const { posts } = await User
         .findOne({ username })
-        .select('posts')
         .populate({ 
             path: 'posts',
             options: { sort: { createdAt: -1 } },
-            select: '_id createdAt' ,
             skip,
             limit: pageSize,
-        });
-      // Check if posts were found
+            populate: {path: 'user', select: 'username'},
+            select: '_id createdAt user' ,
+        })
+        .select('posts')
+
       const timestamp = !lastTimestamp ? posts[0]?.createdAt : lastTimestamp
+
       // Send the retrieved posts in the response
-      res.status(200).json({posts, timestamp});
+      res.status(200).json({ posts: posts.length !==0 ? posts : [], timestamp });
     } catch (error) {
       console.error("Error getting user posts:", error);
       res.status(500).json({ error: "Internal Server Error" });

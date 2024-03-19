@@ -5,20 +5,21 @@ import { faLock, faXmark, faUnlock,faCameraRetro } from '@fortawesome/free-solid
 import DynamicTextarea from "./DynamicTextarea";
 import EditMedia from "./EditMedia";
 import { useUpdateProfileData } from "../hooks/useUpdateProfileData";
-
+const inputDataSchema = {
+  bio: '',
+  name: '',
+  location: '',
+  birthDate: '1901-01-01',
+  privacyStatus: null,
+  bannerFile: null,
+  profilePicFile: null,
+  bannerFileId: null,
+  profilePicFileId: null,
+}
 const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
   const { updateProfileData, isLoading } = useUpdateProfileData();
-  const [inputData, setInputData] = useState({
-    bio: '',
-    name: '',
-    location: '',
-    birthDate: '1901-01-01',
-    privacyStatus: null,
-    bannerFile: null,
-    profilePicFile: null,
-    bannerFileId: null,
-    profilePicFileId: null,
-  });
+  const [ prevInputData, setPrevInputData ] = useState(inputDataSchema)
+  const [inputData, setInputData] = useState(inputDataSchema);
   
   const fileInputRef = useRef(null);
   const [ imgSrc, setImgSrc ] = useState(null);
@@ -48,10 +49,12 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
   
     // Update state with filteredUserData
     setInputData((prevInputData) => (filteredUserData));
+    setPrevInputData((prevInputData) => (filteredUserData))
   }, [userData]);
   
 
   const handleSaveUserData = () => {
+    if(inputData === prevInputData) return setIsProfileFormVisible(false)
     const data = { inputData };
     if (profilePicUrl !== userData.profilePicUrl) {
       data.profilePicFile = inputData.profilePicFile;

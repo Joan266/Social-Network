@@ -12,7 +12,7 @@
     position: sticky; 
     background-color: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(20px);
-    z-index: 3;
+    z-index: 2;
     transition: background-color 0.2s;
     .homeLabel{
       color: var(--strong-text-color);

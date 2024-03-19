@@ -30,7 +30,7 @@ const useFetchUserData = (username) => {
                 profilePicPromise,
             ]);
 
-            setUserData({ ...userDataResponse, profileBannerImgUrl:profilePicBase64, profilePicImgUrl:profileBannerBase64 });
+            setUserData({ ...userDataResponse, profileBannerImgUrl:profileBannerBase64, profilePicImgUrl:profilePicBase64 });
         } catch (error) {
             console.error('Error fetching profile data:', error);
         }finally {
