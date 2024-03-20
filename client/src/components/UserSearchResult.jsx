@@ -11,32 +11,21 @@ const UserSearchResult = ({user,handleUserInfoClick, userToken}) => {
     const fetchProfilePic = async () => {
       try {
         setIsLoading(true)
-        const profilePicDataResponse = await userApi.fetchUserProfilePic({username: user.username,userToken});
-        if(profilePicDataResponse){
-          if (profilePicImgUrl) {
-            URL.revokeObjectURL(profilePicImgUrl);
-          }
-          const newProfilePicImgUrl = URL.createObjectURL(profilePicDataResponse);
-          setProfilePicImgUrl(newProfilePicImgUrl)
-        }
+        const profilePicBase64 = await userApi.fetchUserProfilePic(user.username,{
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userToken}`,
+        });
+        setProfilePicImgUrl(profilePicBase64)
       } catch (error) {
         console.error('Error fetching profile picture:', error);
       }finally{
         setIsLoading(false)
       }
-    };
+    }; 
     if(user.profilePicFileId){
       fetchProfilePic();
     }
-    // Cleanup function to revoke URLs when component unmounts
-    return () => {
-      if (profilePicImgUrl) {
-        URL.revokeObjectURL(profilePicImgUrl);
-      }
-    };
   }, [user, userToken]);
-  if(isLoading) return <div className={styles.userInfoContainer}/>
-      
   return (
     <div
       className={styles.userInfoContainer}
@@ -44,7 +33,7 @@ const UserSearchResult = ({user,handleUserInfoClick, userToken}) => {
       key={user.username}
     >
       <div className={styles.profilePic}>
-        {profilePicImgUrl ? <img src={profilePicImgUrl} alt='search-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
+        {profilePicImgUrl ? <img src={profilePicImgUrl} alt='search-profile-pic'></img> : !isLoading ? <FontAwesomeIcon icon={faUser} className="rounded me-2" />: null}
       </div>
       <div className={styles.userInfo}>
         <div className={styles.name}>

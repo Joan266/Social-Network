@@ -10,8 +10,8 @@ const createHomePosts = async ({ usersIds, postImageFileIds }) => {
   const homePostsInfo = []; // Array to store created posts
 
   // Calculate a date three days ago
-  const threeDaysAgo = new Date();
-  threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+  const fiveDaysAgo = new Date();
+  fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
 
   shuffleArray(postImageFileIds); // Shuffle the postImageFileIds array
 
@@ -20,7 +20,7 @@ const createHomePosts = async ({ usersIds, postImageFileIds }) => {
     shuffleArray(usersIds); // Shuffle the usersIds array before each iteration
     
     // Generate a random creation date for the post
-    const createdAt = faker.date.between(threeDaysAgo, new Date());
+    const createdAt = faker.date.between(fiveDaysAgo, new Date());
 
     // Generate a random user ID
     const randomNum = Math.floor(Math.random() * usersIds.length);

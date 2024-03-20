@@ -5,6 +5,7 @@ import { useAuthContext } from './useAuthContext';
 const useFetchUserData = (username) => {
   const { user } = useAuthContext();
   const [userData, setUserData] = useState({});
+  const [isLoading, setIsLoading] = useState({});
 
   useEffect(() => {
     if (!username || !user) return;
@@ -21,31 +22,22 @@ const useFetchUserData = (username) => {
                 profileBannerPromise = userApi.fetchUserProfileBanner(username, headers);
             }
             if (userDataResponse.profilePicFileId) {
-                profilePicPromise = userApi.fetchUserProfilePic({ username, userToken: user.token });
+                profilePicPromise = userApi.fetchUserProfilePic(username, headers);
             }
 
-            const [profileBannerResponse, profilePicResponse] = await Promise.all([
+            const [profileBannerBase64, profilePicBase64] = await Promise.all([
                 profileBannerPromise,
                 profilePicPromise,
             ]);
 
-            let profileBannerImgUrl = null;
-            let profilePicImgUrl = null;
-
-            if (profileBannerResponse) {
-                profileBannerImgUrl = URL.createObjectURL(profileBannerResponse.data);
-            }
-
-            if (profilePicResponse) {
-                profilePicImgUrl = URL.createObjectURL(profilePicResponse.data);
-            }
-
-            setUserData({ ...userDataResponse, profileBannerImgUrl, profilePicImgUrl });
+            setUserData({ ...userDataResponse, profileBannerImgUrl:profileBannerBase64, profilePicImgUrl:profilePicBase64 });
         } catch (error) {
             console.error('Error fetching profile data:', error);
+        }finally {
+            setIsLoading(false)
         }
     };
-
+    setIsLoading(true)
     fetchProfileData();
 }, [username, user]);
 
@@ -54,7 +46,7 @@ const useFetchUserData = (username) => {
     'Authorization': `Bearer ${user.token}`,
   });
 
-  return { userData };
+  return { userData, isLoading };
 };
 
 export default useFetchUserData;

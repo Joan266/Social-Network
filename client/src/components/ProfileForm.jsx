@@ -5,20 +5,21 @@ import { faLock, faXmark, faUnlock,faCameraRetro } from '@fortawesome/free-solid
 import DynamicTextarea from "./DynamicTextarea";
 import EditMedia from "./EditMedia";
 import { useUpdateProfileData } from "../hooks/useUpdateProfileData";
-
+const inputDataSchema = {
+  bio: '',
+  name: '',
+  location: '',
+  birthDate: '1901-01-01',
+  privacyStatus: null,
+  bannerFile: null,
+  profilePicFile: null,
+  bannerFileId: null,
+  profilePicFileId: null,
+}
 const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
   const { updateProfileData, isLoading } = useUpdateProfileData();
-  const [inputData, setInputData] = useState({
-    bio: '',
-    name: '',
-    location: '',
-    birthDate: '1901-01-01',
-    privacyStatus: null,
-    bannerFile: null,
-    profilePicFile: null,
-    bannerFileId: null,
-    profilePicFileId: null,
-  });
+  const [ prevInputData, setPrevInputData ] = useState(inputDataSchema)
+  const [inputData, setInputData] = useState(inputDataSchema);
   
   const fileInputRef = useRef(null);
   const [ imgSrc, setImgSrc ] = useState(null);
@@ -29,11 +30,11 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
 
   
   useEffect(() => {
-    if(userData.profilePicUrl){
-      setProfilePicUrl(userData.profilePicUrl)
+    if(userData.profilePicImgUrl){
+      setProfilePicUrl(userData.profilePicImgUrl)
     }
-    if(userData.bannerUrl){
-      setBannerUrl(userData.bannerUrl)
+    if(userData.profileBannerImgUrl){
+      setBannerUrl(userData.profileBannerImgUrl)
     }
     // Filter out undefined or null values from the userData object
     const filteredUserData = Object.fromEntries(
@@ -48,10 +49,12 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
   
     // Update state with filteredUserData
     setInputData((prevInputData) => (filteredUserData));
+    setPrevInputData((prevInputData) => (filteredUserData))
   }, [userData]);
   
 
   const handleSaveUserData = () => {
+    if(inputData === prevInputData) return setIsProfileFormVisible(false)
     const data = { inputData };
     if (profilePicUrl !== userData.profilePicUrl) {
       data.profilePicFile = inputData.profilePicFile;
@@ -140,18 +143,18 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
             onChange={handleFileChange}
             accept="image/*">
           </input>
-          <div className={styles.banner}>
+          <div className={styles.banner} onClick={(e) => { handleFileSelect("banner");  e.stopPropagation() }}>
             {bannerUrl && <img src={bannerUrl} alt="banner" />}
             <div className={styles.imgOverlay}></div>
-            <div className={styles.mediaDropLink} onClick={(e) => { handleFileSelect("banner");  e.stopPropagation() }}>
+            <div className={styles.mediaDropLink} >
               <FontAwesomeIcon icon={faCameraRetro} />
             </div>
           </div>  
           <div className={styles.picAndControls}>
-            <div className={styles.profilePic}>
+            <div className={styles.profilePic}onClick={(e) => { handleFileSelect("profilepic");  e.stopPropagation() }}>
               {profilePicUrl && <img src={profilePicUrl} alt="userpicture" />}
               <div className={styles.imgOverlay}></div>
-              <div className={styles.mediaDropLink} onClick={(e) => { handleFileSelect("profilepic");  e.stopPropagation() }}>
+              <div className={styles.mediaDropLink} >
                 <FontAwesomeIcon icon={faCameraRetro} />
               </div>
             </div>

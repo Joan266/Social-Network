@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { postApi } from '../services/postApi';
+import { userApi } from '../services/userApi';
 import { filesApi } from '../services/filesApi';
 import { useAuthContext } from './useAuthContext';
 
@@ -7,8 +8,6 @@ const useFetchPostData = ({ postId, username }) => {
   const { user } = useAuthContext();
   const [postData, setPostData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [postImageUrl, setPostImageUrl] = useState(null);
-  const [profilePicImgUrl, setProfilePicImgUrl] = useState(null);
 
   useEffect(() => {
     const fetchPostData = async () => {
@@ -16,28 +15,16 @@ const useFetchPostData = ({ postId, username }) => {
       try {
         const headers = getHeaders();
         
-        const [postDataResponse, profilePicResponse, postImageResponse] = await Promise.all([
+        const [postDataResponse, profilePicBase64, postImageResponse] = await Promise.all([
           postApi.fetchPostData(postId, headers),
-          filesApi.profilePic(username, headers),
+          userApi.fetchUserProfilePic(username, headers),
           filesApi.postImage(postId, headers)
         ]);
 
-        const { postImageData, postImageMetadata } = postImageResponse;
-        const newPostImageUrl = URL.createObjectURL(postImageData);
-        const newProfilePicImgUrl = URL.createObjectURL(profilePicResponse);
+        const { postImageBase64, postImageMetadata } = postImageResponse;
 
-        // Revoke previous URLs
-        if (postImageUrl) {
-          URL.revokeObjectURL(postImageUrl);
-        }
-        if (profilePicImgUrl) {
-          URL.revokeObjectURL(profilePicImgUrl);
-        }
-
-        // Set new URLs and metadata
-        setPostImageUrl(newPostImageUrl);
-        setProfilePicImgUrl(newProfilePicImgUrl);
-        setPostData({...postDataResponse, profilePicImgUrl: newProfilePicImgUrl, postImageUrl: newPostImageUrl, ...postImageMetadata});
+      
+        setPostData({...postDataResponse, profilePicImgUrl: profilePicBase64, postImageUrl: postImageBase64, ...postImageMetadata});
       } catch (error) {
         console.error('Error fetching post data:', error);
       } finally {
@@ -46,17 +33,6 @@ const useFetchPostData = ({ postId, username }) => {
     };
 
     fetchPostData();
-
-    // Cleanup function to revoke URLs when component unmounts
-    return () => {
-      if (postImageUrl) {
-        URL.revokeObjectURL(postImageUrl);
-      }
-      if (profilePicImgUrl) {
-        URL.revokeObjectURL(profilePicImgUrl);
-      }
-    };
-
   }, [postId, user]);
 
   const getHeaders = () => ({

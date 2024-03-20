@@ -8,7 +8,7 @@ const PostList = ({posts, isLoading}) => {
   const topRef = useRef(null);
   const bottomRef = useRef(null);
   usePostListObserve({ topRef, bottomRef });
-
+  console.log(posts)
   return (
     <div id="post-list" className={styles.postsContainer}>
      { !isLoading && <div id='top-observer' ref={topRef}/>}

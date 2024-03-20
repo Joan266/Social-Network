@@ -11,29 +11,29 @@ import useProfilePosts from '../hooks/useProfilePosts';
 import PostList from '../components/PostList';
 import ProfileForm from '../components/ProfileForm';
 import { useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 // date 
 import {formatDate} from '../utils/useFormatDate';
 
 const Profile = () => {
   const { user } = useAuthContext();
   const { username } = useParams();
-  const { userData } = useProfileData(username);
+  const { userData, isLoading: profileDataLoading } = useProfileData(username);
   const { isUserFollowed, handleFollowToggle } = useProfileFollow({username,isLoggedInUserProfile:username === user.username});
-  const { isLoading, isError, posts } = useProfilePosts(username);
+  const { isLoading, isError, posts } = useProfilePosts({username, userToken:user.token});
 
   const [followHover, setFollowHover] = useState(false);
   const [isProfileFormVisible, setIsProfileFormVisible] = useState(false);
   const queryClient = useQueryClient()
 
   
-  useEffect(()=>{
-    queryClient.resetQueries({ 
-      queryKey:["profile_posts"],
-      exact: true,
-    })
-  },[queryClient])
-
+  // useEffect(()=>{
+  //   queryClient.resetQueries({ 
+  //     queryKey:["profile_posts"],
+  //     exact: true,
+  //   })
+  // },[queryClient])
+  if(profileDataLoading)return null
   return (
     <>
       {isProfileFormVisible && (
@@ -43,9 +43,12 @@ const Profile = () => {
           />
       )}
       <div className={styles.navContainer}>
-          <div className={styles.profileLabel}>
-            Profile
-          </div>
+        <div className={styles.nameLabel}>
+          {userData.name}
+        </div>
+        <div className={styles.postCountLabel}>
+          0 posts
+        </div>
       </div>
       <div className={styles.profileContainer}>
         <div className={styles.userContainer}>
@@ -104,13 +107,13 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        <div className={styles.navContainer}>
+        <div className={styles.postLabelContainer}>
           <div className={styles.posts}>
             Posts
           </div>
         </div>
         {posts.length > 0 && 
-        <PostList posts={posts}/>}
+        <PostList posts={posts} isLoading={isLoading}/>}
         
         {isLoading && <strong>Cargando...</strong>}
 

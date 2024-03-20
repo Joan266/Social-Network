@@ -1,4 +1,5 @@
 import { http, createCustomAxios } from './apiConfig'
+import { blobToBase64 } from '../utils/useBlobToBase64'
 export class userApi {
    
   static async signup(data) {
@@ -34,9 +35,13 @@ export class userApi {
                 params: { emailOrUsername },
                 responseType: 'blob'
             });
-            const profilePicImgUrl = URL.createObjectURL(profilePicData);
-            return { profilePicImgUrl, ...loginResponseData };
-        }
+
+            // Convert blob to Base64
+            const profilePicBase64 = await blobToBase64(profilePicData);
+
+            // Store profilePicBase64 in cache or use it directly
+            return { profilePicBase64, ...loginResponseData };
+        } 
 
         return loginResponseData;
 
@@ -45,19 +50,19 @@ export class userApi {
         throw error;
     }
 }
-static async fetchUserProfilePic({ username, userToken }) {
+
+static async fetchUserProfilePic( username, headers) {
     try {
-        const auth = createCustomAxios({
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userToken}`,
-        });
+        const auth = createCustomAxios(headers);
 
         const profilePicResponse = await auth.get("/files/profilepicdata", {
             params: { emailOrUsername: username },
             responseType: 'blob'
         });
 
-        return profilePicResponse;
+        // Convert blob to Base64
+        const profilePicBase64 = await blobToBase64(profilePicResponse.data);
+        return profilePicBase64;
     
     } catch (error) {
         console.error("Error during login:", error);
@@ -72,8 +77,9 @@ static async fetchUserProfileBanner(data, headers) {
             params: { emailOrUsername: data },
             responseType: 'blob'
         });
-   
-        return profileBannerResponse;
+        // Convert blob to Base64
+        const profileBannerBase64 = await blobToBase64(profileBannerResponse.data);
+        return profileBannerBase64;
     
     } catch (error) {
         console.error("Error during login:", error);
