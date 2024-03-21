@@ -95,6 +95,7 @@ const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseComments
       postId: postIsResponseComment ?  postIsResponseComment._id:false,
       postImageFile,
     })
+    console.log(newPostResponse)
     postIsResponseComment && increaseCommentsCount()
     setContent("")
     const navigateString = `/home/${newPostResponse._id}`;

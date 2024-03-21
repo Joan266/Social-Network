@@ -36,7 +36,7 @@ export default function EditMedia({ imgSrc, endOfEdit, inputImageType }) {
   const handleApply = () => {
     if (!croppedArea || !imgSrc) {
         // If cropped area is invalid or image source is missing, return
-        endOfEdit()
+        endOfEdit();
         return;
     }
 
@@ -45,8 +45,17 @@ export default function EditMedia({ imgSrc, endOfEdit, inputImageType }) {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
-        canvas.width = croppedArea.width;
-        canvas.height = croppedArea.height;
+        let width = croppedArea.width;
+        let height = croppedArea.height;
+
+        if (inputImageType === "postimage") {
+            // Set width and height to 500x500
+            width = 500;
+            height = 500;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
 
         ctx.drawImage(
             image,
@@ -56,14 +65,14 @@ export default function EditMedia({ imgSrc, endOfEdit, inputImageType }) {
             croppedArea.height,
             0,
             0,
-            croppedArea.width,
-            croppedArea.height
+            width,
+            height
         );
 
         canvas.toBlob((blob) => {
             const file = new File([blob], 'cropped-image.webp', { type: 'image/webp' });
             const imageUrl = URL.createObjectURL(file); // Create a URL for the File
-            endOfEdit({file, imageUrl}); // Pass both the File and the URL to the endOfEdit function
+            endOfEdit({ file, imageUrl }); // Pass both the File and the URL to the endOfEdit function
         }, 'image/webp');
     };
 
@@ -71,7 +80,6 @@ export default function EditMedia({ imgSrc, endOfEdit, inputImageType }) {
     image.src = imgSrc;
 };
 
-  
   
   
   

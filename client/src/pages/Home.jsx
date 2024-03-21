@@ -3,10 +3,12 @@ import { useParams } from 'react-router-dom';
 import HomePostsList from '../components/HomePostsList';
 import { useQueryClient } from '@tanstack/react-query';
 import PostDetails from '../components/PostDetails';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const Home = () => {
   const { newPostId } = useParams();
   const queryClient = useQueryClient();
+  const { user } = useAuthContext();
 
   const handleNavClick = (e) => {
     e.preventDefault();
@@ -28,6 +30,7 @@ const Home = () => {
        <PostDetails 
           key={newPostId} 
           postId={newPostId} 
+          username={user.username}
         /> 
       }
       <HomePostsList />
