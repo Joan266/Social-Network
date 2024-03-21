@@ -2,34 +2,31 @@ import { useState, useEffect } from 'react';
 import { postApi } from '../services/postApi';
 import { useAuthContext } from './useAuthContext';
 
-const useFetchPostReplies = (postId) => {
-  const [ isLoading, setIsLoading] = useState(false);
+const usePostReplies = (postId) => {
   const { user } = useAuthContext();
+  const [ posts, setPosts] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
   useEffect(() => {
     const fetchPostReplies = async () => {
-      const headers = getHeaders();
-      try {
-        setIsLoading(true);
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`,
+      };
+      // Fetch home posts
+      const postRepliesResponse = await postApi.fetchPostReplies(postId,headers);
 
-        // Fetch home posts
-        const fetchPostRepliesResponse = await postApi.fetchPostReplies(postId,headers);
-        if(!fetchPostRepliesResponse.error){
-        }
-      } catch (error) {
-        console.error('Error fetching user posts:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchPostReplies();
-  }, [postId]);
+      setIsError(postRepliesResponse.error)
+      setPosts(postRepliesResponse.posts)
+      setIsLoading(false)
+    } 
+    
+    setIsLoading(true)
+    fetchPostReplies()
+  }, [user, postId]);
 
-  const getHeaders = () => ({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${user.token}`,
-  });
-
-  return { isLoading };
+  return { isLoading, posts, isError };
 };
 
-export default useFetchPostReplies;
+export default usePostReplies;

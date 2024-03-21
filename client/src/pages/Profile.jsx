@@ -7,11 +7,8 @@ import styles from './Profile.module.scss';
 import useProfileData from '../hooks/useProfileData';
 import useProfileFollow from '../hooks/useProfileFollow';
 import { useAuthContext } from '../hooks/useAuthContext';
-import useProfilePosts from '../hooks/useProfilePosts';
-import PostList from '../components/PostList';
+import ProfilePostsList from '../components/ProfilePostsList';
 import ProfileForm from '../components/ProfileForm';
-import { useQueryClient } from '@tanstack/react-query'
-// import { useEffect } from 'react';
 // date 
 import {formatDate} from '../utils/useFormatDate';
 
@@ -20,19 +17,10 @@ const Profile = () => {
   const { username } = useParams();
   const { userData, isLoading: profileDataLoading } = useProfileData(username);
   const { isUserFollowed, handleFollowToggle } = useProfileFollow({username,isLoggedInUserProfile:username === user.username});
-  const { isLoading, isError, posts } = useProfilePosts({username, userToken:user.token});
 
   const [followHover, setFollowHover] = useState(false);
   const [isProfileFormVisible, setIsProfileFormVisible] = useState(false);
-  const queryClient = useQueryClient()
-
   
-  // useEffect(()=>{
-  //   queryClient.resetQueries({ 
-  //     queryKey:["profile_posts"],
-  //     exact: true,
-  //   })
-  // },[queryClient])
   if(profileDataLoading)return null
   return (
     <>
@@ -42,15 +30,12 @@ const Profile = () => {
             userData={userData}
           />
       )}
-      <div className={styles.navContainer}>
-        <div className={styles.nameLabel}>
-          {userData.name}
-        </div>
-        <div className={styles.postCountLabel}>
-          0 posts
-        </div>
-      </div>
       <div className={styles.profileContainer}>
+        <div className={styles.navContainer}>
+          <div className={styles.nameLabel}>
+            {userData.name}
+          </div>
+        </div>
         <div className={styles.userContainer}>
           <div className={styles.banner}>
             {userData.profileBannerImgUrl && <img src={userData.profileBannerImgUrl} alt="banner" />}
@@ -112,14 +97,7 @@ const Profile = () => {
             Posts
           </div>
         </div>
-        {posts.length > 0 && 
-        <PostList posts={posts} isLoading={isLoading}/>}
-        
-        {isLoading && <strong>Cargando...</strong>}
-
-        {isError && <p>Ha habido un error</p>}
-
-        {!isLoading && !isError && posts.length === 0 && <p>No hay posts</p>}  
+        <ProfilePostsList username={username}/>
       </div>
     </>
   );

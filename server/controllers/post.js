@@ -38,26 +38,28 @@ module.exports = postController =  {
   fetchPostData: async (req, res) => {
     try {
       const { postId } = req.query;
-      console.log(`postId:${postId}`)
 
       // Use Mongoose to search for post
       const post = await Post.findById(postId)
-      .select('-likes -__v -comments -postImageFileId -_id')
-      .populate({ path: 'user', select: 'username -_id' })
-      .populate({ path: 'parentPost', populate: 'user', select: 'user' })
-      .exec()
-      const { parentPost, user, ...rest } = post.toObject(); 
-      const modifiedPost = { ...rest, ...user, parentPostUsername:parentPost.user.username };
-      if (modifiedPost) {
-        res.status(200).json(modifiedPost);
-      } else {
-        res.status(404).json({ error: "Post not found" });
+        .select('-likes -__v -comments -postImageFileId -_id')
+        .populate({ path: 'user', select: 'username -_id' })
+        .populate({ path: 'parentPost', populate: { path: 'user', select: 'username' } })
+        .exec();
+      
+      if (!post) {
+        return res.status(404).json({ error: "Post not found" });
       }
+      console.log(post)
+      const { parentPost, user, ...rest } = post.toObject(); 
+      const modifiedPost = { ...rest, ...user, parentPostUsername: parentPost ? parentPost.user.username : null};
+
+      res.status(200).json(modifiedPost);
     } catch (error) {
-      console.error("Error getting user:", error);
+      console.error("Error getting post:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
+
   likePost: async (req, res) => {
     try {
       const { userId, postId } = req.body;
@@ -160,20 +162,22 @@ module.exports = postController =  {
 postReplies: async (req, res) => {
   try {
       const { postId } = req.query;
+      console.log(postId)
       // Use Mongoose to search for posts of users with privacyStatus set to false
       const post = await Post.findById(postId)
-      .select('comments -_id')
-      .populate({ path: 'comments', select: '_id' })
+      .select('comments')
+      .populate({
+        path: 'comments',
+        select: 'user',
+        populate: {
+          path: 'user',
+          select: 'username'
+        }
+      })
       .exec()
-      // Check if posts were found
-      if (post && post.comments) {
-          console.log(post.comments);
-          // Send the retrieved posts in the response
-          res.status(200).json(post.comments);
-      } else {
-          // Send a 404 error if no posts were found
-          res.status(404).json({ error: "Post replies not found" });
-      }
+      
+      console.log(post)
+      res.status(200).json({ posts: post ? post.comments : [], error: !post });
   } catch (error) {
       // Handle errors and send a 500 error response
       console.error("Error getting post replies:", error);

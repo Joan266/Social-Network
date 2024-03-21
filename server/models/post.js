@@ -26,12 +26,7 @@ const postSchema = new Schema(
       type: Number,
       default:0,
     },
-    comments: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Post',
-      }
-    ],
+    comments: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
     commentsCount: {
       type: Number,
       default:0,

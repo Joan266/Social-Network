@@ -10,7 +10,7 @@ import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const PostDetails = ({ postId, username }) => {
+const PostDetails = ({ postId, username,page }) => {
   const postRef = useRef(null);
   const {  postData, isLoading } = useFetchPostData({postId, username});
   const { handleLikeToggle, isPostLiked } = usePostLike({postId});
@@ -56,7 +56,7 @@ const PostDetails = ({ postId, username }) => {
   }, [postRef,postData]);
 
   const handlePostLink = () => {
-    navigate(`/post/${postId}`); 
+    navigate(`/post/${postId}/${username}`); 
   };
   
   const increaseCommentsCount = () => {
@@ -94,11 +94,11 @@ const PostDetails = ({ postId, username }) => {
               <div className={styles.date}>{timeSince(postData.createdAt)}</div>
             </div>
           </div>
-          {postData.reply && postData.reply.username && (
+          {postData.parentPostUsername && page !== "post" && (
             <div className={styles.replyInfo}>
               Replying to 
-              <Link to={`/${postData.reply.username}`} onClick={(e) => e.stopPropagation()}>
-                @{postData.reply.username}
+              <Link to={`/${postData.parentPostUsername}`} onClick={(e) => e.stopPropagation()}>
+                @{postData.parentPostUsername}
               </Link>
             </div>
           )}

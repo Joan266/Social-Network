@@ -2,34 +2,36 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom'
 import styles from './Post.module.scss';
 import usePostReplies from '../hooks/usePostReplies';
-import PostList from '../components/PostList';
+import useFetchPostData from '../hooks/usePostData';
+import usePostLike from '../hooks/usePostLike';
+import PostRepliesList from '../components/PostRepliesList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart, faComment } from '@fortawesome/free-regular-svg-icons';
 import { timeSince } from '../utils/useTimeSinceString';
-import usePostData from '../hooks/usePostData';
 import { Link } from 'react-router-dom';
 import PostForm from '../components/PostForm';
 
 const Post = () => {
-  const { postId } = useParams();
+  const { postId, username } = useParams();
   usePostReplies(postId);
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
-  const {  postData, isLoading, handleLikeToggle, isPostLiked } = usePostData({isVisible:true, postId});
+  const {  postData, isLoading } = useFetchPostData({postId, username});
+  const { handleLikeToggle, isPostLiked } = usePostLike({postId});
 
   const increaseCommentsCount = () => {
     setCommentsCount(commentsCount + 1);
   };
 
   if (isLoading || !postData   ) return (
-    <div className={styles.postRepliesContainer}>
+    <div className={styles.postContainer}>
 
     </div>
   );
 
   return (
-    <div className={styles.postRepliesContainer}>
+    <div className={styles.postContainer}>
       <div className={styles.navContainer}>
         <div className={styles.postLabel}>
           Post
@@ -39,13 +41,14 @@ const Post = () => {
         {isPostFormVisible && (
           <PostForm
             setIsPostFormVisible={setIsPostFormVisible}
-            postIsCommentData={postData ? postData : false}
+            postIsResponseComment={postData ? postData : false}
             increaseCommentsCount={increaseCommentsCount}
           />
         )}
         <div className={styles.profilePicContainer}>
           <div className={styles.profilePic}>
-            <FontAwesomeIcon icon={faUser} className="rounded me-2" />
+            {postData.profilePicImgUrl  ? <img src={postData.profilePicImgUrl} alt='post-profile-pic'></img>:
+            <FontAwesomeIcon icon={faUser} className="rounded me-2" />}
           </div>
         </div>
         <div className={styles.body}>
@@ -61,20 +64,20 @@ const Post = () => {
               <div className={styles.date}>{timeSince(postData.createdAt)}</div>
             </div>
           </div>
-          {postData.reply && postData.reply.username && (
+          {postData.parentPostUsername && (
             <div className={styles.replyInfo}>
               Replying to 
-              <Link to={`/${postData.reply.username}`} onClick={(e) => e.stopPropagation()}>
-                @{postData.reply.username}
+              <Link to={`/${postData.parentPostUsername}`} onClick={(e) => e.stopPropagation()}>
+                @{postData.parentPostUsername}
               </Link>
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          {postData.postImageUrl && (
-            <div className={styles.imageContainer}>
-              <img src={postData.postImageUrl} alt='postpage'/>
-            </div>
-          )}
+          <div className={styles.imageContainer} style={{ width: postData.postImgWidth, height: postData.postImgHeight }}>
+            {postData.postImageUrl && (
+              <img src={postData.postImageUrl} alt='post' style={{ width: postData.postImgWidth, height: postData.postImgHeight }}/>
+            )}
+          </div>
           <div className={styles.settings}>
             <div className={styles.commentContainer}>
               <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>
@@ -90,12 +93,12 @@ const Post = () => {
                   style={{ color: isPostLiked ? 'rgb(255, 0, 162)' : '' }}
                 />
               </div>
-              <span>{postData.likesCount}</span>
+              <span>{postData.likesCount + (isPostLiked ? 1 : 0)}</span>
             </div>
           </div>
         </div>
       </div>
-      <PostList/>
+      <PostRepliesList  postId={postId}/>
     </div>
   )
 }

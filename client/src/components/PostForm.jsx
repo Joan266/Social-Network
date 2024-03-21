@@ -49,7 +49,7 @@ const PostTargeted = ({postData}) => {
 
 
 const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseCommentsCount}) => {
-  const user = useAuthContext();
+  const {user} = useAuthContext();
   const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
   const [ imgSrc, setImgSrc ] = useState(null);
@@ -129,8 +129,7 @@ const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseComments
             <div className={styles.container}>
               <div className={styles.profilePicContainer}>
                 <div className={styles.profilePic}>
-                  {user.profilePicImgUrl ? <img src={user.profilePicImgUrl} alt='post-profile-pic'></img>:
-                  <FontAwesomeIcon icon={faUser} className="rounded me-2" />}
+                  {user.profilePicBase64 ? <img src={user.profilePicBase64} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
                 </div>
               </div>
               <div className={styles.inputContainer}>

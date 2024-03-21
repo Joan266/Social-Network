@@ -64,7 +64,7 @@ function App() {
             element={!user ? <Navigate to="/login" /> : <Navigate to={`/${user.username}`} />} 
           />
           <Route 
-            path="/post/:postId" 
+            path="/post/:postId/:username" 
             element={user ? <PrincipalLayout><Post /></PrincipalLayout> : <Navigate to="/login" />}
           />
         </Routes>
