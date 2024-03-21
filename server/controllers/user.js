@@ -89,40 +89,27 @@ module.exports = userController =  {
   },
   fetchUserPosts: async (req, res) => {
     try {
-      const { username, cursor, lastTimestamp } = req.query;
-      if(!cursor){
-        res.status(404).json({ error: "Cursor required" });
-      }
-      const pageSize = 10; 
-      const skip = (parseInt(cursor) - 1) * pageSize; // Parse to integer
-      const query = {};
-
-      if (lastTimestamp) { // Check for the presence of lastTimestamp
-        query.createdAt = { $lt: new Date(parseInt(lastTimestamp)) }; // Parse to Date
-       }
-
+      const { username } = req.query; 
+      
       // Use Mongoose to search for user
-      const { posts } = await User
+      const user = await User
         .findOne({ username })
         .populate({ 
             path: 'posts',
             options: { sort: { createdAt: -1 } },
-            skip,
-            limit: pageSize,
-            populate: {path: 'user', select: 'username'},
+            populate: { path: 'user', select: 'username' },
             select: '_id createdAt user' ,
+            limit:15
         })
         .select('posts')
 
-      const timestamp = !lastTimestamp ? posts[0]?.createdAt : lastTimestamp
-
-      // Send the retrieved posts in the response
-      res.status(200).json({ posts: posts.length !==0 ? posts : [], timestamp });
+      // Check if user exists and send the retrieved posts in the response
+      res.status(200).json({ posts: user ? user.posts : [], error: !user });
     } catch (error) {
       console.error("Error getting user posts:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
-  },
+},
   isFollowingUser: async (req, res) => {
     try {
       const { userId, profileUsername } = req.body;

@@ -94,11 +94,11 @@ const PostDetails = ({ postId, username }) => {
               <div className={styles.date}>{timeSince(postData.createdAt)}</div>
             </div>
           </div>
-          {postData.reply && postData.reply.username && (
+          {postData.parentPostUsername && (
             <div className={styles.replyInfo}>
               Replying to 
-              <Link to={`/${postData.reply.username}`} onClick={(e) => e.stopPropagation()}>
-                @{postData.reply.username}
+              <Link to={`/${postData.parentPostUsername}`} onClick={(e) => e.stopPropagation()}>
+                @{postData.parentPostUsername}
               </Link>
             </div>
           )}

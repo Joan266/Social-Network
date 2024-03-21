@@ -38,26 +38,28 @@ module.exports = postController =  {
   fetchPostData: async (req, res) => {
     try {
       const { postId } = req.query;
-      console.log(`postId:${postId}`)
 
       // Use Mongoose to search for post
       const post = await Post.findById(postId)
-      .select('-likes -__v -comments -postImageFileId -_id')
-      .populate({ path: 'user', select: 'username -_id' })
-      .populate({ path: 'parentPost', populate: 'user', select: 'user' })
-      .exec()
-      const { parentPost, user, ...rest } = post.toObject(); 
-      const modifiedPost = { ...rest, ...user, parentPostUsername:parentPost.user.username };
-      if (modifiedPost) {
-        res.status(200).json(modifiedPost);
-      } else {
-        res.status(404).json({ error: "Post not found" });
+        .select('-likes -__v -comments -postImageFileId -_id')
+        .populate({ path: 'user', select: 'username -_id' })
+        .populate({ path: 'parentPost', populate: { path: 'user', select: 'username' } })
+        .exec();
+      
+      if (!post) {
+        return res.status(404).json({ error: "Post not found" });
       }
+      console.log(post)
+      const { parentPost, user, ...rest } = post.toObject(); 
+      const modifiedPost = { ...rest, ...user, parentPostUsername: parentPost ? parentPost.user.username : null};
+
+      res.status(200).json(modifiedPost);
     } catch (error) {
-      console.error("Error getting user:", error);
+      console.error("Error getting post:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   },
+
   likePost: async (req, res) => {
     try {
       const { userId, postId } = req.body;

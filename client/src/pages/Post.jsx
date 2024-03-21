@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom'
 import styles from './Post.module.scss';
 import usePostReplies from '../hooks/usePostReplies';
-import PostList from '../components/PostList';
+// import PostList from '../components/PostList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart, faComment } from '@fortawesome/free-regular-svg-icons';
@@ -95,7 +95,7 @@ const Post = () => {
           </div>
         </div>
       </div>
-      <PostList/>
+      {/* <PostList/> */}
     </div>
   )
 }
