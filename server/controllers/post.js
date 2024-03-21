@@ -39,13 +39,15 @@ module.exports = postController =  {
     try {
       const { postId } = req.query;
       console.log(`postId:${postId}`)
+
       // Use Mongoose to search for post
       const post = await Post.findById(postId)
       .select('-likes -__v -comments -postImageFileId -_id')
       .populate({ path: 'user', select: 'username -_id' })
+      .populate({ path: 'parentPost', populate: 'user', select: 'user' })
       .exec()
-      const { user, ...rest } = post.toObject(); 
-      const modifiedPost = { ...rest, ...user };
+      const { parentPost, user, ...rest } = post.toObject(); 
+      const modifiedPost = { ...rest, ...user, parentPostUsername:parentPost.user.username };
       if (modifiedPost) {
         res.status(200).json(modifiedPost);
       } else {

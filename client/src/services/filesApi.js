@@ -25,14 +25,14 @@ export class filesApi {
                 params: { postId },
             })
         ]);
-
         // Convert blob to Base64
-        const postImageBase64 = await blobToBase64(postImageBlobResponse.data);
-
+        const postImageBase64 = !postImageJsonResponse.data.error ? await blobToBase64(postImageBlobResponse.data) : null;
+        const postImageMetadata =!postImageJsonResponse.data.error ? postImageJsonResponse.data : null
+      
         // Return both Blob image data and Json data
         return {
             postImageBase64,
-            postImageMetadata: postImageJsonResponse.data,
+            postImageMetadata,
         };
         
     } catch (error) {

@@ -183,7 +183,7 @@ module.exports = filesController = {
 
             // Check if file is not found
             if (!post || !post.postImageFileId) {
-                return res.status(200).json({ msg: 'Post image id not found' });
+                return res.status(200).json({ error: 'Post image id not found' });
             }
 
             // Find the files by filename:fileId
