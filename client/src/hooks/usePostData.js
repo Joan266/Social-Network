@@ -23,7 +23,6 @@ const useFetchPostData = ({ postId, username }) => {
 
         const { postImageBase64, postImageMetadata } = postImageResponse;
 
-        console.log(postDataResponse)
         setPostData({...postDataResponse, profilePicImgUrl: profilePicBase64, postImageUrl: postImageBase64, ...postImageMetadata});
       } catch (error) {
         console.error('Error fetching post data:', error);

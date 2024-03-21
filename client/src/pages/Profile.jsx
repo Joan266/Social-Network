@@ -30,12 +30,12 @@ const Profile = () => {
             userData={userData}
           />
       )}
-      <div className={styles.navContainer}>
-        <div className={styles.nameLabel}>
-          {userData.name}
-        </div>
-      </div>
       <div className={styles.profileContainer}>
+        <div className={styles.navContainer}>
+          <div className={styles.nameLabel}>
+            {userData.name}
+          </div>
+        </div>
         <div className={styles.userContainer}>
           <div className={styles.banner}>
             {userData.profileBannerImgUrl && <img src={userData.profileBannerImgUrl} alt="banner" />}

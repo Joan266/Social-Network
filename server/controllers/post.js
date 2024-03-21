@@ -162,20 +162,22 @@ module.exports = postController =  {
 postReplies: async (req, res) => {
   try {
       const { postId } = req.query;
+      console.log(postId)
       // Use Mongoose to search for posts of users with privacyStatus set to false
       const post = await Post.findById(postId)
-      .select('comments -_id')
-      .populate({ path: 'comments', select: '_id' })
+      .select('comments')
+      .populate({
+        path: 'comments',
+        select: 'user',
+        populate: {
+          path: 'user',
+          select: 'username'
+        }
+      })
       .exec()
-      // Check if posts were found
-      if (post && post.comments) {
-          console.log(post.comments);
-          // Send the retrieved posts in the response
-          res.status(200).json(post.comments);
-      } else {
-          // Send a 404 error if no posts were found
-          res.status(404).json({ error: "Post replies not found" });
-      }
+      
+      console.log(post)
+      res.status(200).json({ posts: post ? post.comments : [], error: !post });
   } catch (error) {
       // Handle errors and send a 500 error response
       console.error("Error getting post replies:", error);

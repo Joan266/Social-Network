@@ -1,21 +1,22 @@
 import { Suspense, lazy } from 'react';
 import styles from './PostList.module.scss';
-import useProfilePosts from '../hooks/useProfilePosts';
+import usePostReplies from '../hooks/usePostReplies';
 // Lazy load the component containing the image
 const PostDetails = lazy(() => import('./PostDetails'));
 
-const ProfilePostsList = ({username}) => {
-  const { isLoading, isError, posts } = useProfilePosts(username);
+const PostRepliesList = ({postId}) => {
+  const { isLoading, isError, posts } = usePostReplies(postId);
   return (
     <>
       {posts && posts.length > 0 && 
         <div id="post-list" className={styles.postsContainer}>
           
-          {posts.map(( post, index ) => (
+          {posts.map(( post ) => (
             <Suspense key={post._id} fallback={""}>
               <PostDetails 
                 postId={post._id} 
                 username={post.user.username}
+                page='post'
               />
             </Suspense>
           ))}
@@ -32,4 +33,4 @@ const ProfilePostsList = ({username}) => {
   )
 }
 
-export default ProfilePostsList;
+export default PostRepliesList;
