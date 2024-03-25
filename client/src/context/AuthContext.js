@@ -13,6 +13,10 @@ export const authReducer = (state, action) => {
       // Stringify and store user in local storage
       localStorage.setItem('user', JSON.stringify(action.payload));
       return { user: action.payload };
+    case 'UPDATE_PROFILE_PIC':
+      // Update profile pic in user object and store in local storage
+      localStorage.setItem('user', JSON.stringify({ ...state.user, profilePicBase64: action.profilePicBase64 }));
+      return { user: { ...state.user, profilePicBase64: action.profilePicBase64 } };
     case 'LOGOUT':
       // Remove user from local storage
       localStorage.removeItem('user');

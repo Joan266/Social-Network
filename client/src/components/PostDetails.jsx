@@ -10,12 +10,11 @@ import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-const PostDetails = ({ postId, username,page }) => {
+const PostDetails = ({ postId, username, page }) => {
   const postRef = useRef(null);
   const {  postData, isLoading } = useFetchPostData({postId, username});
   const { handleLikeToggle, isPostLiked } = usePostLike({postId});
   const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
-  const [ commentsCount, setCommentsCount ] = useState(0);
   const [ isPostVisible, setIsPostVisible ] = useState(false);
   const navigate = useNavigate(); 
   useEffect(() => {
@@ -58,11 +57,6 @@ const PostDetails = ({ postId, username,page }) => {
   const handlePostLink = () => {
     navigate(`/post/${postId}/${username}`); 
   };
-  
-  const increaseCommentsCount = () => {
-    setCommentsCount(commentsCount + 1);
-  };
-
 
   if (isLoading || !postData) return "";
   
@@ -71,8 +65,7 @@ const PostDetails = ({ postId, username,page }) => {
         {isPostFormVisible && (
           <PostForm
             setIsPostFormVisible={setIsPostFormVisible}
-            postIsResponseComment={postData ? postData : null}
-            increaseCommentsCount={increaseCommentsCount}
+            postFormCommentData={postData ? postData : null}
           />
         )}
         <div className={styles.profilePicContainer}>
@@ -113,7 +106,7 @@ const PostDetails = ({ postId, username,page }) => {
               <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>
                 <FontAwesomeIcon icon={faComment} className="rounded me-2" />
               </div>
-              <span>{postData.commentsCount + commentsCount}</span>
+              <span>{postData.commentsCount}</span>
             </div>
             <div className={styles.likesContainer}>
               <div className={styles.heart} onClick={(e) => { e.stopPropagation(); handleLikeToggle(); }}>

@@ -41,9 +41,9 @@ module.exports = postController =  {
 
       // Use Mongoose to search for post
       const post = await Post.findById(postId)
-        .select('-likes -__v -comments -postImageFileId -_id')
+        .select('-likes -__v -comments -postImageFileId')
         .populate({ path: 'user', select: 'username -_id' })
-        .populate({ path: 'parentPost', populate: { path: 'user', select: 'username' } })
+        .populate({ path: 'parentPost', select: 'user' , populate: { path: 'user', select: 'username' } })
         .exec();
       
       if (!post) {

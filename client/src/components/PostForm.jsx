@@ -48,7 +48,7 @@ const PostTargeted = ({postData}) => {
 
 
 
-const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseCommentsCount}) => {
+const PostForm = ({setIsPostFormVisible, postFormCommentData }) => {
   const {user} = useAuthContext();
   const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
@@ -90,12 +90,12 @@ const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseComments
 
   const handlePostSubmit = async () => {
     if(isLoading || (content.trim() === "" && !postImageFile))return;
+    console.log(postFormCommentData)
     const newPostResponse = await createPost({
       content,
-      postId: postIsResponseComment ?  postIsResponseComment._id:false,
+      postId: postFormCommentData ?  postFormCommentData._id:false,
       postImageFile,
     })
-    postIsResponseComment && increaseCommentsCount()
     setContent("")
     const navigateString = `/home/${newPostResponse._id}`;
     navigate(navigateString); 
@@ -125,7 +125,7 @@ const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseComments
             </div>
           </div>
           <div className={styles.body}>
-            {postIsResponseComment && <PostTargeted postData={postIsResponseComment}/>}
+            {postFormCommentData && <PostTargeted postData={postFormCommentData}/>}
             <div className={styles.container}>
               <div className={styles.profilePicContainer}>
                 <div className={styles.profilePic}>
@@ -139,7 +139,7 @@ const PostForm = ({setIsPostFormVisible, postIsResponseComment, increaseComments
                     setContent={setContent}
                     maxLength="200"
                     value={content}
-                    placeholder={postIsResponseComment ? "Add another post" : "What is happening?!"}
+                    placeholder={postFormCommentData ? "Add another post" : "What is happening?!"}
                   />
                 </div>
                 {postImageUrl && (
