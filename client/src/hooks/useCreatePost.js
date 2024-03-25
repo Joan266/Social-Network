@@ -10,7 +10,6 @@ export const useCreatePost = () => {
   const createPost = async ({content, postId, postImageFile}) => {
     setIsLoading(true);
     let postData = { postId, content, userId: user._id };
-    
     const postImageFileId = postImageFile ? await uploadFile({token: user.token,file:postImageFile}) : null;
 
     postData.postImageFileId = postImageFileId;
