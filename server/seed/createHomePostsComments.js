@@ -6,6 +6,28 @@ const User = require('../models/user');
 
 const shuffleArray = require('./shuffleArray');
 
+const fakeComments = [
+  "¡Qué foto tan impresionante! 😍",
+  "Simplemente hermosa. 🌟",
+  "Me encanta esta captura. 📸",
+  "¡Increíblemente encantador! 💖",
+  "¡Bravo! 👏",
+  "¡Qué momento tan mágico capturado! ✨",
+  "Hermosa composición. 🎨",
+  "¡Increíble vista! 🌄",
+  "¡Estás brillando con luz propia! 💫",
+  "Simplemente perfecto. 👌",
+  "¡Qué foto tan inspiradora! 🌠",
+  "¡Maravillosa! 💐",
+  "¡Me hace sonreír! 😊",
+  "¡Qué captura tan encantadora! 🌺",
+  "¡Qué elegancia! 💃",
+  "¡Impresionante! 😮",
+  "¡Genialidad en cada detalle! 🌟",
+  "¡Una foto digna de enmarcar! 🖼️",
+  "¡Fascinante! 🌌",
+  "¡Simple y hermosa! 🌸"
+];
 // Function to create comments for picture posts
 const createPostComments = async ({ homePostsInfo, usersIds }) => {
   for (const post of homePostsInfo) {
@@ -15,7 +37,7 @@ const createPostComments = async ({ homePostsInfo, usersIds }) => {
     if (likesCount <= 0) continue;
 
     // Generate a random number of comments for the post
-    const randomNumOfComments = Math.floor(Math.random() * likesCount);
+    const randomNumOfComments = Math.floor(Math.random() * likesCount/2);
 
     // If there are no comments to create, skip to the next post
     if (randomNumOfComments <= 0) continue;
@@ -40,7 +62,7 @@ const createPostComments = async ({ homePostsInfo, usersIds }) => {
       // Create a new comment using the Post model
       const comment = await Post.create({
         _id: new mongoose.Types.ObjectId(),
-        content: "This is a comment",
+        content: fakeComments[Math.floor(Math.random() * fakeComments.length)],
         likesCount: likes.length,
         likes,
         parentPost: _id, // Reference to the parent post
