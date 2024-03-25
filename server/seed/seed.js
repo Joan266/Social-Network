@@ -10,6 +10,7 @@ const uploadHomePostsImageList = require('./uploadHomePostsImageList');
 const createUsers = require('./createUsers');
 const createHomePosts = require('./createHomePosts');
 const createHomePostsComments = require('./createHomePostsComments');
+const addUsersFollowers = require('./addUsersFollowers');
 
 const configDB = require('./configDB')
 
@@ -38,7 +39,7 @@ const seedUsers = async () => {
     // Constants for seed data
     const USERS_NUM = 30;
     const POSTS_NUM = 150;
-    const POSTS_PAGE = 2;
+    const POSTS_PAGE = 3;
     const profilePicUrl = "https://picsum.photos/150.webp";
     const bannerUrl = "https://picsum.photos/600/200.webp";
     const homePostsUrl = `https://picsum.photos/v2/list?page=${POSTS_PAGE}&limit=${POSTS_NUM}`;
@@ -57,6 +58,11 @@ const seedUsers = async () => {
     console.log('Creating users...');
     const usersIds = await createUsers({ USERS_NUM, profilePicFilesInfo, bannerFilesInfo });
     console.log('Users created successfully.');
+
+    // Add users followers
+    console.log('Adding users followers...');
+    await addUsersFollowers({ usersIds });
+    console.log('Users followers added');
 
     // Create home posts
     console.log('Creating home posts...');
