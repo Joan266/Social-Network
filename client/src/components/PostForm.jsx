@@ -48,7 +48,7 @@ const PostTargeted = ({postData}) => {
 
 
 
-const PostForm = ({setIsPostFormVisible, postFormCommentData }) => {
+const PostForm = ({setIsPostFormVisible, postFormCommentData, handleCommentCount }) => {
   const {user} = useAuthContext();
   const { createPost, isLoading } = useCreatePost();
   const [content, setContent] = useState('')
@@ -90,13 +90,13 @@ const PostForm = ({setIsPostFormVisible, postFormCommentData }) => {
 
   const handlePostSubmit = async () => {
     if(isLoading || (content.trim() === "" && !postImageFile))return;
-    console.log(postFormCommentData)
     const newPostResponse = await createPost({
       content,
       postId: postFormCommentData ?  postFormCommentData._id:false,
       postImageFile,
     })
     setContent("")
+    handleCommentCount()
     const navigateString = `/home/${newPostResponse._id}`;
     navigate(navigateString); 
     setIsPostFormVisible(false)

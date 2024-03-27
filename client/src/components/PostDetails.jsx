@@ -13,10 +13,13 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 const PostDetails = ({ postId, username, page }) => {
   const postRef = useRef(null);
   const {  postData, isLoading } = useFetchPostData({postId, username});
-  const { handleLikeToggle, isPostLiked } = usePostLike({postId});
+  const [ likeCountSwitch, setLikeCountSwitch ] = useState(0);
+  const { handleLikeToggle, isPostLiked } = usePostLike({postId, setLikeCountSwitch});
   const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
+  const [ commentsCount, setCommentsCount ] = useState(0);
   const [ isPostVisible, setIsPostVisible ] = useState(false);
   const navigate = useNavigate(); 
+  
   useEffect(() => {
     const observePostRef = () => {
       const element = postRef ? postRef.current : null;
@@ -58,6 +61,10 @@ const PostDetails = ({ postId, username, page }) => {
     navigate(`/post/${postId}/${username}`); 
   };
 
+  const handleCommentCount = () => {
+    setCommentsCount(commentsCount + 1);
+  };
+
   if (isLoading || !postData) return "";
   
   return (
@@ -66,6 +73,7 @@ const PostDetails = ({ postId, username, page }) => {
           <PostForm
             setIsPostFormVisible={setIsPostFormVisible}
             postFormCommentData={postData ? postData : null}
+            handleCommentCount={handleCommentCount}
           />
         )}
         <div className={styles.profilePicContainer}>
@@ -106,7 +114,7 @@ const PostDetails = ({ postId, username, page }) => {
               <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>
                 <FontAwesomeIcon icon={faComment} className="rounded me-2" />
               </div>
-              <span>{postData.commentsCount}</span>
+              <span>{postData.commentsCount + commentsCount}</span>
             </div>
             <div className={styles.likesContainer}>
               <div className={styles.heart} onClick={(e) => { e.stopPropagation(); handleLikeToggle(); }}>
@@ -116,7 +124,7 @@ const PostDetails = ({ postId, username, page }) => {
                   style={{ color: isPostLiked ? 'rgb(255, 0, 162)' : '' }}
                 />
               </div>
-              <span>{postData.likesCount + (isPostLiked ? 1 : 0)}</span>
+              <span>{postData.likesCount + likeCountSwitch }</span>
             </div>
           </div>
         </div>
