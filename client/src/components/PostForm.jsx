@@ -96,7 +96,7 @@ const PostForm = ({setIsPostFormVisible, postFormCommentData, handleCommentCount
       postImageFile,
     })
     setContent("")
-    handleCommentCount()
+    handleCommentCount && handleCommentCount()
     const navigateString = `/home/${newPostResponse._id}`;
     navigate(navigateString); 
     setIsPostFormVisible(false)
