@@ -38,11 +38,11 @@ module.exports = postController =  {
   delete: async (req, res) => {
     const { postId } = req.body
     try {
-        const response = await Post.findByIdAndDelete(postId); 
-        console.log(response);
-        if (response) {
+        const post = await Post.findByIdAndDelete(postId); 
+        console.log(post);
+        if (post) {
             console.log(`Post: ${postId} deleted successfully`);
-            res.status(200).json({ message: `Post ${postId} deleted successfully` }); // Send success message
+            res.status(200).json({ message: `Post ${postId} deleted successfully`,postImageFileId: post.postImageFileId }); // Send success message
         } else {
             console.log(`Post delete operation failed`);
             res.status(404).json({ error: "Post not found" }); // Send 404 if post not found

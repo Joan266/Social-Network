@@ -19,4 +19,7 @@ router.get('/postimagemetadata', requireAuth,  filesController.postImageMetadata
 // ulpoad file route
 router.post('/upload', upload.single('file'), requireAuth,  filesController.upload);
 
+// delete file route
+router.post('/delete', upload.single('file'), requireAuth,  filesController.delete);
+
 module.exports = router;

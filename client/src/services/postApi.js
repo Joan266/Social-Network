@@ -28,9 +28,12 @@ export class postApi {
   static async delete(data, headers) {
     try {
         const auth = createCustomAxios(headers)
-        const response = await auth.post("/post/delete", data); 
-        console.log(response)
-        return response
+        const deletePostResponse = await auth.post("/post/delete", data); 
+        console.log(deletePostResponse)
+        if(deletePostResponse.ok && deletePostResponse.postImageFileId){ 
+            const deleteImagePostResponse = await auth.post("/file/delete", {fileId:deletePostResponse.postImageFileId}); 
+        }
+        return deletePostResponse
     } catch ({response}) {
         console.log("Error deleting post:", response.error);
     }
