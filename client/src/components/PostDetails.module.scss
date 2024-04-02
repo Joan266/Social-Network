@@ -92,12 +92,12 @@
         justify-content: center;
         width: 35px;
         height: 35px;
-        font-size: 17px;
-        color: #1D9BF0;
+        font-size: 16px;
+        color: #ccc;
         border-radius: 50%;
         transition: color 0.3s background-color 0.3s;
         &:hover{
-          color: rgba(255, 0, 0, 0.745);
+          color: rgba(255, 0, 0, 0.558);
           background-color: rgba(255, 0, 0, 0.212);
         }
         svg{

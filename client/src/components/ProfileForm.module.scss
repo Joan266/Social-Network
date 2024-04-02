@@ -47,15 +47,15 @@
       padding: 0 18px;
       .xMark{
         display: flex;
-        width: 62px;
+        width: 45px;
         align-items: center;
         svg{
-          font-size: 25px;
+          font-size: 24px;
           cursor: pointer;
           color: #0f1419d8;
           &:hover {
             color: #007bff;
-            transition: color 0.3s ease; 
+            transition: color 0.2s ease; 
           }
         }
       }
@@ -63,7 +63,7 @@
         width: 410px;
         color: #0f1419;
         font-weight: 600;
-        font-size: 22px;
+        font-size: 25px;
       }
       .saveButton {
         width: 73px;
@@ -79,7 +79,7 @@
           background-color: var(--strong-text-color);
           transition: background-color 0.3s;
           &:hover{
-           background-color: var(--light-text-color);
+           background-color: #0f1419db;
           }
         }
       }

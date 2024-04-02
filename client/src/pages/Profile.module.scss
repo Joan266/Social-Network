@@ -8,6 +8,7 @@
   backdrop-filter: blur(25px);
   transition: background-color 0.2s;
   padding-left: 22px;
+  z-index: 5;
   .nameLabel{
     color:var(--strong-text-color);
     font-size: 22px;

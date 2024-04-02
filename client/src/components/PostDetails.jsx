@@ -17,6 +17,7 @@ const PostDetails = ({ postId, username, page }) => {
   const [ likeCountSwitch, setLikeCountSwitch ] = useState(0);
   const { handleLikeToggle, isPostLiked } = usePostLike({postId, setLikeCountSwitch});
   const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
+  const [ isDeleteVisible, setIsDeleteVisible ] = useState(false);
   const [ commentsCount, setCommentsCount ] = useState(0);
   const [ isPostVisible, setIsPostVisible ] = useState(false);
   const navigate = useNavigate(); 
@@ -77,6 +78,13 @@ const PostDetails = ({ postId, username, page }) => {
             handleCommentCount={handleCommentCount}
           />
         )}
+        {isDeleteVisible && (
+          <PostForm
+            setIsPostFormVisible={setIsPostFormVisible}
+            postFormCommentData={postData ? postData : null}
+            handleCommentCount={handleCommentCount}
+          />
+        )}
         <div className={styles.profilePicContainer}>
           <div className={styles.profilePic}>
             {postData.profilePicImgUrl && isPostVisible ? <img src={postData.profilePicImgUrl} alt='post-profile-pic'></img>:
@@ -95,7 +103,7 @@ const PostDetails = ({ postId, username, page }) => {
               <div className={styles.dote}>·</div>
               <div className={styles.date}>{timeSince(postData.createdAt)}</div>
             </div>
-            { username === user.username && <div className={styles.deletePostPointer}>
+            { username === user.username && <div className={styles.deletePostPointer} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>
               <FontAwesomeIcon icon={faTrashCanArrowUp} className="rounded me-2" />
             </div>}
           </div>
