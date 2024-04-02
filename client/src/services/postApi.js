@@ -25,6 +25,16 @@ export class postApi {
           console.log("Error creating post:", response.error);
       }
   }
+  static async delete(data, headers) {
+    try {
+        const auth = createCustomAxios(headers)
+        const response = await auth.post("/post/delete", data); 
+        console.log(response)
+        return response
+    } catch ({response}) {
+        console.log("Error deleting post:", response.error);
+    }
+}
   static async likePost(data, headers) {
       try {
           const auth = createCustomAxios(headers)

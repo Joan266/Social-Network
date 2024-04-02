@@ -6,6 +6,9 @@ const router = express.Router()
 // create post route
 router.post('/create', requireAuth,  postController.create);
 
+// delete post route
+router.post('/delete', requireAuth,  postController.delete);
+
 // get post data route
 router.get('/fetchpostdata', requireAuth, postController.fetchPostData);
 
