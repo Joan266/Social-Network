@@ -86,27 +86,25 @@
           align-items: center;
         }
       }
-      .controls {
-        .ellipsis{
-          position: relative;
-          cursor: pointer;
-          justify-content: center;
-          width: 35px;
-          height: 35px;
-          font-size: 17px;
-          color: #0f1419;
-          border-radius: 50%;
-          transition: color 0.3s background-color 0.3s;
-          &:hover{
-            color: #1D9BF0;
-            background-color: #1d9cf01c;
-          }
-          svg{
-            position: absolute;
-            top: 50%;
-            left:50%;
-            transform: translate(-50%, -50%);
-          }
+      .deletePostPointer {
+        position: relative;
+        cursor: pointer;
+        justify-content: center;
+        width: 35px;
+        height: 35px;
+        font-size: 17px;
+        color: #1D9BF0;
+        border-radius: 50%;
+        transition: color 0.3s background-color 0.3s;
+        &:hover{
+          color: rgba(255, 0, 0, 0.745);
+          background-color: rgba(255, 0, 0, 0.212);
+        }
+        svg{
+          position: absolute;
+          top: 50%;
+          left:50%;
+          transform: translate(-50%, -50%);
         }
       }
     }

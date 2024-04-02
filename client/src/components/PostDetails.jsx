@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './PostDetails.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faHeart, faTrashCanArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart, faComment } from '@fortawesome/free-regular-svg-icons';
 import { timeSince } from '../utils/useTimeSinceString';
 import useFetchPostData from '../hooks/usePostData';
@@ -9,8 +9,9 @@ import usePostLike from '../hooks/usePostLike';
 import PostForm from './PostForm';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
-
+import { useAuthContext } from '../hooks/useAuthContext';
 const PostDetails = ({ postId, username, page }) => {
+  const { user } = useAuthContext();
   const postRef = useRef(null);
   const {  postData, isLoading } = useFetchPostData({postId, username});
   const [ likeCountSwitch, setLikeCountSwitch ] = useState(0);
@@ -94,6 +95,9 @@ const PostDetails = ({ postId, username, page }) => {
               <div className={styles.dote}>·</div>
               <div className={styles.date}>{timeSince(postData.createdAt)}</div>
             </div>
+            { username === user.username && <div className={styles.deletePostPointer}>
+              <FontAwesomeIcon icon={faTrashCanArrowUp} className="rounded me-2" />
+            </div>}
           </div>
           {postData.parentPostUsername && page !== "post" && (
             <div className={styles.replyInfo}>
