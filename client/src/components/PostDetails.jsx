@@ -7,9 +7,11 @@ import { timeSince } from '../utils/useTimeSinceString';
 import useFetchPostData from '../hooks/usePostData';
 import usePostLike from '../hooks/usePostLike';
 import PostForm from './PostForm';
+import DeleteMenu from './DeleteMenu';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import { useAuthContext } from '../hooks/useAuthContext';
+
 const PostDetails = ({ postId, username, page }) => {
   const { user } = useAuthContext();
   const postRef = useRef(null);
@@ -17,7 +19,7 @@ const PostDetails = ({ postId, username, page }) => {
   const [ likeCountSwitch, setLikeCountSwitch ] = useState(0);
   const { handleLikeToggle, isPostLiked } = usePostLike({postId, setLikeCountSwitch});
   const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
-  const [ isDeleteVisible, setIsDeleteVisible ] = useState(false);
+  const [ isDeleteMenuVisible, setIsDeleteMenuVisible ] = useState(false);
   const [ commentsCount, setCommentsCount ] = useState(0);
   const [ isPostVisible, setIsPostVisible ] = useState(false);
   const navigate = useNavigate(); 
@@ -78,11 +80,10 @@ const PostDetails = ({ postId, username, page }) => {
             handleCommentCount={handleCommentCount}
           />
         )}
-        {isDeleteVisible && (
-          <PostForm
-            setIsPostFormVisible={setIsPostFormVisible}
-            postFormCommentData={postData ? postData : null}
-            handleCommentCount={handleCommentCount}
+        {isDeleteMenuVisible && (
+          <DeleteMenu
+            setIsDeleteMenuVisible={setIsDeleteMenuVisible}
+            postId={postId}
           />
         )}
         <div className={styles.profilePicContainer}>
@@ -103,7 +104,8 @@ const PostDetails = ({ postId, username, page }) => {
               <div className={styles.dote}>·</div>
               <div className={styles.date}>{timeSince(postData.createdAt)}</div>
             </div>
-            { username === user.username && <div className={styles.deletePostPointer} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>
+            { username === user.username && 
+            <div className={styles.deletePostPointer} onClick={(e) => {e.stopPropagation(); setIsDeleteMenuVisible(true);}}>
               <FontAwesomeIcon icon={faTrashCanArrowUp} className="rounded me-2" />
             </div>}
           </div>

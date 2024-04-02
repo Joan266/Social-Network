@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 3;
+  z-index: 6;
 }
 .imgOverlay{
   top: 0;
@@ -24,7 +24,7 @@
   height: auto;
   border-radius: 20px;
   background-color: transparent;
-  z-index: 4;
+  z-index: 7;
   overflow: hidden;
   .profileForm {
     background-color: white;
@@ -44,19 +44,32 @@
       backdrop-filter: blur(10px);
       align-items: center;
       z-index: 3;
-      padding: 0 18px;
+      padding-left: 8px;
+      padding-right: 18px;
       .xMark{
+        cursor: pointer;
+        position: relative;
         display: flex;
-        width: 45px;
+        height: 42px;
+        width: 42px;
+        border-radius: 50%;
+        justify-content: center;
         align-items: center;
-        svg{
-          font-size: 24px;
-          cursor: pointer;
-          color: #0f1419d8;
-          &:hover {
-            color: #007bff;
+        &:hover {
+          background-color: rgb(219, 217, 217);
+          transition: background-color 0.2s ease; 
+          svg{
+            color: #0f1419d8;
             transition: color 0.2s ease; 
           }
+        }
+        svg{
+          font-size: large;
+          position: absolute;
+          top: 50%;
+          left:50%;
+          transform: translate(-50%, -50%);
+          color: #007bff;
         }
       }
       .profileLabel {
@@ -64,10 +77,12 @@
         color: #0f1419;
         font-weight: 600;
         font-size: 25px;
+        margin-left: 13px;
       }
       .saveButton {
-        width: 73px;
+        width: 93px;
         button {
+          width: 100%;
           cursor: pointer;
           border-radius: 40px;
           font-weight: 600;

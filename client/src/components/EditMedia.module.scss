@@ -12,19 +12,32 @@
     font-size: 17px;
     min-height: 58px;
     align-items: center;
-    padding: 0 18px;
+    padding-left: 8px;
+    padding-right: 18px;
     .xMark{
+      cursor: pointer;
+      position: relative;
       display: flex;
-      width: 62px;
+      height: 42px;
+      width: 42px;
+      border-radius: 50%;
+      justify-content: center;
       align-items: center;
-      svg{
-        font-size: 22px;
-        cursor: pointer;
-        color: #0f1419d8;
-        &:hover {
-          color: #007bff;
-          transition: color 0.3s ease; 
+      &:hover {
+        background-color: rgb(219, 217, 217);
+        transition: background-color 0.2s ease; 
+        svg{
+          color: #0f1419d8;
+          transition: color 0.2s ease; 
         }
+      }
+      svg{
+        font-size: large;
+        position: absolute;
+        top: 50%;
+        left:50%;
+        transform: translate(-50%, -50%);
+        color: #007bff;
       }
     }
     .editMediaLabel {
@@ -32,6 +45,7 @@
       color: #0f1419;
       font-weight: 500;
       font-size: 22px;
+      margin-left: 13px;
     }
     .applyButton {
       width: 73px;
