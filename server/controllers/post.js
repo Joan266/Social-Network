@@ -45,7 +45,7 @@ module.exports = postController =  {
             res.status(200).json({ message: `Post ${postId} deleted successfully`,postImageFileId: post.postImageFileId }); // Send success message
         } else {
             console.log(`Post delete operation failed`);
-            res.status(404).json({ error: "Post not found" }); // Send 404 if post not found
+            res.status(404).json({ error: "Post not found" });
         }
     } catch (error) {
         console.log(`Error: ${error}`);

@@ -12,7 +12,10 @@ const DeleteMenu = ({postId, setIsDeleteMenuVisible }) => {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${user.token}`,
     };
-    const response = await postApi.delete({postId}, headers);
+    await postApi.delete({postId}, headers);
+    const navigateString = `/profile`;
+    setIsDeleteMenuVisible(false)
+    navigate(navigateString); 
   }
   return (
     <div className={styles.deleteMenuOverlay}onClick={(e)=>e.stopPropagation()}>
@@ -28,7 +31,7 @@ const DeleteMenu = ({postId, setIsDeleteMenuVisible }) => {
         </div>
         <div className={styles.body}>
           <div className={styles.container}>
-           <p>Seguro que quieres borrar el post?</p> 
+           <p>Are you sure you want to delete the post?</p> 
           </div>
         </div>
         <div className={styles.controls}>

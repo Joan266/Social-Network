@@ -74,7 +74,7 @@ module.exports = userController =  {
       const { query } = req.query;
 
       // Use Mongoose to search for user
-      const user = await User.findOne({ username: query }).select('-_id -__v -password -following -followers');
+      const user = await User.findOne({ username: query }).select('-_id -__v -password -following -followers -posts');
 
       if (user) {
         console.log(user)
@@ -99,7 +99,7 @@ module.exports = userController =  {
             options: { sort: { createdAt: -1 } },
             populate: { path: 'user', select: 'username' },
             select: '_id createdAt user' ,
-            limit:15
+            limit: 15,
         })
         .select('posts')
 
