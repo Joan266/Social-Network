@@ -37,9 +37,9 @@ const seedUsers = async () => {
     console.log('All documents in fs.chunks deleted.');
 
     // Constants for seed data
-    const USERS_NUM = 30;
-    const POSTS_NUM = 150;
-    const POSTS_PAGE = 3;
+    const USERS_NUM = 40;
+    const POSTS_NUM = 100;
+    const POSTS_PAGE = 4;
     const profilePicUrl = "https://picsum.photos/150.webp";
     const bannerUrl = "https://picsum.photos/600/200.webp";
     const homePostsUrl = `https://picsum.photos/v2/list?page=${POSTS_PAGE}&limit=${POSTS_NUM}`;

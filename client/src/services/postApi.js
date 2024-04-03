@@ -25,6 +25,19 @@ export class postApi {
           console.log("Error creating post:", response.error);
       }
   }
+  static async delete(data, headers) {
+    try {
+        const auth = createCustomAxios(headers)
+        const deletePostResponse = await auth.post("/post/delete", data); 
+        console.log(deletePostResponse)
+        if(deletePostResponse.ok && deletePostResponse.postImageFileId){ 
+            const deleteImagePostResponse = await auth.post("/file/delete", {fileId:deletePostResponse.postImageFileId}); 
+        }
+        return deletePostResponse.ok
+    } catch ({response}) {
+        console.log("Error deleting post:", response.error);
+    }
+}
   static async likePost(data, headers) {
       try {
           const auth = createCustomAxios(headers)

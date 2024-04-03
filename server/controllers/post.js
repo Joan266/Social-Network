@@ -35,6 +35,25 @@ module.exports = postController =  {
       })
     }
   },
+  delete: async (req, res) => {
+    const { postId } = req.body
+    try {
+        const post = await Post.findByIdAndDelete(postId); 
+        console.log(post);
+        if (post) {
+            console.log(`Post: ${postId} deleted successfully`);
+            res.status(200).json({ message: `Post ${postId} deleted successfully`,postImageFileId: post.postImageFileId }); // Send success message
+        } else {
+            console.log(`Post delete operation failed`);
+            res.status(404).json({ error: "Post not found" });
+        }
+    } catch (error) {
+        console.log(`Error: ${error}`);
+        res.status(500).json({
+            error: 'Internal Server Error',
+        }); // Send 500 for any unexpected errors
+    }
+},
   fetchPostData: async (req, res) => {
     try {
       const { postId } = req.query;
