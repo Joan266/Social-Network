@@ -57,11 +57,12 @@ module.exports = userController =  {
               { following: userId }, 
               { privacyStatus: false }, 
             ]
-          }
+          },
+          { _id: { $ne: userId } } 
         ]
       })
         .select('profilePicFileId name username')
-        .limit(3)
+        .limit(7)
       console.log(users)
       res.status(200).json(users);
     } catch (error) {
