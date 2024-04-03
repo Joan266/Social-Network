@@ -96,12 +96,13 @@ module.exports = userController =  {
       const user = await User
         .findOne({ username })
         .populate({ 
-            path: 'posts',
-            options: { sort: { createdAt: -1 } },
-            populate: { path: 'user', select: 'username' },
-            select: '_id createdAt user' ,
-            limit: 15,
-        })
+          path: 'posts',
+          match: { parentPost: { $exists: false } }, 
+          options: { sort: { createdAt: -1 } },
+          populate: { path: 'user', select: 'username' },
+          select: '_id createdAt user' ,
+          limit: 15,
+      })
         .select('posts')
 
       // Check if user exists and send the retrieved posts in the response
