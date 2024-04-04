@@ -13,23 +13,41 @@
     .searchInputContainer {
       display: flex;
       align-items: center;
+      justify-content: left;
       color: var(--light-text-color);
       svg {
         font-size: 0.95rem;
         color: var(--light-text-color)
       }
-
-      .cancelSearch {
+      .xMark{
         cursor: pointer;
+        position: relative;
+        display: flex;
+        height: 29px;
+        min-width: 29px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
         &:hover {
+          background-color: rgb(219, 217, 217);
+          transition: background-color 0.2s ease; 
+          svg{
+            color: #0f1419d8;
+            transition: color 0.2s ease; 
+          }
+        }
+        svg{
+          font-size: small;
+          position: absolute;
+          top: 50%;
+          left:50%;
+          transform: translate(-50%, -50%);
           color: #007bff;
-          transition: color 0.3s ease; 
         }
       }
-
       input {
         margin-left: 18px;
-        margin-right: 18px;
+        margin-right: 8px;
         display: flex;
         padding: 4px;
         border: none;
