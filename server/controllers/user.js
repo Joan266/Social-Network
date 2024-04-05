@@ -112,6 +112,23 @@ module.exports = userController =  {
       res.status(500).json({ error: "Internal Server Error" });
     }
 },
+whoToFollow: async (req, res) => {
+  try { 
+    const { username } = req.query; 
+    
+    // Use Mongoose to search for user excluding the specified username
+    const users = await User
+      .find({ username: { $ne: username } }) // Exclude user with specified username
+      .select('profilePicFileId name username')
+      .limit(15);
+
+    // Check if user exists and send the retrieved response
+    res.status(200).json({ users: users ? users : [], error: !users });
+  } catch (error) {
+    console.error("Error getting users to follow:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+},
   isFollowingUser: async (req, res) => {
     try {
       const { userId, profileUsername } = req.body;

@@ -123,6 +123,19 @@ static async searchUser(data, headers) {
           return response.data;
       }
   }
+  static async fetchWhoToFollow(data,headers) {
+    try {
+        const auth = createCustomAxios(headers)
+
+        const response = await auth.get("/user/whotofollow", {
+            params: data,
+        });
+        return response.data;
+    } catch ({response}) {
+        console.log("Error users to follow not found:", response.data);
+        return response.data;
+    }
+}
   static async followUser(data, headers) {
       try {
           const auth = createCustomAxios(headers)
