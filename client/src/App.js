@@ -9,7 +9,7 @@ import Profile from './pages/Profile'
 import Post from './pages/Post'
 import Navbar from './components/Navbar'
 import SearchBar from './components/SearchBar'
-
+import WhoToFollow from './components/WhoToFollow.jsx';
 const PrincipalLayout = ({ children }) => (
   <div className='mainlayout'>
     <div className='header'>
@@ -21,6 +21,7 @@ const PrincipalLayout = ({ children }) => (
       </div>
       <div className='trending'>
         <SearchBar/>
+        <WhoToFollow/>
       </div>
     </div>
   </div>

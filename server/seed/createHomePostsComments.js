@@ -66,7 +66,7 @@ const createPostComments = async ({ homePostsInfo, usersIds }) => {
         content: fakeComments[Math.floor(Math.random() * fakeComments.length)],
         likesCount: likes.length,
         likes,
-        parentPost: _id, // Reference to the parent post
+        parentPost: _id, 
         user: userId,
         createdAt,
       });

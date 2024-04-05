@@ -63,7 +63,7 @@ const createHomePosts = async ({ usersIds, postImageFileIds }) => {
       _id: new mongoose.Types.ObjectId(), // Generate a new object ID
       postImageFileId,
       likesCount,
-      content: fakePostContent[Math.floor(Math.random() * fakeComments.length)],
+      content: fakePostContent[Math.floor(Math.random() * fakePostContent.length)],
       likes,
       user: userId,
       createdAt,

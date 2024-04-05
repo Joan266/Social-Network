@@ -4,12 +4,14 @@
   margin: 0 auto;
   padding: 10px;
   border-radius: 5px;
-
+  z-index: 4;
+  background-color: white;
   .formContainer {
     background-color: rgba(180, 194, 219, 0.26);
     padding: 10px 15px;
     border-radius: 25px;
     cursor: pointer;
+    z-index: 4;
     .searchInputContainer {
       display: flex;
       align-items: center;
@@ -23,18 +25,15 @@
         cursor: pointer;
         position: relative;
         display: flex;
-        height: 29px;
-        min-width: 29px;
+        height: 25px;
+        min-width: 25px;
         border-radius: 50%;
         justify-content: center;
+        background-color: #007bff;
         align-items: center;
         &:hover {
-          background-color: rgb(219, 217, 217);
+          background-color: #005effc2;
           transition: background-color 0.2s ease; 
-          svg{
-            color: #0f1419d8;
-            transition: color 0.2s ease; 
-          }
         }
         svg{
           font-size: small;
@@ -42,7 +41,7 @@
           top: 50%;
           left:50%;
           transform: translate(-50%, -50%);
-          color: #007bff;
+          color: white;
         }
       }
       input {
@@ -65,8 +64,10 @@
     text-align: center;
     font-size: 0.8rem;
     display: flex;
+    background-color: white;
     color: var(--light-text-color);
     height: 70px;
+    z-index: 4;
   }
 
   .searchResultsContainer {
@@ -74,7 +75,9 @@
     padding: 5px 0;
     border-radius: 10px;
     display: flex;
+    background-color: white;
     flex-direction: column;
+    z-index: 4;
     h3 {
       margin: 0 0 5px;
       font-size: 16px;
@@ -88,12 +91,13 @@
       align-items: center;
       font-size: smaller;
       padding: 13px 18px;
+      background-color: white;
       color: #0f0f0f;
       cursor: pointer;
-
+      z-index: 4;
+      transition: background-color 0.3s ease; 
       &:hover {
-        background-color: #cccccc23;
-        transition: background-color 0.3s ease; // Added transition
+        background-color: #fffafa;
       }
       .profilePic {
         position: relative;
