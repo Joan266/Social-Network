@@ -4,15 +4,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './WhoToFollow.module.scss';
 import { userApi } from '../services/userApi.js';
 import useProfileFollow from '../hooks/useProfileFollow'
+import { useNavigate } from 'react-router-dom'; 
 
 const WhoToFollowSearchResult = ({user, userToken}) => {
   const [ profilePicImgUrl, setProfilePicImgUrl ] =useState(null);
   const [ isLoading, setIsLoading ] =useState(true);
   const { isUserFollowed, handleFollowToggle } = useProfileFollow({username: user.username, isLoggedInUserProfile:false});
   const [followHover, setFollowHover] = useState(false);
-  useEffect(()=>{
-    console.log(user)
-  },[user])
+  const navigate = useNavigate(); 
+
   useEffect(() => {
     const fetchProfilePic = async () => {
       try {
@@ -36,7 +36,7 @@ const WhoToFollowSearchResult = ({user, userToken}) => {
   return (
     <div
       className={styles.userInfoContainer}
-      key={user.username}
+      onClick={() => navigate(`/${user.username}`)} 
     >
       <div className={styles.leftUserContainer}>
         <div className={styles.profilePic}>

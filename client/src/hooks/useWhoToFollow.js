@@ -15,7 +15,7 @@ const useWhoToFollow = () => {
         'Authorization': `Bearer ${user.token}`,
       };
 
-      const whoToFollowResponse = await userApi.fetchWhoToFollow({username:user.username},headers);
+      const whoToFollowResponse = await userApi.fetchWhoToFollow({username:user.username, userId:user._id},headers);
       console.log(whoToFollowResponse)
       setIsError(whoToFollowResponse.error)
       setUsers(whoToFollowResponse.users)

@@ -1,5 +1,3 @@
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom'; 
 import styles from './WhoToFollow.module.scss';
 import useWhoToFollow from '../hooks/useWhoToFollow'
 import WhoToFollowSearchResult from './WhoToFollowSearchResult'

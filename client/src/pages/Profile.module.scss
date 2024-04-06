@@ -84,7 +84,7 @@
             border-radius: 25px;
             font-weight: 600;
             width: 86px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s color  0.3s border  0.3s;
           }
           .follow {
             border: #0f1419 1px solid;
@@ -96,9 +96,9 @@
           }
           .following {
             width: 84px;
-            border: #007bff 1px solid;
+            border: #1D9BF8 1px solid;
             background-color: white;
-            color:#007bff;
+            color:#1D9BF8;
           }
           .unfollow {
             width: 84px;

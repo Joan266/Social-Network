@@ -114,13 +114,18 @@ module.exports = userController =  {
 },
 whoToFollow: async (req, res) => {
   try { 
-    const { username } = req.query; 
+    const { username,  userId } = req.query; 
     
-    // Use Mongoose to search for user excluding the specified username
     const users = await User
-      .find({ username: { $ne: username } }) // Exclude user with specified username
-      .select('profilePicFileId name username')
-      .limit(5);
+    .find({ 
+      _id: { $ne: userId }
+    })
+    .populate({
+      path: 'followers',
+      match: { _id: { $ne: userId } } // Exclude user with specified userId from followers
+    })
+    .select('profilePicFileId name username')
+    .limit(5);
 
     // Check if user exists and send the retrieved response
     res.status(200).json({ users: users ? users : [], error: !users });
