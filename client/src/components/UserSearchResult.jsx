@@ -30,7 +30,6 @@ const UserSearchResult = ({user,handleUserInfoClick, userToken}) => {
     <div
       className={styles.userInfoContainer}
       onClick={() => handleUserInfoClick(user.username)} 
-      key={user.username}
     >
       <div className={styles.profilePic}>
         {profilePicImgUrl ? <img src={profilePicImgUrl} alt='search-profile-pic'></img> : !isLoading ? <FontAwesomeIcon icon={faUser} className="rounded me-2" />: null}

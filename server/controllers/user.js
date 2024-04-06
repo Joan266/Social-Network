@@ -112,6 +112,28 @@ module.exports = userController =  {
       res.status(500).json({ error: "Internal Server Error" });
     }
 },
+whoToFollow: async (req, res) => {
+  try { 
+    const { username,  userId } = req.query; 
+    
+    const users = await User
+    .find({ 
+      _id: { $ne: userId }
+    })
+    .populate({
+      path: 'followers',
+      match: { _id: { $ne: userId } } // Exclude user with specified userId from followers
+    })
+    .select('profilePicFileId name username')
+    .limit(5);
+
+    // Check if user exists and send the retrieved response
+    res.status(200).json({ users: users ? users : [], error: !users });
+  } catch (error) {
+    console.error("Error getting users to follow:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+},
   isFollowingUser: async (req, res) => {
     try {
       const { userId, profileUsername } = req.body;

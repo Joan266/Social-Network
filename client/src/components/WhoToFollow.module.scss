@@ -1,0 +1,125 @@
+// SearchBar.module.scss
+.WhoToFollow {
+  position: absolute;
+  width: 330px;
+  top: 100px;
+  left:10px;
+  z-index: 0;
+  .whoToFollowResultsContainer {
+    z-index: 0;
+    background-color: #B4C2DB42;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column; 
+    .title{
+      padding: 0 15px;
+      padding-top: 15px;
+      padding-bottom: 8px;
+      color: #0f1419;
+      font-size: 23px;
+      font-weight: 700;
+    }
+    .userInfoContainer {
+      position: relative;
+      display: flex;
+      max-height: 78px;
+      height: 78px;
+      justify-content: space-between;
+      align-items: center;
+      font-size: smaller;
+      padding: 3px 18px;
+      color: #0f0f0f;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #cccccc23;
+        transition: background-color 0.3s ease; // Added transition
+      }
+      .leftUserContainer{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-right: 8px;
+        .profilePic {
+          position: relative;
+          background-color: #ccc;
+          border-radius: 5px;
+          display: flex;
+          color: white;
+          font-size: 1.1rem;
+          width: 44px;
+          justify-content: center;
+          align-items: center;
+          height: 44px;
+          overflow: hidden;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          margin-right: 8px;
+          svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 25px;
+            width: 25px;
+          }
+          img {
+            width: 100%;
+            height: auto;
+            z-index: 2;
+          }
+        }
+        .userInfo {
+          font-size: 15px;
+          max-width: 130px;
+          overflow: hidden;
+          .name{
+            color:#0f1419;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+          }
+          .username {
+            color: #536471;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+      
+      .sharedFollow {
+        font-size: 15px;
+        display: flex;
+        justify-content: center;
+        padding: 5px 13px;
+        cursor: pointer;
+        border-radius: 25px;
+        font-weight: 600;
+        width: 76px;
+      }
+      .follow {
+        border: #0f1419 1px solid;
+        color:white;
+        background-color: #0f1419;
+        &:hover{
+          background-color: #0f1419e3;
+        }
+      }
+      .following {
+        border: #1D9BF8  1px solid;
+        background-color: white;
+        color:#1D9BF8;
+      }
+      .unfollow {
+        border: #536471 1px solid;
+        background-color: transparent;
+        color:#0f1419;
+        &:hover{
+          border: salmon 1px solid;
+          color: red;
+          background-color: rgba(250, 128, 114, 0.092);
+        }
+      }
+    }
+  }
+}

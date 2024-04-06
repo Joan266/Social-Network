@@ -52,7 +52,6 @@ const useHomePosts = () => {
     refetchOnWindowFocus: false,
     getNextPageParam: (lastPage) => lastPage?.nextCursor ? {cursor: lastPage.nextCursor,lastTimestamp: lastPage.lastTimestamp} :undefined,
     getPreviousPageParam: (firstPage) => firstPage.previousCursor ? { cursor: firstPage.previousCursor, lastTimestamp: firstPage.lastTimestamp } : undefined,
-    maxPages:2,
   }
   );
 

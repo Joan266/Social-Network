@@ -46,11 +46,11 @@ const SearchBar = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             {searchQuery !== "" && selected ? (
-              <FontAwesomeIcon
-                className={styles.cancelSearch}
-                onClick={clearSearch}
+              <div className={styles.xMark} onClick={clearSearch}>
+                <FontAwesomeIcon
                 icon={faXmark}
-              />
+                />
+              </div>
             ): ""}
           </div>
         </form>

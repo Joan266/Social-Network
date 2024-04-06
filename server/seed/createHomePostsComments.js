@@ -7,27 +7,28 @@ const User = require('../models/user');
 const shuffleArray = require('./shuffleArray');
 
 const fakeComments = [
-  "¡Qué foto tan impresionante! 😍",
-  "Simplemente hermosa. 🌟",
+  "😍 ¡Qué foto tan impresionante!",
+  "🌟 Simplemente hermosa. 🌟",
   "Me encanta esta captura. 📸",
-  "¡Increíblemente encantador! 💖",
-  "¡Bravo! 👏",
-  "¡Qué momento tan mágico capturado! ✨",
-  "Hermosa composición. 🎨",
-  "¡Increíble vista! 🌄",
-  "¡Estás brillando con luz propia! 💫",
-  "Simplemente perfecto. 👌",
-  "¡Qué foto tan inspiradora! 🌠",
-  "¡Maravillosa! 💐",
-  "¡Me hace sonreír! 😊",
-  "¡Qué captura tan encantadora! 🌺",
-  "¡Qué elegancia! 💃",
-  "¡Impresionante! 😮",
-  "¡Genialidad en cada detalle! 🌟",
-  "¡Una foto digna de enmarcar! 🖼️",
-  "¡Fascinante! 🌌",
-  "¡Simple y hermosa! 🌸"
+  "💖 ¡Increíblemente encantador! 💖",
+  "👏 ¡Bravo! 👏",
+  "✨ ¡Qué momento tan mágico capturado! ✨",
+  "🎨 Hermosa composición. 🎨",
+  "🌄 ¡Increíble vista! 🌄",
+  "💫 ¡Estás brillando con luz propia! 💫",
+  "👌 Simplemente perfecto. 👌",
+  "🌠 ¡Qué foto tan inspiradora! 🌠",
+  "💐 ¡Maravillosa! 💐",
+  "😊 ¡Me hace sonreír! 😊",
+  "🌺 ¡Qué captura tan encantadora! 🌺",
+  "💃 ¡Qué elegancia! 💃",
+  "😮 ¡Impresionante! 😮",
+  "🌟 ¡Genialidad en cada detalle! 🌟",
+  "🖼️ ¡Una foto digna de enmarcar! 🖼️",
+  "🌌 ¡Fascinante! 🌌",
+  "🌸 ¡Simple y hermosa! 🌸"
 ];
+
 // Function to create comments for picture posts
 const createPostComments = async ({ homePostsInfo, usersIds }) => {
   for (const post of homePostsInfo) {
@@ -65,7 +66,7 @@ const createPostComments = async ({ homePostsInfo, usersIds }) => {
         content: fakeComments[Math.floor(Math.random() * fakeComments.length)],
         likesCount: likes.length,
         likes,
-        parentPost: _id, // Reference to the parent post
+        parentPost: _id, 
         user: userId,
         createdAt,
       });

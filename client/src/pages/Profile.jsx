@@ -9,7 +9,6 @@ import useProfileFollow from '../hooks/useProfileFollow';
 import { useAuthContext } from '../hooks/useAuthContext';
 import ProfilePostsList from '../components/ProfilePostsList';
 import ProfileForm from '../components/ProfileForm';
-// date 
 import {formatDate} from '../utils/useFormatDate';
 
 const Profile = () => {

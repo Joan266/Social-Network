@@ -49,10 +49,6 @@
         &:hover {
           background-color: rgb(219, 217, 217);
           transition: background-color 0.2s ease; 
-          svg{
-            color: #0f1419d8;
-            transition: color 0.2s ease; 
-          }
         }
         svg{
           font-size: large;
@@ -60,7 +56,7 @@
           top: 50%;
           left:50%;
           transform: translate(-50%, -50%);
-          color: #007bff;
+          color: #0f1419d8;
         }
       }
       .profileLabel {

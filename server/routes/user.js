@@ -19,6 +19,9 @@ router.get('/fetchdata', requireAuth, userController.fetchUserData);
 // get user posts route
 router.get('/fetchposts', requireAuth, userController.fetchUserPosts);
 
+// get user posts route
+router.get('/whotofollow', requireAuth, userController.whoToFollow);
+
 // isfolling user route
 router.post('/isfollowinguser', requireAuth, userController.isFollowingUser);
 
