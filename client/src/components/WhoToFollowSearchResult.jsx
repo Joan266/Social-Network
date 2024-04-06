@@ -10,7 +10,6 @@ const WhoToFollowSearchResult = ({user, userToken}) => {
   const [ isLoading, setIsLoading ] =useState(true);
   const { isUserFollowed, handleFollowToggle } = useProfileFollow({username: user.username, isLoggedInUserProfile:false});
   const [followHover, setFollowHover] = useState(false);
-  
   useEffect(()=>{
     console.log(user)
   },[user])
@@ -39,15 +38,17 @@ const WhoToFollowSearchResult = ({user, userToken}) => {
       className={styles.userInfoContainer}
       key={user.username}
     >
-      <div className={styles.profilePic}>
-        {profilePicImgUrl ? <img src={profilePicImgUrl} alt='search-profile-pic'></img> : !isLoading ? <FontAwesomeIcon icon={faUser} className="rounded me-2" />: null}
-      </div>
-      <div className={styles.userInfo}>
-        <div className={styles.name}>
-          <span>{user.name}</span>
+      <div className={styles.leftUserContainer}>
+        <div className={styles.profilePic}>
+          {profilePicImgUrl ? <img src={profilePicImgUrl} alt='search-profile-pic'></img> : !isLoading ? <FontAwesomeIcon icon={faUser} className="rounded me-2" />: null}
         </div>
-        <div className={styles.username}>
-          <span>@{user.username}</span>
+        <div className={styles.userInfo}>
+          <div className={styles.name}>
+            <span>{user.name}</span>
+          </div>
+          <div className={styles.username}>
+            <span>@{user.username}</span>
+          </div>
         </div>
       </div>
       <div
