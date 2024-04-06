@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { userApi } from '../services/userApi';
 import { useAuthContext } from './useAuthContext';
 
-const useWhoToFollow = (username) => {
+const useWhoToFollow = () => {
   const { user } = useAuthContext();
-  const [ users, setUsers] = useState(null);
+  const [ users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -15,14 +15,15 @@ const useWhoToFollow = (username) => {
         'Authorization': `Bearer ${user.token}`,
       };
 
-      const whoToFollowResponse = await userApi.fetchWhoToFollow({username},headers);
+      const whoToFollowResponse = await userApi.fetchWhoToFollow({username:user.username},headers);
+      console.log(whoToFollowResponse)
       setIsError(whoToFollowResponse.error)
       setUsers(whoToFollowResponse.users)
       setIsLoading(false)
     };
     setIsLoading(true)
     fetchWhoToFollow();
-  }, [username,user]);
+  }, [user]);
 
   return { isLoading, users, isError };
 };

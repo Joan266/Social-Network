@@ -1,12 +1,19 @@
 import { useState, useEffect } from 'react';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './SearchBar.module.scss';
+import styles from './WhoToFollow.module.scss';
 import { userApi } from '../services/userApi.js';
+import useProfileFollow from '../hooks/useProfileFollow'
 
-const WhoToFollowSearchResult = ({user,handleUserInfoClick, userToken}) => {
+const WhoToFollowSearchResult = ({user, userToken}) => {
   const [ profilePicImgUrl, setProfilePicImgUrl ] =useState(null);
   const [ isLoading, setIsLoading ] =useState(true);
+  const { isUserFollowed, handleFollowToggle } = useProfileFollow({username: user.username, isLoggedInUserProfile:false});
+  const [followHover, setFollowHover] = useState(false);
+  
+  useEffect(()=>{
+    console.log(user)
+  },[user])
   useEffect(() => {
     const fetchProfilePic = async () => {
       try {
@@ -26,10 +33,10 @@ const WhoToFollowSearchResult = ({user,handleUserInfoClick, userToken}) => {
       fetchProfilePic();
     }
   }, [user, userToken]);
+
   return (
     <div
       className={styles.userInfoContainer}
-      onClick={() => handleUserInfoClick(user.username)} 
       key={user.username}
     >
       <div className={styles.profilePic}>
@@ -42,6 +49,18 @@ const WhoToFollowSearchResult = ({user,handleUserInfoClick, userToken}) => {
         <div className={styles.username}>
           <span>@{user.username}</span>
         </div>
+      </div>
+      <div
+        className={`${styles.sharedFollow} ${
+          isUserFollowed && followHover ? styles.unfollow : isUserFollowed ? styles.following : styles.follow
+        }`}
+        onClick={handleFollowToggle}
+        onMouseEnter={() => {
+          setFollowHover(true);
+        }}
+        onMouseLeave={() => setFollowHover(false)}
+      >
+        {isUserFollowed ? (followHover ? "Unfollow" : "Following") : "Follow"}
       </div>
     </div>
   )
