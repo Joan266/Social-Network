@@ -118,13 +118,10 @@ whoToFollow: async (req, res) => {
     
     const users = await User
     .find({ 
-      _id: { $ne: userId }
+      _id: { $ne: userId },
+      followers: { $nin: [userId] },
     })
-    .populate({
-      path: 'followers',
-      match: { _id: { $ne: userId } } // Exclude user with specified userId from followers
-    })
-    .select('profilePicFileId name username')
+    .select('profilePicFileId name username followers')
     .limit(5);
 
     // Check if user exists and send the retrieved response
