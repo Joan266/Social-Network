@@ -26,7 +26,7 @@ const Navbar = () => {
   };
 
   const handleResize = () => {
-    if (window.innerWidth < 1275) {
+    if (window.innerWidth <= 1275) {
       setIsScreenSizeComputer(false);
     }else{
       setIsScreenSizeComputer(true);
@@ -49,19 +49,27 @@ const Navbar = () => {
             <div className={styles.svgContainer}><FontAwesomeIcon icon={ faFish} /></div> 
           </div> */}
           <div className={styles.linkContainer}>
-            <Link to="/"><div className={styles.svgContainer}><FontAwesomeIcon icon={solidHouse} className="rounded me-2"/></div> {window.innerWidth >= 1275 && "Home"}</Link>
+            <Link to="/">
+              <div className={styles.svgContainer}>
+                <FontAwesomeIcon icon={solidHouse} className="rounded me-2"/>
+              </div>
+              {isScreenSizeComputer && "Home"}
+            </Link>
           </div>
           <div className={styles.linkContainer}>
-            <Link to="/profile"><div className={styles.svgContainer}><FontAwesomeIcon icon={faUser} className="rounded me-2"/></div>{window.innerWidth >= 1275 && "Profile"}</Link>
+            <Link to="/profile">
+              <div className={styles.svgContainer}>
+                <FontAwesomeIcon icon={faUser} className="rounded me-2"/>
+              </div>
+              {isScreenSizeComputer && "Profile"}
+            </Link>
           </div>
         </nav>
-        {window.innerWidth < 1275 ? (
-          <button className={`${styles.postButton} ${styles.smallPostButton}`}>
-            <FontAwesomeIcon icon={faSignsPost} className="rounded me-2" />
+        <div className={styles.postButtonContainer}>
+          <button className={styles.postButton}>
+            {window.innerWidth <= 1275 ? <FontAwesomeIcon icon={faSignsPost} className="rounded me-2" />:"Post"}
           </button>
-        ) : (
-          <button className={styles.postButton} onClick={() => setIsPostFormVisible(true)}>Post</button>
-        )}
+        </div>
         {isPostFormVisible && <PostForm setIsPostFormVisible={setIsPostFormVisible} />}
       </div>
       {userControlsVisible && 
@@ -74,12 +82,12 @@ const Navbar = () => {
           <span>@{user.username}</span>
         </div>
       </div>}
-      <div className={`${styles.accountMenu} ${!userControlsVisible ? styles.controlsVisible : ''}`} ref={menuRef}>
-        <div className={styles.container}>
+      <div className={styles.accountMenu} ref={menuRef}>
+        <div className={`${styles.container} {!userControlsVisible ? styles.controlsVisible : ''}`}>
           <div className={styles.profilePic}>
             {user.profilePicBase64 ? <img src={user.profilePicBase64} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
           </div>
-          {window.innerWidth >= 1275 &&  <>
+          {isScreenSizeComputer &&  <>
             <div className={styles.infoContainer}>
               <span className={styles.name}>{user.name}</span>
               <span className={styles.username}>@{user.username}</span>
