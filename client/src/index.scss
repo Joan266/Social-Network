@@ -114,24 +114,27 @@ body {
   background-color: white;
   .header {
     display: flex;
-    flex: 3;
-    justify-content: right;
+    flex: 5 1 auto; 
+    justify-content: flex-end;
     
   }
   
   .main {
     display: flex;
-    flex: 7;
-    justify-content: left;
+    flex: 7 1 auto;
     overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: flex-start;
     .dashboard {
       width: 600px;
+      min-width: 600px;
       border: 0.1px solid rgba(0, 0, 0, 0.04);
     }
     .trending {
       top: 0;
       position: sticky; 
       width: 350px;
+      min-width: 350px;
       margin-left: 20px;
     }
   }

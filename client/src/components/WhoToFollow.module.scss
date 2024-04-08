@@ -3,6 +3,7 @@
   position: absolute;
   width: 330px;
   top: 100px;
+  height: 477px;
   left:10px;
   z-index: 0;
   .whoToFollowResultsContainer {
@@ -91,14 +92,14 @@
       }
       
       .sharedFollow {
-        font-size: 15px;
+        font-size: 14px;
         display: flex;
         justify-content: center;
-        padding: 5px 13px;
+        padding: 6px 7px;
         cursor: pointer;
         border-radius: 25px;
         font-weight: 600;
-        width: 76px;
+        width: 70px;
       }
       .follow {
         border: #0f1419 1px solid;
