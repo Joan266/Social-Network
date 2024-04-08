@@ -62,7 +62,6 @@
       border-radius: 30px;
       margin-top: 20px;
       width: 95%;
-      min-width: 80px;
       min-height: 55px;
       transition: background-color 0.3s ease; /* Added transition */
       font-size: 19px;
@@ -70,6 +69,20 @@
 
       &:hover {
         background-color: var(--button-hover-background);
+      }
+    }
+    .smallPostButton{
+      position: relative;
+      padding: 0;
+      width: 55px;
+      height: 55px;
+      svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 25px;
+        width: 25px;
       }
     }
   }
