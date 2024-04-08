@@ -55,7 +55,7 @@ const WhoToFollowSearchResult = ({user, userToken}) => {
         className={`${styles.sharedFollow} ${
           isUserFollowed && followHover ? styles.unfollow : isUserFollowed ? styles.following : styles.follow
         }`}
-        onClick={handleFollowToggle}
+        onClick={(e) => { e.stopPropagation(); handleFollowToggle(); }}
         onMouseEnter={() => {
           setFollowHover(true);
         }}
