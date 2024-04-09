@@ -2,6 +2,9 @@
 .WhoToFollow {
   position: absolute;
   width: 330px;
+  @media (max-width: 1110px) {   
+    width: 290px;
+  }
   top: 100px;
   height: 477px;
   left:10px;
