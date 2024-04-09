@@ -1,6 +1,7 @@
 // Navbar.module.scss
 
 .container {
+  position: relative;
   display: flex;
   justify-content: space-between;
   width: 257px;
@@ -110,15 +111,19 @@
     position: absolute;
     width: 257px;
     bottom: 10%;
+    right: 5%;
     z-index: 3;
     padding: 5px 0;
     text-align: center;
-    font-size: 0.8rem;
     display: flex;
     box-shadow: 0 0 10px var(--strong-box-shadow-color);
     border-radius: 10px;
     color: #0f0f0f82;
     height: 70px;
+    @media (max-width: 1275px) {   
+      height: 60px;
+      width: 87px;
+    }
     .userControlsContainer{
       width: 100%;
       display: flex;
@@ -129,6 +134,11 @@
       font-weight: 600;
       cursor: pointer;
       padding-left: 22px;
+      @media (max-width: 1275px) {  
+      padding-left: 13px;
+      padding-right: 8px;
+      font-size: 16px;
+      }
       span {
         display: flex;
         justify-content: left;
@@ -148,17 +158,22 @@
   }
   .accountMenu {
     display: flex;
-    padding: 15px;
-    border-radius: 40px;
-    height: 50px;
-    justify-content: right;
+    @media (max-width: 1275px) {   
+      justify-content:right;
+    }
     .container {
-      padding: 0;
-      display: flex;
+      padding: 15px;
+      height: 50px;
+      border-radius: 40px;
       flex-direction: row;
-      justify-content: center;
       align-items: center;
       justify-content: space-between;
+      @media (max-width: 1275px) {  
+        padding: 0; 
+        width: 80px;
+        height: 80px;
+        justify-content: center;
+      }
       text-align: center;
       font-size: 0.8rem;
       .profilePic {
@@ -168,13 +183,16 @@
         display: flex;
         color: white;
         font-size: 1.1rem;
-        min-width: 44px;
+        min-width: 50px;
         justify-content: center;
         align-items: center;
-        height: 44px;
+        height: 50px;
         overflow: hidden;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-right: 8px;
+        @media (max-width: 1275px) {  
+          margin-right: 0;
+        }
         svg {
           position: absolute;
           top: 50%;
@@ -184,8 +202,8 @@
           width: 25px;
         }
         img {
-          width: 44px;
-          height: 44px;
+          width: 50px;
+          height: 50px;
         }
       }
       .infoContainer {
@@ -202,7 +220,6 @@
           color: var(--light-text-color);
         }
         margin-left: 8px;
-        width: 100%;
         display: flex;
         flex-direction: column;
       }

@@ -13,7 +13,7 @@ const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const [isPostFormVisible, setIsPostFormVisible]=useState(false);
-  const [isScreenSizeComputer, setIsScreenSizeComputer]=useState(false);
+  const [isScreenSizeComputer, setIsScreenSizeComputer]=useState(true);
   const [userControlsVisible, setUserControlsVisible] = useState(false);
   const userControlsRef = useRef(null);
   const menuRef = useRef(null);
@@ -83,7 +83,7 @@ const Navbar = () => {
         </div>
       </div>}
       <div className={styles.accountMenu} ref={menuRef}>
-        <div className={`${styles.container} {!userControlsVisible ? styles.controlsVisible : ''}`}>
+        <div className={`${styles.container} ${!userControlsVisible ? styles.controlsVisible : ''}`}>
           <div className={styles.profilePic}>
             {user.profilePicBase64 ? <img src={user.profilePicBase64} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
           </div>
