@@ -76,6 +76,9 @@
           font-size: 15px;
           max-width: 130px;
           overflow: hidden;
+          @media (max-width: 1110px) {   
+            width: 110px;
+          }
           .name{
             color:#0f1419;
             display: flex;

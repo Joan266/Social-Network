@@ -13,7 +13,7 @@ const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
   const [isPostFormVisible, setIsPostFormVisible]=useState(false);
-  const [isScreenSizeComputer, setIsScreenSizeComputer]=useState(true);
+  const [isScreenSizeComputer, setIsScreenSizeComputer]=useState(null);
   const [userControlsVisible, setUserControlsVisible] = useState(false);
   const userControlsRef = useRef(null);
   const menuRef = useRef(null);
@@ -34,6 +34,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
+    if (window.innerWidth <= 1275) {
+      setIsScreenSizeComputer(false);
+    }else{
+      setIsScreenSizeComputer(true);
+    }
     document.addEventListener('mousedown', handleClick);
     window.addEventListener('resize', handleResize);
     return () => {

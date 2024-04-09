@@ -109,6 +109,9 @@ body {
 .mainlayout {
   display: flex;
   flex-direction: row;
+  @media (max-width: 500px) {
+    flex-direction: column-reverse;
+  }
   width: 100%;
   height: 100%;
   background-color: white;
@@ -116,7 +119,12 @@ body {
     display: flex;
     flex: 5 1 auto; 
     justify-content: flex-end;
-    
+    width: 100%;
+    @media (max-width: 500px) {
+      max-height: 75px;
+      justify-content: center;
+      align-items: center;
+    }
   }
   
   .main {
@@ -127,7 +135,6 @@ body {
     justify-content: flex-start;
     .dashboard {
       width: 600px;
-      min-width: 600px;
       border: 0.1px solid rgba(0, 0, 0, 0.04);
     }
     .trending {

@@ -13,7 +13,7 @@ import SearchBar from './components/SearchBar'
 import WhoToFollow from './components/WhoToFollow.jsx';
 
 const PrincipalLayout = ({ children }) => {
-  const [isScreenSizeComputer, setIsScreenSizeComputer] = useState(true);
+  const [isScreenSizeComputer, setIsScreenSizeComputer] = useState(null);
 
   const handleResize = () => {
     if (window.innerWidth <= 1020) {
@@ -24,6 +24,11 @@ const PrincipalLayout = ({ children }) => {
   };
 
   useEffect(() => {
+    if (window.innerWidth <= 1020) {
+      setIsScreenSizeComputer(false);
+    } else {
+      setIsScreenSizeComputer(true);
+    }
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
