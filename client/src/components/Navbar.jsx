@@ -84,16 +84,20 @@ const Navbar = () => {
       </div>}
       <div className={styles.accountMenu} ref={menuRef}>
         <div className={`${styles.container} ${!userControlsVisible ? styles.controlsVisible : ''}`}>
-          <div className={styles.profilePic}>
-            {user.profilePicBase64 ? <img src={user.profilePicBase64} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
-          </div>
-          {isScreenSizeComputer &&  <>
+          <div className={styles.leftContainer}>
+            <div className={styles.profilePic}>
+              {user.profilePicBase64 ? <img src={user.profilePicBase64} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
+            </div>
+          {isScreenSizeComputer &&  
             <div className={styles.infoContainer}>
               <span className={styles.name}>{user.name}</span>
-              <span className={styles.username}>@{user.username}</span>
+              <span className={styles.username}>@{user.username}</span> 
             </div>
-            <div className={styles.controls}><div className={styles.svgContainer}><FontAwesomeIcon icon={faEllipsis} className="rounded me-2"/></div></div>
-          </>}
+          }
+          </div>
+        {isScreenSizeComputer &&
+          <div className={styles.controls}><div className={styles.svgContainer}><FontAwesomeIcon icon={faEllipsis} className="rounded me-2"/></div></div>
+        }
         </div>
       </div>
     </div>
