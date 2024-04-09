@@ -82,6 +82,10 @@
         .username {
           display: flex;
           align-items: center;
+          overflow: hidden;
+          @media (max-width: 500px) {
+            width: 70px;
+          }
         }
         .dote{
           padding: 0 4px;

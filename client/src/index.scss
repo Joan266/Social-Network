@@ -119,11 +119,11 @@ body {
     display: flex;
     flex: 5 1 auto; 
     justify-content: flex-end;
-    width: 100%;
     @media (max-width: 500px) {
       max-height: 75px;
       justify-content: center;
       align-items: center;
+      padding: 0 10px;
     }
   }
   

@@ -11,8 +11,8 @@
     cursor: pointer;
     top: 0;
     position: sticky; 
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(25px);
+    background-color: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(60px);
     z-index: 2;
     transition: background-color 0.2s;
     .homeLabel{

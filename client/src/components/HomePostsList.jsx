@@ -18,7 +18,7 @@ const HomePostsList = () => {
           
           {posts.map(( post, index ) => (
             <Suspense key={post._id} fallback={""}>
-              {index === 0 && <div id='newTopPageMark'/>}
+              {/* {index === 0 && <div id='newTopPageMark'/>} */}
               <PostDetails 
                 postId={post._id} 
                 username={post.user.username}
