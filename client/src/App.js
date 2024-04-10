@@ -11,29 +11,10 @@ import Post from './pages/Post'
 import Navbar from './components/Navbar'
 import SearchBar from './components/SearchBar'
 import WhoToFollow from './components/WhoToFollow.jsx';
+import { useWindowContext } from './hooks/useWindowContext';
 
 const PrincipalLayout = ({ children }) => {
-  const [isScreenSizeComputer, setIsScreenSizeComputer] = useState(null);
-
-  const handleResize = () => {
-    if (window.innerWidth <= 1020) {
-      setIsScreenSizeComputer(false);
-    } else {
-      setIsScreenSizeComputer(true);
-    }
-  };
-
-  useEffect(() => {
-    if (window.innerWidth <= 1020) {
-      setIsScreenSizeComputer(false);
-    } else {
-      setIsScreenSizeComputer(true);
-    }
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+ const { isWindowWidthOver1020 } = useWindowContext();
 
   return (
     <div className='mainlayout'>
@@ -44,7 +25,7 @@ const PrincipalLayout = ({ children }) => {
         <div className='dashboard'>
           {children}
         </div>
-        {isScreenSizeComputer &&
+        {isWindowWidthOver1020 &&
           <div className='trending'>
             <SearchBar/>
             <WhoToFollow/>

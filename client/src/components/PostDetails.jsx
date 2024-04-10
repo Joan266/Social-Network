@@ -11,8 +11,10 @@ import DeleteMenu from './DeleteMenu';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; 
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useWindowContext } from '../hooks/useWindowContext';
 
 const PostDetails = ({ postId, username, page }) => {
+  const { isWindowWidthOver400,isWindowWidthOver550,isWindowWidthOver600, isWindowWidthOver650, isWindowWidthOver800 } = useWindowContext();
   const { user } = useAuthContext();
   const postRef = useRef(null);
   const {  postData, isLoading } = useFetchPostData({postId, username});
@@ -23,43 +25,44 @@ const PostDetails = ({ postId, username, page }) => {
   const [ commentsCount, setCommentsCount ] = useState(0);
   const [ isPostVisible, setIsPostVisible ] = useState(true);
   const navigate = useNavigate(); 
-  
-  // useEffect(() => {
-  //   const observePostRef = () => {
-  //     const element = postRef ? postRef.current : null;
-  //     if (!element || !postData) {
-  //       return;
-  //     }
+  useEffect(()=>{console.log(postData)},[postData])
+  useEffect(() => {
+    const observePostRef = () => {
+      const element = postRef ? postRef.current : null;
+      if (!element || !postData) {
+        return;
+      }
 
-  //     const observer = new IntersectionObserver(
-  //       ([entry]) => {
-  //         // Ensure that the entry is intersecting and is the target element
-  //         if (entry.isIntersecting) {
-  //           setIsPostVisible(true)
-  //         }else{
-  //           setIsPostVisible(false)
-  //         }
-  //       },
-  //       {
-  //         root: null,
-  //         threshold: 0.1,
-  //       }
-  //     );
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          console.log(entry.isIntersecting)
+          // Ensure that the entry is intersecting and is the target element
+          if (entry.isIntersecting) {
+            setIsPostVisible(true)
+          }else{
+            setIsPostVisible(false)
+          }
+        },
+        {
+          root: null,
+          threshold: 0.1,
+        }
+      );
 
-  //     observer.observe(element);
+      observer.observe(element);
 
-  //     // Cleanup function
-  //     return () => {
-  //       if (observer && element) {
-  //         observer.unobserve(element);
-  //         setIsPostVisible(false)
-  //       }
-  //     };
-  //   };
+      // Cleanup function
+      return () => {
+        if (observer && element) {
+          observer.unobserve(element);
+          setIsPostVisible(false)
+        }
+      };
+    };
 
-  //   observePostRef();
+    observePostRef();
 
-  // }, [postRef,postData]);
+  }, [postRef,postData]);
 
   const handlePostLink = () => {
     navigate(`/post/${postId}/${username}`); 
@@ -71,6 +74,20 @@ const PostDetails = ({ postId, username, page }) => {
 
   if (isLoading || !postData) return "";
   
+  const imageWidth = isWindowWidthOver800 ? postData.postImgWidth :
+  isWindowWidthOver650 ? postData.postImgWidth * (19 / 20) :
+  isWindowWidthOver600 ? postData.postImgWidth * (17 / 20) :
+  isWindowWidthOver550 ? postData.postImgWidth * (15 / 20) :
+  isWindowWidthOver400 ? postData.postImgWidth * (12 / 20) :
+  postData.postImgWidth * (7 / 20);
+
+  const imageHeight = isWindowWidthOver800 ? postData.postImgHeight :
+  isWindowWidthOver650 ? postData.postImgHeight * (19 / 20) :
+  isWindowWidthOver600 ? postData.postImgHeight * (17 / 20) :
+  isWindowWidthOver550 ? postData.postImgHeight * (15 / 20) :
+  isWindowWidthOver400 ? postData.postImgHeight * (12 / 20) :
+  postData.postImgHeight * (7 / 20);
+
   return (
       <div className={styles.postDetailsContainer} ref={postRef} onClick={() => handlePostLink()} >
         {isPostFormVisible && (
@@ -101,8 +118,8 @@ const PostDetails = ({ postId, username, page }) => {
                 </Link>
               </div>
               <div className={styles.username}>@{postData.username}</div>
-              <div className={styles.dote}>·</div>
-              <div className={styles.date}>{timeSince(postData.createdAt)}</div>
+              {isWindowWidthOver400 &&<div className={styles.dote}>·</div>}
+              {isWindowWidthOver400 && <div className={styles.date}>{timeSince(postData.createdAt)}</div>}
             </div>
             { username === user.username && 
             <div className={styles.deletePostPointer} onClick={(e) => {e.stopPropagation(); setIsDeleteMenuVisible(true);}}>
@@ -118,7 +135,7 @@ const PostDetails = ({ postId, username, page }) => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          <div className={styles.imageContainer} >
+          <div className={styles.imageContainer} style={{ width: imageWidth, height: imageHeight }}>
           {postData.postImageUrl && isPostVisible && (
             <img src={postData.postImageUrl} alt='post'/>
           )}

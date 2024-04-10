@@ -8,12 +8,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHouse as solidHouse, faEllipsis, faSignsPost } from '@fortawesome/free-solid-svg-icons';
 import PostForm from "../components/PostForm"
 import styles from './Navbar.module.scss';
+import { useWindowContext } from '../hooks/useWindowContext';
 
 const Navbar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
+  const { isWindowWidthOver1275 } = useWindowContext();
   const [isPostFormVisible, setIsPostFormVisible]=useState(false);
-  const [isScreenSizeComputer, setIsScreenSizeComputer]=useState(null);
   const [userControlsVisible, setUserControlsVisible] = useState(false);
   const userControlsRef = useRef(null);
   const menuRef = useRef(null);
@@ -25,27 +26,13 @@ const Navbar = () => {
     }
   };
 
-  const handleResize = () => {
-    if (window.innerWidth <= 1275) {
-      setIsScreenSizeComputer(false);
-    }else{
-      setIsScreenSizeComputer(true);
-    }
-  };
-
   useEffect(() => {
-    if (window.innerWidth <= 1275) {
-      setIsScreenSizeComputer(false);
-    }else{
-      setIsScreenSizeComputer(true);
-    }
     document.addEventListener('mousedown', handleClick);
-    window.addEventListener('resize', handleResize);
     return () => {
       document.removeEventListener('mousedown', handleClick);
-      window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   return (
     <div className={styles.container}>
       <div className={styles.menu}>
@@ -58,7 +45,7 @@ const Navbar = () => {
               <div className={styles.svgContainer}>
                 <FontAwesomeIcon icon={solidHouse} className="rounded me-2"/>
               </div>
-              {isScreenSizeComputer && "Home"}
+              {isWindowWidthOver1275 && "Home"}
             </Link>
           </div>
           <div className={styles.linkContainer}>
@@ -66,13 +53,13 @@ const Navbar = () => {
               <div className={styles.svgContainer}>
                 <FontAwesomeIcon icon={faUser} className="rounded me-2"/>
               </div>
-              {isScreenSizeComputer && "Profile"}
+              {isWindowWidthOver1275 && "Profile"}
             </Link>
           </div>
         </nav>
         <div className={styles.postButtonContainer}>
           <button className={styles.postButton} onClick={()=>setIsPostFormVisible(true)}>
-            {window.innerWidth <= 1275 ? <FontAwesomeIcon icon={faSignsPost} className="rounded me-2" />:"Post"}
+            {isWindowWidthOver1275 ? "Post" :<FontAwesomeIcon icon={faSignsPost} className="rounded me-2" />}
           </button>
         </div>
         {isPostFormVisible && <PostForm setIsPostFormVisible={setIsPostFormVisible} />}
@@ -93,14 +80,14 @@ const Navbar = () => {
             <div className={styles.profilePic}>
               {user.profilePicBase64 ? <img src={user.profilePicBase64} alt='menu-profile-pic'></img>:<FontAwesomeIcon icon={faUser} className="rounded me-2" />}
             </div>
-          {isScreenSizeComputer &&  
+          {isWindowWidthOver1275 &&  
             <div className={styles.infoContainer}>
               <span className={styles.name}>{user.name}</span>
               <span className={styles.username}>@{user.username}</span> 
             </div>
           }
           </div>
-        {isScreenSizeComputer &&
+        {isWindowWidthOver1275 &&
           <div className={styles.controls}><div className={styles.svgContainer}><FontAwesomeIcon icon={faEllipsis} className="rounded me-2"/></div></div>
         }
         </div>

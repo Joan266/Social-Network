@@ -11,24 +11,24 @@ export const usePostListObserve = ({ topRef, bottomRef }) => {
   } = useHomePosts();
 
   useEffect(() => {
-    let newTopPageMarkRef = null;
+    // let newTopPageMarkRef = null;
 
-    const debouncedHandleTopIntersection = _.debounce(handleTopIntersection, 700);
+    // const debouncedHandleTopIntersection = _.debounce(handleTopIntersection, 700);
     const debouncedHandleBottomIntersection = _.debounce(handleBottomIntersection, 1000);
 
     const bottomObserver = createObserver(debouncedHandleBottomIntersection, 0.1);
-    const topObserver = createObserver(debouncedHandleTopIntersection, 0.1);
+    // const topObserver = createObserver(debouncedHandleTopIntersection, 0.1);
 
-    const topElement = topRef ? topRef.current : null;
+    // const topElement = topRef ? topRef.current : null;
     const bottomElement = bottomRef ? bottomRef.current : null;
 
-    if (topElement) {
-      if (hasPreviousPage) {
-        topObserver.observe(topElement);
-      } else {
-        topObserver.disconnect();
-      }
-    }
+    // if (topElement) {
+    //   if (hasPreviousPage) {
+    //     topObserver.observe(topElement);
+    //   } else {
+    //     topObserver.disconnect();
+    //   }
+    // }
 
     if (bottomElement) {
       if (hasNextPage) {
@@ -39,20 +39,20 @@ export const usePostListObserve = ({ topRef, bottomRef }) => {
     }
 
     return () => {
-      topObserver.disconnect();
+      // topObserver.disconnect();
       bottomObserver.disconnect();
     };
 
-    function handleTopIntersection(entry) {
-      if (entry.isIntersecting && hasPreviousPage) {
-        console.log("top entry is intersecting");
-        fetchPreviousPage();
-        newTopPageMarkRef = document.querySelector("#newTopPageMark");
-        if (newTopPageMarkRef) {
-          newTopPageMarkRef.scrollIntoView({ behavior: "smooth" });
-        }
-      }
-    }
+    // function handleTopIntersection(entry) {
+    //   if (entry.isIntersecting && hasPreviousPage) {
+    //     console.log("top entry is intersecting");
+    //     fetchPreviousPage();
+    //     newTopPageMarkRef = document.querySelector("#newTopPageMark");
+    //     if (newTopPageMarkRef) {
+    //       newTopPageMarkRef.scrollIntoView({ behavior: "smooth" });
+    //     }
+    //   }
+    // }
 
     function handleBottomIntersection(entry) {
       if (entry.isIntersecting && hasNextPage) {
