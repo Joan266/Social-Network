@@ -69,7 +69,7 @@
           margin-top: 3px;
           margin-right: 3px;
           @media (max-width: 600px) {
-            width: 30px;
+            width: 50px;
           }
           a {
             color:#0f1419;
@@ -85,6 +85,9 @@
           overflow: hidden;
           @media (max-width: 500px) {
             width: 70px;
+          }
+          @media (max-width: 400px) {
+            width: 100%;
           }
         }
         .dote{
