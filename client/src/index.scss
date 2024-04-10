@@ -109,21 +109,30 @@ body {
 .mainlayout {
   display: flex;
   flex-direction: row;
+  @media (max-width: 500px) {
+    flex-direction: column-reverse;
+  }
   width: 100%;
   height: 100%;
   background-color: white;
   .header {
     display: flex;
-    flex: 3;
-    justify-content: right;
-    
+    flex: 5 1 auto; 
+    justify-content: flex-end;
+    @media (max-width: 500px) {
+      max-height: 75px;
+      justify-content: center;
+      align-items: center;
+      padding: 0 10px;
+    }
   }
   
   .main {
     display: flex;
-    flex: 7;
-    justify-content: left;
+    flex: 7 1 auto;
     overflow-y: auto;
+    overflow-x: hidden;
+    justify-content: flex-start;
     .dashboard {
       width: 600px;
       border: 0.1px solid rgba(0, 0, 0, 0.04);

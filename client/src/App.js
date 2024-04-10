@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthContext } from './hooks/useAuthContext.js';
+import { useState,useEffect } from 'react'
 
 // pages & components
 import Home from './pages/Home'
@@ -10,22 +11,49 @@ import Post from './pages/Post'
 import Navbar from './components/Navbar'
 import SearchBar from './components/SearchBar'
 import WhoToFollow from './components/WhoToFollow.jsx';
-const PrincipalLayout = ({ children }) => (
-  <div className='mainlayout'>
-    <div className='header'>
-      <Navbar />
-    </div>
-    <div id='main' className='main'>
-      <div className='dashboard'>
-        {children}
+
+const PrincipalLayout = ({ children }) => {
+  const [isScreenSizeComputer, setIsScreenSizeComputer] = useState(null);
+
+  const handleResize = () => {
+    if (window.innerWidth <= 1020) {
+      setIsScreenSizeComputer(false);
+    } else {
+      setIsScreenSizeComputer(true);
+    }
+  };
+
+  useEffect(() => {
+    if (window.innerWidth <= 1020) {
+      setIsScreenSizeComputer(false);
+    } else {
+      setIsScreenSizeComputer(true);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return (
+    <div className='mainlayout'>
+      <div className='header'>
+        <Navbar />
       </div>
-      <div className='trending'>
-        <SearchBar/>
-        <WhoToFollow/>
+      <div id='main' className='main'>
+        <div className='dashboard'>
+          {children}
+        </div>
+        {isScreenSizeComputer &&
+          <div className='trending'>
+            <SearchBar/>
+            <WhoToFollow/>
+          </div>
+        }
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const AuthLayout = ({ children }) => (
   <div className='authlayout'>

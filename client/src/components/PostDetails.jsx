@@ -21,45 +21,45 @@ const PostDetails = ({ postId, username, page }) => {
   const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
   const [ isDeleteMenuVisible, setIsDeleteMenuVisible ] = useState(false);
   const [ commentsCount, setCommentsCount ] = useState(0);
-  const [ isPostVisible, setIsPostVisible ] = useState(false);
+  const [ isPostVisible, setIsPostVisible ] = useState(true);
   const navigate = useNavigate(); 
   
-  useEffect(() => {
-    const observePostRef = () => {
-      const element = postRef ? postRef.current : null;
-      if (!element || !postData) {
-        return;
-      }
+  // useEffect(() => {
+  //   const observePostRef = () => {
+  //     const element = postRef ? postRef.current : null;
+  //     if (!element || !postData) {
+  //       return;
+  //     }
 
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          // Ensure that the entry is intersecting and is the target element
-          if (entry.isIntersecting) {
-            setIsPostVisible(true)
-          }else{
-            setIsPostVisible(false)
-          }
-        },
-        {
-          root: null,
-          threshold: 0.1,
-        }
-      );
+  //     const observer = new IntersectionObserver(
+  //       ([entry]) => {
+  //         // Ensure that the entry is intersecting and is the target element
+  //         if (entry.isIntersecting) {
+  //           setIsPostVisible(true)
+  //         }else{
+  //           setIsPostVisible(false)
+  //         }
+  //       },
+  //       {
+  //         root: null,
+  //         threshold: 0.1,
+  //       }
+  //     );
 
-      observer.observe(element);
+  //     observer.observe(element);
 
-      // Cleanup function
-      return () => {
-        if (observer && element) {
-          observer.unobserve(element);
-          setIsPostVisible(false)
-        }
-      };
-    };
+  //     // Cleanup function
+  //     return () => {
+  //       if (observer && element) {
+  //         observer.unobserve(element);
+  //         setIsPostVisible(false)
+  //       }
+  //     };
+  //   };
 
-    observePostRef();
+  //   observePostRef();
 
-  }, [postRef,postData]);
+  // }, [postRef,postData]);
 
   const handlePostLink = () => {
     navigate(`/post/${postId}/${username}`); 
@@ -118,9 +118,9 @@ const PostDetails = ({ postId, username, page }) => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          <div className={styles.imageContainer} style={{ width: postData.postImgWidth, height: postData.postImgHeight }}>
+          <div className={styles.imageContainer} >
           {postData.postImageUrl && isPostVisible && (
-            <img src={postData.postImageUrl} alt='post' style={{ width: postData.postImgWidth, height: postData.postImgHeight }}/>
+            <img src={postData.postImageUrl} alt='post'/>
           )}
           </div>
           <div className={styles.settings}>

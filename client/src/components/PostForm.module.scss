@@ -15,6 +15,10 @@
   position: relative;
   display: flex;
   width: 640px;
+  @media (max-width:1000px) {
+   width: 440px;
+   margin: 0 5px;
+  }
   height: auto;
   border-radius: 20px;
   background-color: white;
@@ -60,7 +64,6 @@
         }
       }
       .profileLabel {
-        width: 410px;
         color: #0f1419;
         font-weight: 600;
         font-size: 22px;
@@ -94,6 +97,9 @@
         flex-direction: row;
         padding-top: 4px;
         font-size: 17px;
+        @media (max-width:1000px) {
+          font-size: 16px;
+         }
         color:#536471;
         margin-top: 13px;
         .postInfo{
@@ -185,8 +191,12 @@
           textarea{
             font-family: 'Poppins';
             display: flex;
-            width: 500px;
+            max-width: 100%;
+            width: 100%;
             font-size: 22px;
+            @media (max-width:1000px) {
+            font-size: 18px;
+            }
             border: none;
             resize: none;
             overflow: hidden;
@@ -233,8 +243,7 @@
               }
               img {
                 width: 100%;
-                max-width: 500px;
-                min-width: 500px;
+                max-width: 100%;
                 max-height: 600px;
                 height: auto;
               }

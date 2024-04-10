@@ -4,14 +4,17 @@
   min-height: 58px;
   top: 0;
   position: sticky; 
-  background-color: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(25px);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(60px);
   transition: background-color 0.2s;
   padding-left: 22px;
   z-index: 5;
   .nameLabel{
     color:var(--strong-text-color);
     font-size: 22px;
+    @media (max-width: 600px) {
+      font-size: 20px; 
+    }
     font-weight: 600;
   }
 }
@@ -24,6 +27,9 @@
     flex-direction: column;
     .banner {
       height: 200px;
+      @media (max-width: 500px) {
+        height: 140px;
+      }
       background-color: gainsboro;
       img {
         width: 100%;
@@ -35,7 +41,10 @@
       flex-direction: column;
       padding: 13px 18px 0 18px;
       margin-bottom: 18px;
-      font-size: 17px;
+      font-size: 17px; 
+      @media (max-width: 600px) {
+        font-size: 16px; 
+      }
       color:#536471;
       .picAndControls {
         display: flex;
@@ -49,6 +58,10 @@
           display: flex;
           width: 135px;
           height: 135px;
+          @media (max-width: 600px) {
+            height: 100px;
+            width: 100px;
+          }
           border-radius: 50%;
           background-color: whitesmoke;
           margin-bottom: 13px;
@@ -85,6 +98,7 @@
             font-weight: 600;
             width: 86px;
             transition: background-color 0.3s color  0.3s border  0.3s;
+          
           }
           .follow {
             border: #0f1419 1px solid;
@@ -118,7 +132,10 @@
             display: flex;
             font-weight: 600;
             border-radius: 25px;
-            border: #ccc 1px solid;
+            border: #ccc 1px solid;  
+            @media (max-width: 600px) {
+              padding: 5px 15px;
+            }
             &:hover{
               background-color: whitesmoke;
             }
@@ -130,6 +147,9 @@
         margin-bottom: 13px;
         .nameContainer {
           font-size: 22px;
+          @media (max-width: 600px) {
+            font-size: 18px; 
+          }
           font-weight: 600;
           color:#0f1419;
         }
@@ -137,11 +157,17 @@
       .bio {
         margin-bottom: 13px;
         font-size: 17px;
+        @media (max-width: 600px) {
+          font-size: 16px; 
+        }
         color: #0f1419;
       }
       .data {
         margin-bottom: 13px;
-        font-size: 17px;
+        font-size: 16px;
+        @media (max-width: 600px) {
+          font-size: 15px; 
+        }
         color: #536471;
         svg {
           margin-right: 4px;
