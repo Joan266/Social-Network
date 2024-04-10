@@ -73,9 +73,9 @@ const Post = () => {
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          <div className={styles.imageContainer} style={{ width: postData.postImgWidth, height: postData.postImgHeight }}>
+          <div className={styles.imageContainer} >
             {postData.postImageUrl && (
-              <img src={postData.postImageUrl} alt='post' style={{ width: postData.postImgWidth, height: postData.postImgHeight }}/>
+              <img src={postData.postImageUrl} alt='post' />
             )}
           </div>
           <div className={styles.settings}>

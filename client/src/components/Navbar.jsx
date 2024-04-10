@@ -71,7 +71,7 @@ const Navbar = () => {
           </div>
         </nav>
         <div className={styles.postButtonContainer}>
-          <button className={styles.postButton}>
+          <button className={styles.postButton} onClick={()=>setIsPostFormVisible(true)}>
             {window.innerWidth <= 1275 ? <FontAwesomeIcon icon={faSignsPost} className="rounded me-2" />:"Post"}
           </button>
         </div>
