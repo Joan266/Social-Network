@@ -4,7 +4,7 @@ import WhoToFollowSearchResult from './WhoToFollowSearchResult'
 import { useAuthContext } from '../hooks/useAuthContext';
 
 const WhoToFollow = () => {
-  const { isLoading, users, isError } = useWhoToFollow();
+  const { users } = useWhoToFollow();
   const { user: authUser } = useAuthContext();
   return (
     <div className={styles.WhoToFollow}  >

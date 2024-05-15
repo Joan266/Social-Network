@@ -11,10 +11,11 @@
   z-index: 0;
   .whoToFollowResultsContainer {
     z-index: 0;
-    background-color: #B4C2DB42;
+    background-color: #b4c2db53;
     border-radius: 20px;
     display: flex;
     flex-direction: column; 
+    padding-bottom: 10px;
     .title{
       padding: 0 15px;
       padding-top: 15px;
@@ -70,6 +71,8 @@
             width: 100%;
             height: auto;
             z-index: 2;
+            animation-name: fade;
+            animation-duration: 0.3s;
           }
         }
         .userInfo {

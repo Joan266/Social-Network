@@ -20,7 +20,7 @@ const fetchHomePosts = async ({ pageParam, userId, userToken }) => {
   let previousCursor;
 
   // Determine next and previous cursors based on the number of posts returned
-  if (homePostsResponse.posts.length === 10) {
+  if (homePostsResponse.posts.length === 20) {
     nextCursor = cursor + 1;
     previousCursor = cursor - 1;
   } else {
@@ -45,7 +45,7 @@ const fetchHomePosts = async ({ pageParam, userId, userToken }) => {
 
 const useHomePosts = () => {
   const { user } = useAuthContext();
-  const { isLoading, isError, data, fetchNextPage, hasNextPage, fetchPreviousPage, hasPreviousPage } = useInfiniteQuery({
+  const { isFetchingNextPage, isLoading, isError, data, fetchNextPage, hasNextPage, fetchPreviousPage, hasPreviousPage } = useInfiniteQuery({
     queryKey: ['home_posts'],
     queryFn: async ({ pageParam }) => fetchHomePosts({ userId: user._id, userToken: user.token, pageParam }),
     initialPageParam: { cursor:1 },
@@ -56,7 +56,7 @@ const useHomePosts = () => {
   );
 
   const posts = data?.pages?.flatMap(page => page.posts) ?? []
-  return { isLoading, isError, fetchNextPage, hasNextPage, posts, fetchPreviousPage, hasPreviousPage };
+  return { isFetchingNextPage,isLoading, isError, fetchNextPage, hasNextPage, posts, fetchPreviousPage, hasPreviousPage };
 };
 
 export default useHomePosts;

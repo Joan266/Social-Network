@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef,useMemo } from 'react';
 import styles from './PostDetails.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faHeart, faTrashCanArrowUp } from '@fortawesome/free-solid-svg-icons';
@@ -17,25 +17,23 @@ const PostDetails = ({ postId, username, page }) => {
   const { isWindowWidthOver400,isWindowWidthOver550,isWindowWidthOver600, isWindowWidthOver650, isWindowWidthOver800 } = useWindowContext();
   const { user } = useAuthContext();
   const postRef = useRef(null);
-  const {  postData, isLoading } = useFetchPostData({postId, username});
+  const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
+  const [ isPostVisible, setIsPostVisible ] = useState(false);
+  const {  postData } = useFetchPostData({postId, username, isPostVisible});
   const [ likeCountSwitch, setLikeCountSwitch ] = useState(0);
   const { handleLikeToggle, isPostLiked } = usePostLike({postId, setLikeCountSwitch});
-  const [ isPostFormVisible, setIsPostFormVisible ] = useState(false);
   const [ isDeleteMenuVisible, setIsDeleteMenuVisible ] = useState(false);
   const [ commentsCount, setCommentsCount ] = useState(0);
-  const [ isPostVisible, setIsPostVisible ] = useState(true);
   const navigate = useNavigate(); 
-  useEffect(()=>{console.log(postData)},[postData])
   useEffect(() => {
     const observePostRef = () => {
       const element = postRef ? postRef.current : null;
-      if (!element || !postData) {
+      if (!element) {
         return;
       }
 
       const observer = new IntersectionObserver(
         ([entry]) => {
-          console.log(entry.isIntersecting)
           // Ensure that the entry is intersecting and is the target element
           if (entry.isIntersecting) {
             setIsPostVisible(true)
@@ -71,22 +69,30 @@ const PostDetails = ({ postId, username, page }) => {
   const handleCommentCount = () => {
     setCommentsCount(commentsCount + 1);
   };
+  const imageWidth = useMemo(() => {
+    return (
+      isWindowWidthOver800 ? 500 :
+      isWindowWidthOver650 ? 500 * (19 / 20) :
+      isWindowWidthOver600 ? 500 * (17 / 20) :
+      isWindowWidthOver550 ? 500 * (15 / 20) :
+      isWindowWidthOver400 ? 500 * (12 / 20) :
+      500 * (9 / 20)
+    );
+  }, [ isWindowWidthOver400, isWindowWidthOver550, isWindowWidthOver600, isWindowWidthOver650, isWindowWidthOver800]);
 
-  if (isLoading || !postData) return "";
+  const imageHeight = useMemo(() => {
+    let height = postData ? postData.postImgHeight: 300;
+    return (
+      isWindowWidthOver800 ? height :
+      isWindowWidthOver650 ? height * (19 / 20) :
+      isWindowWidthOver600 ? height * (17 / 20) :
+      isWindowWidthOver550 ? height * (15 / 20) :
+      isWindowWidthOver400 ? height * (12 / 20) :
+      height * (9 / 20)
+    );
+  }, [postData, isWindowWidthOver400, isWindowWidthOver550, isWindowWidthOver600, isWindowWidthOver650, isWindowWidthOver800]);
+
   
-  const imageWidth = isWindowWidthOver800 ? postData.postImgWidth :
-  isWindowWidthOver650 ? postData.postImgWidth * (19 / 20) :
-  isWindowWidthOver600 ? postData.postImgWidth * (17 / 20) :
-  isWindowWidthOver550 ? postData.postImgWidth * (15 / 20) :
-  isWindowWidthOver400 ? postData.postImgWidth * (12 / 20) :
-  postData.postImgWidth * (7 / 20);
-
-  const imageHeight = isWindowWidthOver800 ? postData.postImgHeight :
-  isWindowWidthOver650 ? postData.postImgHeight * (19 / 20) :
-  isWindowWidthOver600 ? postData.postImgHeight * (17 / 20) :
-  isWindowWidthOver550 ? postData.postImgHeight * (15 / 20) :
-  isWindowWidthOver400 ? postData.postImgHeight * (12 / 20) :
-  postData.postImgHeight * (7 / 20);
 
   return (
       <div className={styles.postDetailsContainer} ref={postRef} onClick={() => handlePostLink()} >
@@ -105,13 +111,14 @@ const PostDetails = ({ postId, username, page }) => {
         )}
         <div className={styles.profilePicContainer}>
           <div className={styles.profilePic}>
-            {postData.profilePicImgUrl && isPostVisible ? <img src={postData.profilePicImgUrl} alt='post-profile-pic'></img>:
+            {postData && postData.profilePicImgUrl && isPostVisible ? <img src={postData.profilePicImgUrl} style={{ width: 44, height: 44 }} alt='post-profile-pic'></img>:
             <FontAwesomeIcon icon={faUser} className="rounded me-2" />}
           </div>
         </div>
         <div className={styles.body}>
           <div className={styles.header} >
-            <div className={styles.userInfo}>
+           {postData &&  
+           <div className={styles.userInfo}>
               <div className={styles.name}>
                 <Link to={`/${postData.username}`} onClick={(e) => e.stopPropagation()}>
                   {postData.username}
@@ -121,12 +128,13 @@ const PostDetails = ({ postId, username, page }) => {
               {isWindowWidthOver400 &&<div className={styles.dote}>·</div>}
               {isWindowWidthOver400 && <div className={styles.date}>{timeSince(postData.createdAt)}</div>}
             </div>
+            }
             { username === user.username && 
             <div className={styles.deletePostPointer} onClick={(e) => {e.stopPropagation(); setIsDeleteMenuVisible(true);}}>
               <FontAwesomeIcon icon={faTrashCanArrowUp} className="rounded me-2" />
             </div>}
           </div>
-          {postData.parentPostUsername && page !== "post" && (
+          {postData && postData.parentPostUsername && page !== "post" && (
             <div className={styles.replyInfo}>
               Replying to 
               <Link to={`/${postData.parentPostUsername}`} onClick={(e) => e.stopPropagation()}>
@@ -134,18 +142,22 @@ const PostDetails = ({ postId, username, page }) => {
               </Link>
             </div>
           )}
-          <div className={styles.content}>{postData.content}</div>
+          
+          {postData &&  
+          <div className={styles.content}>{postData.content}</div>}
           <div className={styles.imageContainer} style={{ width: imageWidth, height: imageHeight }}>
-          {postData.postImageUrl && isPostVisible && (
-            <img src={postData.postImageUrl} alt='post'/>
+          {postData && postData.postImageUrl && isPostVisible && (
+            <img src={postData.postImageUrl} style={{ width: imageWidth, height: imageHeight }} alt='post'/>
           )}
           </div>
           <div className={styles.settings}>
             <div className={styles.commentContainer}>
               <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>
                 <FontAwesomeIcon icon={faComment} className="rounded me-2" />
-              </div>
+              </div>   
+           {postData &&  
               <span>{postData.commentsCount + commentsCount}</span>
+           }
             </div>
             <div className={styles.likesContainer}>
               <div className={styles.heart} onClick={(e) => { e.stopPropagation(); handleLikeToggle(); }}>
@@ -155,7 +167,9 @@ const PostDetails = ({ postId, username, page }) => {
                   style={{ color: isPostLiked ? 'rgb(255, 0, 162)' : '' }}
                 />
               </div>
-              <span>{postData.likesCount + likeCountSwitch }</span>
+              
+           {postData &&  
+              <span>{postData.likesCount + likeCountSwitch }</span>}
             </div>
           </div>
         </div>

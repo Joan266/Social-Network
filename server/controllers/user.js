@@ -122,7 +122,7 @@ whoToFollow: async (req, res) => {
       followers: { $nin: [userId] },
     })
     .select('profilePicFileId name username followers')
-    .limit(5);
+    .limit(3);
 
     // Check if user exists and send the retrieved response
     res.status(200).json({ users: users ? users : [], error: !users });
