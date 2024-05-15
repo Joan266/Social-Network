@@ -4,16 +4,17 @@ import { userApi } from '../services/userApi';
 import { filesApi } from '../services/filesApi';
 import { useAuthContext } from './useAuthContext';
 
-const useFetchPostData = ({ postId, username }) => {
+const useFetchPostData = ({ postId, username, isPostVisible }) => {
   const { user } = useAuthContext();
   const [postData, setPostData] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchPostData = async () => {
-      setLoading(true);
       try {
-        const headers = getHeaders();
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
+        };
         
         const [postDataResponse, profilePicBase64, postImageResponse] = await Promise.all([
           postApi.fetchPostData(postId, headers),
@@ -25,20 +26,14 @@ const useFetchPostData = ({ postId, username }) => {
         setPostData({...postDataResponse, profilePicImgUrl: profilePicBase64, postImageUrl: postImageBase64, ...postImageMetadata});
       } catch (error) {
         console.error('Error fetching post data:', error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
+    if(isPostVisible && !postData){
+      fetchPostData();
+    }
+  }, [postId, user, isPostVisible, postData, username]);
 
-    fetchPostData();
-  }, [postId, user]);
-
-  const getHeaders = () => ({
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${user.token}`,
-  });
-
-  return { loading, postData };
+  return { postData };
 };
 
 export default useFetchPostData;

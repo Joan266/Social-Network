@@ -40,7 +40,7 @@ const WhoToFollowSearchResult = ({user, userToken}) => {
     >
       <div className={styles.leftUserContainer}>
         <div className={styles.profilePic}>
-          {profilePicImgUrl ? <img src={profilePicImgUrl} alt='search-profile-pic'></img> : !isLoading ? <FontAwesomeIcon icon={faUser} className="rounded me-2" />: null}
+          {profilePicImgUrl ? <img src={profilePicImgUrl}  style={{ width: 44, height: 44 }} alt='search-profile-pic'></img> : !isLoading ? <FontAwesomeIcon icon={faUser} className="rounded me-2" />: null}
         </div>
         <div className={styles.userInfo}>
           <div className={styles.name}>

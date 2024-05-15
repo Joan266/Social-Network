@@ -21,7 +21,7 @@ const Navbar = () => {
   const handleClick = (event) => {
     if (userControlsRef.current && !userControlsRef.current.contains(event.target)) {
       setUserControlsVisible(false);
-    }else if (menuRef.current.contains(event.target)){
+    } else if (menuRef.current.contains(event.target)){
       setUserControlsVisible(true)
     }
   };

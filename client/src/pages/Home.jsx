@@ -4,11 +4,19 @@ import HomePostsList from '../components/HomePostsList';
 import { useQueryClient } from '@tanstack/react-query';
 import PostDetails from '../components/PostDetails';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useEffect } from 'react';
 
 const Home = () => {
   const { newPostId } = useParams();
   const queryClient = useQueryClient();
   const { user } = useAuthContext();
+
+  useEffect(()=>{
+    queryClient.resetQueries({ 
+      queryKey: ["home_posts"],
+      exact: true,
+    });
+  },[])
 
   const handleNavClick = (e) => {
     e.preventDefault();
