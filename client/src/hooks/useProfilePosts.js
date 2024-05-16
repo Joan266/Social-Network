@@ -16,7 +16,6 @@ const useProfilePosts = (username) => {
       };
       // Fetch user posts
       const profilePostsResponse = await userApi.fetchUserPosts({username}, headers);
-      console.log("bb",profilePostsResponse)
       setIsError(profilePostsResponse.error)
       setPosts(profilePostsResponse.posts)
       setIsLoading(false)

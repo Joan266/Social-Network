@@ -68,7 +68,7 @@ static async fetchUserProfilePic( username, headers) {
     
     } catch (error) {
         console.error("Error fetching profile picture:", error);
-        throw error;
+        return null;
     }
 }
 static async fetchUserProfileBanner(data, headers) {

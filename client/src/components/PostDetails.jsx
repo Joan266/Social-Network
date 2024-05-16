@@ -144,11 +144,11 @@ const PostDetails = ({ postId, username, page }) => {
           
           {postData &&  
           <div className={styles.content}>{postData.content}</div>}
-          {postData && postData.postImageUrl && isPostVisible && (
             <div className={styles.imageContainer} style={{ width: imageWidth, height: imageHeight }}>
+            {postData && postData.postImageUrl &&
               <img src={postData.postImageUrl} style={{ width: imageWidth, height: imageHeight }} alt='post'/>
+            }
             </div>
-          )}
           <div className={styles.settings}>
             <div className={styles.commentContainer}>
               <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>
