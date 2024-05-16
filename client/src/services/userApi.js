@@ -59,13 +59,15 @@ static async fetchUserProfilePic( username, headers) {
             params: { emailOrUsername: username },
             responseType: 'blob'
         });
-
-        // Convert blob to Base64
-        const profilePicBase64 = await blobToBase64(profilePicResponse.data);
-        return profilePicBase64;
+        console.log(profilePicResponse)
+        if (profilePicResponse) {
+            // Convert blob to Base64
+            const profilePicBase64 = await blobToBase64(profilePicResponse.data);
+            return profilePicBase64;
+         }
     
     } catch (error) {
-        console.error("Error during login:", error);
+        console.error("Error fetching profile picture:", error);
         throw error;
     }
 }

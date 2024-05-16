@@ -10,7 +10,6 @@ const HomePostsList = () => {
   const bottomRef = useRef(null);
   const { isFetchingNextPage, isLoading, isError, posts } = useHomePosts();
   usePostListObserve({ topRef, bottomRef });
-  useEffect(()=>{console.log(isFetchingNextPage,isLoading)},[isFetchingNextPage,isLoading])
   return (
     <>
       {posts.length > 0 && 

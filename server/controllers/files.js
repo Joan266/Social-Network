@@ -96,7 +96,7 @@ module.exports = filesController = {
 
             console.log(`user:${user.profilePicFileId}`)
             if (!user || !user.profilePicFileId) {
-                return res.status(404).json({ error: 'User profile picture not found' });
+                return res.status(200).json({ error: 'User profile picture not found' });
             }
     
             // Find the profile picture file by filename:fileId

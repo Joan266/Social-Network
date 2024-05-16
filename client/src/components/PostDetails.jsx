@@ -61,7 +61,6 @@ const PostDetails = ({ postId, username, page }) => {
     observePostRef();
 
   }, [postRef,postData]);
-
   const handlePostLink = () => {
     navigate(`/post/${postId}/${username}`); 
   };
@@ -145,11 +144,11 @@ const PostDetails = ({ postId, username, page }) => {
           
           {postData &&  
           <div className={styles.content}>{postData.content}</div>}
-          <div className={styles.imageContainer} style={{ width: imageWidth, height: imageHeight }}>
           {postData && postData.postImageUrl && isPostVisible && (
-            <img src={postData.postImageUrl} style={{ width: imageWidth, height: imageHeight }} alt='post'/>
+            <div className={styles.imageContainer} style={{ width: imageWidth, height: imageHeight }}>
+              <img src={postData.postImageUrl} style={{ width: imageWidth, height: imageHeight }} alt='post'/>
+            </div>
           )}
-          </div>
           <div className={styles.settings}>
             <div className={styles.commentContainer}>
               <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>

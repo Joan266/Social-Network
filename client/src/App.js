@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthContext } from './hooks/useAuthContext.js';
-import { useState,useEffect } from 'react'
+import { useWindowContext } from './hooks/useWindowContext';
+import { useState, useEffect } from 'react'
 
 // pages & components
 import Home from './pages/Home'
@@ -11,10 +12,9 @@ import Post from './pages/Post'
 import Navbar from './components/Navbar'
 import SearchBar from './components/SearchBar'
 import WhoToFollow from './components/WhoToFollow.jsx';
-import { useWindowContext } from './hooks/useWindowContext';
 
 const PrincipalLayout = ({ children }) => {
- const { isWindowWidthOver1020 } = useWindowContext();
+  const { isWindowWidthOver1020 } = useWindowContext();
 
   return (
     <div className='mainlayout'>
@@ -43,44 +43,35 @@ const AuthLayout = ({ children }) => (
 );
 
 function App() {
-  const { user } = useAuthContext()
+  const { user } = useAuthContext();
 
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          <Route 
-            path="/" 
-            element={user ? <Navigate to="/home" /> : <Navigate to="/signup" />} 
-          />
-          <Route 
-            path="/:username" 
-            element={user ? <PrincipalLayout><Profile /></PrincipalLayout> : <Navigate to="/login" />}
-          />
-          <Route 
-            path='/home/:newPostId?' 
-            element={!user ? <Navigate to="/login" /> :  <PrincipalLayout><Home /></PrincipalLayout>} 
-          />
-          <Route 
-            path="/login" 
-            element={user ?  <Navigate to="/home" />: <AuthLayout><Login /></AuthLayout>} 
-          />
-          <Route 
-            path="/signup" 
-            element={user ?  <Navigate to="/home" />: <AuthLayout><Signup /></AuthLayout>} 
-          />
-          <Route 
-            path="/profile" 
-            element={!user ? <Navigate to="/login" /> : <Navigate to={`/${user.username}`} />} 
-          />
-          <Route 
-            path="/post/:postId/:username" 
-            element={user ? <PrincipalLayout><Post /></PrincipalLayout> : <Navigate to="/login" />}
-          />
-        </Routes>
+        {user ? (
+          <PrincipalLayout>
+            <Routes>
+              <Route path="/" element={<Navigate to="/home" />} />
+              <Route path="/:username" element={<Profile />} />
+              <Route path="/home/:newPostId?" element={<Home />} />
+              <Route
+                path="/profile"
+                element={<Navigate to={`/${user.username}`} />}
+              />
+              <Route path="/post/:postId/:username" element={<Post />} />
+            </Routes>
+          </PrincipalLayout>
+        ) : (
+          <AuthLayout>
+            <Routes>
+              <Route path="/" element={<Navigate to="/signup" />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+            </Routes>
+          </AuthLayout>
+        )}
       </BrowserRouter>
     </div>
   );
 }
-
 export default App;
