@@ -21,13 +21,14 @@ const useFetchPostData = ({ postId, username, isPostVisible }) => {
           userApi.fetchUserProfilePic(username, headers),
           filesApi.postImage(postId, headers)
         ]);
+        console.log(postDataResponse)
         const { postImageBase64, postImageMetadata } = postImageResponse;
         setPostData({...postDataResponse, profilePicImgUrl:profilePicBase64, postImageUrl: postImageBase64, ...postImageMetadata});
       } catch (error) {
         console.error('Error fetching post data:', error);
       } 
     };
-    if(isPostVisible && !postData){
+    if(isPostVisible && (!postData|| postData._id!==postId)){
       fetchPostData();
     }
   }, [postId, user, isPostVisible, postData, username]);

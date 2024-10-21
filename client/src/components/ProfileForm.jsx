@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useMemo } from "react"
 import styles from './ProfileForm.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faXmark, faUnlock,faCameraRetro } from '@fortawesome/free-solid-svg-icons';
@@ -28,8 +28,7 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
   const [ inputImageType, setInputImageType ] = useState(null);
   const [ editingImage, setEditingImage ] = useState(false);
 
-  
-  useEffect(() => {
+  useMemo(() => {
     if(userData.profilePicImgUrl){
       setProfilePicUrl(userData.profilePicImgUrl)
     }

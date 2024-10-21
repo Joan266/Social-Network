@@ -58,7 +58,7 @@ function App() {
                 path="/profile"
                 element={<Navigate to={`/${user.username}`} />}
               />
-              <Route path="/post/:postId/:username" element={<Post />} />
+              <Route path="/:username/:postId" element={<Post />} />
             </Routes>
           </PrincipalLayout>
         ) : (

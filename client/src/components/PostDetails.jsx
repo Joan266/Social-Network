@@ -62,7 +62,7 @@ const PostDetails = ({ postId, username, page }) => {
 
   }, [postRef,postData]);
   const handlePostLink = () => {
-    navigate(`/post/${postId}/${username}`); 
+    navigate(`/${username}/${postId}`); 
   };
 
   const handleCommentCount = () => {
@@ -142,8 +142,7 @@ const PostDetails = ({ postId, username, page }) => {
             </div>
           )}
           
-          {postData &&  
-          <div className={styles.content}>{postData.content}</div>}
+          {postData && <div className={styles.content}>{postData.content}</div>}
             <div className={styles.imageContainer} style={{ width: imageWidth, height: imageHeight }}>
             {postData && postData.postImageUrl &&
               <img src={postData.postImageUrl} style={{ width: imageWidth, height: imageHeight }} alt='post'/>
