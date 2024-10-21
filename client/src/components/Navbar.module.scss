@@ -7,34 +7,54 @@
   width: 237px;
   float: right;
   padding: 20px 30px;
-  @media (max-width: 1275px) {  
+
+  @media (max-width: 1275px) {
     padding: 20px 0;
     width: 85px;
   }
+
   flex-direction: column;
+
   @media (max-width: 500px) {
-   flex-direction: row;
-   width: 100%;
-   padding: 0;
+    flex-direction: row;
+    width: 100%;
+    padding: 0;
   }
+
   font-size: 1.2rem;
+
+
 
   .menu {
     display: flex;
     flex-direction: column;
-    @media (max-width: 1275px) {  
-      padding-right: 15px;
+
+    >h1 {
+      margin: 0;
+      text-align: center;
+      font-size: 2.3rem;
+      color: var(--button-background);
+      margin-bottom: 1em;
+      @media (max-width: 500px) {
+        margin: 0;
+      }
     }
+
+
+
     @media (max-width: 500px) {
-     flex-direction: row;
-     width: 100% ;
+      flex-direction: row;
+      width: 100%;
     }
+
     nav {
       display: flex;
       flex-direction: column;
+
       @media (max-width: 500px) {
-       flex-direction: row;
+        flex-direction: row;
       }
+
       .linkContainer {
         display: flex;
         border-radius: 40px;
@@ -42,10 +62,10 @@
         padding: 10px 0;
         align-items: center;
         height: 55px;
-        justify-content: left;
-        @media (max-width: 1275px) {   
-          justify-content:right;
-        }
+        justify-content: center;
+        text-align: center;
+
+
         a {
           display: flex;
           border-radius: 40px;
@@ -53,19 +73,25 @@
           padding: 15px 35px 15px 15px;
           color: var(--strong-text-color);
           align-items: center;
-          @media (max-width: 1275px) {   
+
+          @media (max-width: 1275px) {
             padding: 15px;
           }
-          transition: color 0.3s ease, background-color 0.3s ease; 
+
+          transition: color 0.3s ease,
+          background-color 0.3s ease;
           flex-direction: row;
+
           .svgContainer {
             position: relative;
             height: 27px;
             width: 27px;
             margin-right: 15px;
-            @media (max-width: 1275px) {    
+
+            @media (max-width: 1275px) {
               margin-right: 0;
             }
+
             svg {
               position: absolute;
               top: 50%;
@@ -85,17 +111,17 @@
 
     .postButtonContainer {
       display: flex;
-      justify-content: left;
+      justify-content: center;
       margin-top: 20px;
       width: 100%;
-      min-height: 55px;
+      min-height: 70px;
       align-items: center;
-      @media (max-width: 1275px) {  
-       justify-content: right;
-      }
+
+
       @media (max-width: 500px) {
-       margin: 0;
+        margin: 0;
       }
+
       .postButton {
         position: relative;
         display: flex;
@@ -107,14 +133,17 @@
         border: none;
         cursor: pointer;
         border-radius: 30px;
-        width: 100%;
-        transition: background-color 0.3s ease; /* Added transition */
+        width: 70%;
+        transition: background-color 0.3s ease;
+        /* Added transition */
         font-size: 19px;
         font-weight: 600;
-        @media (max-width: 1275px) {  
+
+        @media (max-width: 1275px) {
           padding: 0;
           width: 55px;
           height: 55px;
+
           svg {
             position: absolute;
             top: 50%;
@@ -124,10 +153,12 @@
             width: 25px;
           }
         }
+
         @media (max-width: 500px) {
           padding: 0;
           width: 35px;
           height: 35px;
+
           svg {
             position: absolute;
             top: 50%;
@@ -137,12 +168,14 @@
             width: 20px;
           }
         }
+
         &:hover {
           background-color: var(--button-hover-background);
         }
       }
     }
   }
+
   .userControls {
     position: absolute;
     width: 257px;
@@ -157,17 +190,20 @@
     color: #0f0f0f82;
     background-color: white;
     height: 70px;
-    @media (max-width: 1275px) {   
+
+    @media (max-width: 1275px) {
       height: 50px;
       width: 75px;
     }
-    @media (max-width: 500px) {   
+
+    @media (max-width: 500px) {
       height: 50px;
       width: 75px;
       bottom: 80%;
       right: -1%;
     }
-    .userControlsContainer{
+
+    .userControlsContainer {
       width: 100%;
       display: flex;
       justify-content: center;
@@ -177,34 +213,42 @@
       font-weight: 600;
       cursor: pointer;
       padding-left: 22px;
-      @media (max-width: 1275px) {  
-      padding-left: 13px;
-      padding-right: 8px;
-      font-size: 14px;
+
+      @media (max-width: 1275px) {
+        padding-left: 13px;
+        padding-right: 8px;
+        font-size: 14px;
       }
+
       span {
         display: flex;
         justify-content: left;
       }
+
       &:hover {
         background-color: #cccccc23;
         transition: background-color 0.3s ease; // Added transition
       }
     }
   }
-  .controlsVisible{
+
+  .controlsVisible {
     cursor: pointer;
     transition: background-color 0.3s;
+
     &:hover {
       background-color: var(--container-hover-background);
     }
   }
+
   .accountMenu {
     display: flex;
     align-items: center;
-    @media (max-width: 1275px) {   
-      justify-content:right;
+
+    @media (max-width: 1275px) {
+      justify-content: right;
     }
+
     .container {
       padding: 15px;
       height: 50px;
@@ -212,24 +256,28 @@
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      @media (max-width: 1275px) {  
-        padding: 0; 
+
+      @media (max-width: 1275px) {
+        padding: 0;
         width: 70px;
         height: 70px;
         margin-bottom: 5px;
         margin-right: 5px;
         justify-content: center;
       }
-      @media (max-width: 500px) { 
-        padding: 0; 
+
+      @media (max-width: 500px) {
+        padding: 0;
         width: 50px;
         height: 50px;
         margin-bottom: 0;
         margin-right: 5px;
         justify-content: center;
       }
+
       text-align: center;
       font-size: 0.8rem;
+
       .leftContainer {
         display: flex;
         flex-direction: row;
@@ -237,14 +285,17 @@
         align-items: center;
         width: 100%;
         height: 50px;
-        @media (max-width: 1275px) {  
+
+        @media (max-width: 1275px) {
           height: 70px;
           justify-content: center;
         }
-        @media (max-width: 500px) { 
+
+        @media (max-width: 500px) {
           height: 50px;
           justify-content: center;
         }
+
         .profilePic {
           position: relative;
           background-color: #ccc;
@@ -258,10 +309,12 @@
           height: 50px;
           overflow: hidden;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          @media (max-width: 500px) { 
+
+          @media (max-width: 500px) {
             height: 40px;
             width: 40px;
           }
+
           svg {
             position: absolute;
             top: 50%;
@@ -270,32 +323,39 @@
             height: 25px;
             width: 25px;
           }
+
           img {
             width: 50px;
             height: 50px;
           }
         }
+
         .infoContainer {
-          span{
+          span {
             display: flex;
             justify-content: left;
           }
+
           .name {
             color: var(--strong-text-color);
             font-weight: 600;
           }
+
           .username {
             margin-left: 1px;
             color: var(--light-text-color);
           }
+
           margin-left: 8px;
           display: flex;
           flex-direction: column;
         }
       }
+
       .controls {
         justify-content: center;
         align-items: center;
+
         .svgContainer {
           color: var(--strong-text-color);
           height: 27px;

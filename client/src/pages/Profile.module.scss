@@ -7,11 +7,11 @@
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(60px);
   transition: background-color 0.2s;
-  padding-left: 22px;
   z-index: 5;
   .nameLabel{
     color:var(--strong-text-color);
     font-size: 22px;
+    margin-left: 0.5em;
     @media (max-width: 600px) {
       font-size: 20px; 
     }

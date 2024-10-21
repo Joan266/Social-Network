@@ -13,12 +13,10 @@
     z-index: 2;
     transition: background-color 0.2s;
     .postLabel{
-      margin-left: 78px;
       color:var(--strong-text-color);
       font-size: 24px;
       @media (max-width: 600px) {
-        font-size: 18px; 
-        margin-left: 38px;
+        font-size: 22px; 
       }
       font-weight: 600;
     }

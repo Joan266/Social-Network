@@ -5,6 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 const fetchHomePosts = async ({ pageParam, userId, userToken }) => {
   const { cursor, lastTimestamp } = pageParam;
   
+  await new Promise(resolve => setTimeout(resolve, 1250));
   const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${userToken}`,
