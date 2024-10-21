@@ -68,7 +68,7 @@ module.exports = postController =  {
       if (!post) {
         return res.status(404).json({ error: "Post not found" });
       }
-      console.log(post)
+      console.log(post, postId)
       const { parentPost, user, ...rest } = post.toObject(); 
       const modifiedPost = { ...rest, ...user, parentPostUsername: parentPost ? parentPost.user.username : null};
 

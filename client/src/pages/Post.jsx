@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'
 import styles from './Post.module.scss';
 import usePostReplies from '../hooks/usePostReplies';
@@ -17,12 +17,13 @@ const Post = () => {
   usePostReplies(postId);
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
-  const {  postData, isLoading } = useFetchPostData({postId, username});
+  const {  postData, isLoading } = useFetchPostData({postId, username, isPostVisible:true});
   const { handleLikeToggle, isPostLiked } = usePostLike({postId});
 
   const increaseCommentsCount = () => {
     setCommentsCount(commentsCount + 1);
   };
+
 
   if (isLoading || !postData   ) return (
     <div className={styles.postContainer}>

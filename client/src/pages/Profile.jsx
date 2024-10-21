@@ -14,13 +14,12 @@ import {formatDate} from '../utils/useFormatDate';
 const Profile = () => {
   const { user } = useAuthContext();
   const { username } = useParams();
-  const { userData, isLoading: profileDataLoading } = useProfileData(username);
+  const { userData } = useProfileData(username);
   const { isUserFollowed, handleFollowToggle } = useProfileFollow({username,isLoggedInUserProfile:username === user.username});
 
   const [followHover, setFollowHover] = useState(false);
   const [isProfileFormVisible, setIsProfileFormVisible] = useState(false);
   
-  if(profileDataLoading)return null
   return (
     <>
       {isProfileFormVisible && (
@@ -32,18 +31,18 @@ const Profile = () => {
       <div className={styles.profileContainer}>
         <div className={styles.navContainer}>
           <div className={styles.nameLabel}>
-            {userData.name}
+           {userData && userData.name }
           </div>
         </div>
         <div className={styles.userContainer}>
           <div className={styles.banner}>
-            {userData.profileBannerImgUrl && <img src={userData.profileBannerImgUrl} alt="banner" />}
+            { userData && userData.profileBannerImgUrl && <img src={userData.profileBannerImgUrl} alt="banner" />}
           </div>  
           <div className={styles.body}>
             <div className={styles.picAndControls}>
               <div className={styles.profilePic}>
                 
-                {userData.profilePicImgUrl ? <img src={userData.profilePicImgUrl} alt="profilepic" />:<FontAwesomeIcon icon={faUser} />}
+                {userData && userData.profilePicImgUrl ? <img src={userData.profilePicImgUrl} alt="profilepic" />:<FontAwesomeIcon icon={faUser} />}
               </div>
               <div className={styles.settingsContainer} >
                 {username === user.username ? 
@@ -70,16 +69,16 @@ const Profile = () => {
               <div className={styles.nameContainer}>{userData.name}</div>
               <div className={styles.usernameContainer}>@{userData.username}</div>
             </div>
-            { userData.bio && 
+            { userData && userData.bio && 
             <div className={styles.bio}>
               {userData.bio}
             </div>}
             <div className={styles.data}>
-              {userData.location && 
+              {userData && userData.location && 
               <div className={styles.location}>
                 <FontAwesomeIcon icon={faLocationDot} />{userData.location}
               </div>}
-              {userData.birthDate && <div className={styles.birthDate}>
+              {userData && userData.birthDate && <div className={styles.birthDate}>
                 <FontAwesomeIcon icon={faCalendarDays} />Born {formatDate(userData.birthDate)}
               </div>}
               <div className={styles.joinDate}>
@@ -87,7 +86,7 @@ const Profile = () => {
               </div>
             </div>
             <div className={styles.following}>
-              <span>{userData.followingCount}</span> Following <span>{userData.followersCount}</span> Followers
+              <span>{userData && userData.followingCount}</span> Following <span>{userData && userData.followersCount}</span> Followers
             </div>
           </div>
         </div>
