@@ -19,8 +19,9 @@ const Post = () => {
   usePostReplies(postId);
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
+  const [ likeCountSwitch, setLikeCountSwitch ] = useState(0);
   const { postData, isLoading } = useFetchPostData({ postId, username, isPostVisible: true });
-  const { handleLikeToggle, isPostLiked } = usePostLike({ postId });
+  const { handleLikeToggle, isPostLiked } = usePostLike({ postId, setLikeCountSwitch });
 
   const increaseCommentsCount = () => {
     setCommentsCount(commentsCount + 1);
@@ -97,7 +98,7 @@ const Post = () => {
                   style={{ color: isPostLiked ? 'rgb(255, 0, 162)' : '' }}
                 />
               </div>
-              <span>{postData.likesCount + (isPostLiked ? 1 : 0)}</span>
+              <span>{postData.likesCount + likeCountSwitch}</span>
             </div>
           </div>
         </div>
