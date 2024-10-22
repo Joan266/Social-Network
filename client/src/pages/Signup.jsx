@@ -32,21 +32,19 @@ const Signup = () => {
 
       signup({ email, password, username }).then(() => {
         localStorage.setItem('isSignedUp', 'true');  
-        navigate('/');  
+        navigate('/home');  
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await signup({ email, password, username }).then(() => {
-      navigate('/');  
+      navigate('/home');  
     });
   };
 
-  if (user) {
-    return null;
-  }
 
   return (
     <>
@@ -78,7 +76,7 @@ const Signup = () => {
         {error && <div className="error">{error}</div>}
       </form>
       <div>
-        <p>¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link></p>
+        <p>¿Ya tienes cuenta? <Link to="/auth/login">Inicia sesión</Link></p>
       </div>
     </>
   );

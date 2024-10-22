@@ -62,7 +62,7 @@ const Post = () => {
           <div className={styles.header}>
             <div className={styles.userInfo}>
               <div className={styles.name}>
-                <Link to={`/${postData.username}`} onClick={(e) => e.stopPropagation()}>
+                <Link to={`/user/${postData.username}`} onClick={(e) => e.stopPropagation()}>
                   {postData.username}
                 </Link>
               </div>
@@ -74,7 +74,7 @@ const Post = () => {
           {postData.parentPostUsername && (
             <div className={styles.replyInfo}>
               Replying to{' '}
-              <Link to={`/${postData.parentPostUsername}`} onClick={(e) => e.stopPropagation()}>
+              <Link to={`/user/${postData.parentPostUsername}`} onClick={(e) => e.stopPropagation()}>
                 @{postData.parentPostUsername}
               </Link>
             </div>

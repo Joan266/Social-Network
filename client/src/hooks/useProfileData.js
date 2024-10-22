@@ -3,7 +3,7 @@ import { userApi } from '../services/userApi';
 import { useAuthContext } from './useAuthContext';
 
 const useFetchUserData = (username) => {
-  const { user } = useAuthContext();
+  const { user, dispatch } = useAuthContext();
   const [userData, setUserData] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +31,12 @@ const useFetchUserData = (username) => {
           profileBannerPromise,
           profilePicPromise,
         ]);
-
+        if (user.username === username && profilePicBase64) {
+          dispatch({
+            type: 'UPDATE_PROFILE_PIC',
+            payload: profilePicBase64,
+          });
+        }
         setUserData({
           ...userDataResponse,
           profileBannerImgUrl: profileBannerBase64,
@@ -51,7 +56,8 @@ const useFetchUserData = (username) => {
     }, 1250);
 
     return () => clearTimeout(delayTimeout);
-  }, [username, user]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username]);
 
   return { userData, loading };
 };

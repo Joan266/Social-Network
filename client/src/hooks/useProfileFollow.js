@@ -41,6 +41,7 @@ const useProfileFollow = ({ username, isLoggedInUserProfile}) => {
     if (!username || !user || isLoggedInUserProfile) return;
 
     fetchFollowingUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [username, user]);
 
   const getHeaders = () => ({
