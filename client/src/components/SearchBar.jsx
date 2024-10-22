@@ -23,7 +23,7 @@ const SearchBar = () => {
   const handleUserInfoClick = (username) => {
     clearSearch(); 
     setSelected(false); 
-    navigate(`/${username}`); 
+    navigate(`/user/${username}`); 
 };
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);

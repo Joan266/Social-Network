@@ -31,7 +31,7 @@ export class postApi {
         const deletePostResponse = await auth.post("/post/delete", data); 
         console.log(deletePostResponse)
         if(deletePostResponse.ok && deletePostResponse.postImageFileId){ 
-            const deleteImagePostResponse = await auth.post("/file/delete", {fileId:deletePostResponse.postImageFileId}); 
+            await auth.post("/file/delete", {fileId:deletePostResponse.postImageFileId}); 
         }
         return deletePostResponse.ok
     } catch ({response}) {

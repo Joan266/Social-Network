@@ -12,7 +12,7 @@ const Login = () => {
     e.preventDefault()
 
     await login(emailOrUsername, password).then(() => {
-      navigate('/');  
+      navigate('/home');  
     });
   }
 
@@ -40,7 +40,7 @@ const Login = () => {
         {error && <div className="error">{error}</div>}
       </form>
       <div>
-        <p>¿No tienes cuenta?<Link to="/signup">Regístrate</Link></p>
+        <p>¿No tienes cuenta?<Link to="/auth/signup">Regístrate</Link></p>
       </div>
     </>
   )

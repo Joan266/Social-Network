@@ -16,6 +16,7 @@ const Home = () => {
       queryKey: ["home_posts"],
       exact: true,
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   const handleNavClick = (e) => {

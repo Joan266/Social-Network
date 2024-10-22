@@ -62,7 +62,7 @@ const PostDetails = ({ postId, username, page }) => {
 
   }, [postRef,postData]);
   const handlePostLink = () => {
-    navigate(`/${username}/${postId}`); 
+    navigate(`/post/${username}/${postId}`); 
   };
 
   const handleCommentCount = () => {
@@ -119,7 +119,7 @@ const PostDetails = ({ postId, username, page }) => {
            {postData &&  
            <div className={styles.userInfo}>
               <div className={styles.name}>
-                <Link to={`/${postData.username}`} onClick={(e) => e.stopPropagation()}>
+                <Link to={`/user/${postData.username}`} onClick={(e) => e.stopPropagation()}>
                   {postData.username}
                 </Link>
               </div>
@@ -136,7 +136,7 @@ const PostDetails = ({ postId, username, page }) => {
           {postData && postData.parentPostUsername && page !== "post" && (
             <div className={styles.replyInfo}>
               Replying to 
-              <Link to={`/${postData.parentPostUsername}`} onClick={(e) => e.stopPropagation()}>
+              <Link to={`/user/${postData.parentPostUsername}`} onClick={(e) => e.stopPropagation()}>
                 @{postData.parentPostUsername}
               </Link>
             </div>

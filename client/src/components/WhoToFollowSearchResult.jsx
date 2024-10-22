@@ -36,7 +36,7 @@ const WhoToFollowSearchResult = ({user, userToken}) => {
   return (
     <div
       className={styles.userInfoContainer}
-      onClick={() => navigate(`/${user.username}`)} 
+      onClick={() => navigate(`/user/${user.username}`)} 
     >
       <div className={styles.leftUserContainer}>
         <div className={styles.profilePic}>

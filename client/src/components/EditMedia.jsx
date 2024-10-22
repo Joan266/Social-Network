@@ -9,13 +9,7 @@ export default function EditMedia({ imgSrc, endOfEdit, inputImageType }) {
   const [zoom, setZoom] = useState(1);
   const [croppedArea, setCroppedArea] = useState()
   const [ aspect, setAspect ] = useState(null)
-  const [cropSize, setCropSize] = useState({ width: 0, height: 0 })
-  const [mediaSize, setMediaSize] = useState({
-    width: 0,
-    height: 0,
-    naturalWidth: 0,
-    naturalHeight: 0,
-  });
+
   useEffect(()=>{
     if (inputImageType === "banner") {
       setAspect(3);  
@@ -101,8 +95,6 @@ export default function EditMedia({ imgSrc, endOfEdit, inputImageType }) {
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
-          setMediaSize={setMediaSize}
-          setCropSize={setCropSize}
         />
       </div>
       <div className={styles.controls}>

@@ -7,7 +7,7 @@ export const useLogout = () => {
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
 
-    navigate('/');
+    navigate('/auth');
   };
 
   return { logout };

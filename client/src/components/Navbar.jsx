@@ -36,12 +36,12 @@ const Navbar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.menu}>
-        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <Link to="/home" style={{ textDecoration: 'none', color: 'inherit' }}>
           <h1 className={styles.logo}>{isWindowWidthOver1275 ? "FakeNet" : "FN"}</h1>
         </Link>
         <nav>
           <div className={styles.linkContainer}>
-            <Link to="/">
+            <Link to="/home">
               <div className={styles.svgContainer}>
                 <FontAwesomeIcon icon={solidHouse} className="rounded me-2" />
               </div>

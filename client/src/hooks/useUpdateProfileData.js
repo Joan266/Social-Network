@@ -9,13 +9,11 @@ export const useUpdateProfileData = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate(); 
   const navigateString = `/profile`;
-  
 
   const updateProfileData = async (data) => {
     setIsLoading(true);
     try {
       const { inputData, profilePicFile, bannerFile, bannerFileId, profilePicFileId } = data;
-      console.log(`bannerFileId:${bannerFileId}, profilePicFileId:${profilePicFileId}`)
       const userDataUpdate = {
         ...inputData
       };
@@ -40,7 +38,6 @@ export const useUpdateProfileData = () => {
         throw new Error(updateProfileDataResponse.error);
       }
 
-      console.log(updateProfileDataResponse);
       setIsLoading(false);
       navigate(navigateString);
     } catch (error) {

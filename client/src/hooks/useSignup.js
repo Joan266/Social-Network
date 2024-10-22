@@ -1,16 +1,16 @@
 import { useState } from 'react'
 import { useAuthContext } from './useAuthContext'
-import { userApi } from '../services/userApi' 
+import { userApi } from '../services/userApi'
 export const useSignup = () => {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const { dispatch } = useAuthContext()
 
-  const signup = async ({email, password, username}) => {
+  const signup = async ({ email, password, username }) => {
     setIsLoading(true)
     setError(null)
 
-    const response = await userApi.signup({email, password, username});
+    const response = await userApi.signup({ email, password, username });
     if (response.error) {
       setIsLoading(false)
       setError(response.message)
@@ -18,7 +18,7 @@ export const useSignup = () => {
     }
 
     // update the auth context
-    dispatch({type: 'LOGIN', payload: response})
+    dispatch({ type: 'LOGIN', payload: response })
 
     // update loading state
     setIsLoading(false)
