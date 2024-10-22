@@ -36,7 +36,9 @@ const Navbar = () => {
   return (
     <div className={styles.container}>
       <div className={styles.menu}>
-      <h1>{isWindowWidthOver1275 ? "FakeNet" : "FN"}</h1>
+        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <h1 className={styles.logo}>{isWindowWidthOver1275 ? "FakeNet" : "FN"}</h1>
+        </Link>
         <nav>
           <div className={styles.linkContainer}>
             <Link to="/">
