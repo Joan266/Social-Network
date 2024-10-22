@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthContext } from './hooks/useAuthContext.js';
 import { useWindowContext } from './hooks/useWindowContext';
-import { useState, useEffect } from 'react'
 
 // pages & components
 import Home from './pages/Home'

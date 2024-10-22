@@ -59,7 +59,6 @@ static async fetchUserProfilePic( username, headers) {
             params: { emailOrUsername: username },
             responseType: 'blob'
         });
-        console.log(profilePicResponse)
         if (profilePicResponse) {
             // Convert blob to Base64
             const profilePicBase64 = await blobToBase64(profilePicResponse.data);

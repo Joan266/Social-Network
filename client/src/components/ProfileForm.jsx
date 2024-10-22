@@ -122,9 +122,8 @@ const ProfileForm = ({ setIsProfileFormVisible, userData }) => {
       <div className={styles.profileFormContainer} >
         <div className={styles.profileForm}>
           <div className={styles.navContainer}>
-            <div className={styles.xMark}>
+            <div className={styles.xMark} onClick={()=>setIsProfileFormVisible(false)}>
               <FontAwesomeIcon
-                  onClick={()=>setIsProfileFormVisible(false)}
                   icon={faXmark}
               />
             </div>

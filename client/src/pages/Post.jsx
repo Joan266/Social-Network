@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styles from './Post.module.scss';
 import usePostReplies from '../hooks/usePostReplies';
 import useFetchPostData from '../hooks/usePostData';
@@ -11,34 +11,37 @@ import { faHeart as regularHeart, faComment } from '@fortawesome/free-regular-sv
 import { timeSince } from '../utils/useTimeSinceString';
 import { Link } from 'react-router-dom';
 import PostForm from '../components/PostForm';
+import { BackButtonComponent } from '../components/BackButton';
+import { LoaderComponent } from '../components/Loader';
 
 const Post = () => {
   const { postId, username } = useParams();
   usePostReplies(postId);
   const [isPostFormVisible, setIsPostFormVisible] = useState(false);
   const [commentsCount, setCommentsCount] = useState(0);
-  const {  postData, isLoading } = useFetchPostData({postId, username, isPostVisible:true});
-  const { handleLikeToggle, isPostLiked } = usePostLike({postId});
+  const [ likeCountSwitch, setLikeCountSwitch ] = useState(0);
+  const { postData, isLoading } = useFetchPostData({ postId, username, isPostVisible: true });
+  const { handleLikeToggle, isPostLiked } = usePostLike({ postId, setLikeCountSwitch });
 
   const increaseCommentsCount = () => {
     setCommentsCount(commentsCount + 1);
   };
 
-
-  if (isLoading || !postData   ) return (
-    <div className={styles.postContainer}>
-
-    </div>
-  );
+  if (isLoading || !postData) {
+    return (
+      <div className={styles.postContainer}>
+        <LoaderComponent />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.postContainer}>
       <div className={styles.navContainer}>
-        <div className={styles.postLabel}>
-          Post
-        </div>
+        <BackButtonComponent />
+        <div className={styles.postLabel}>Post</div>
       </div>
-      <div className={styles.postDetailsContainer} >
+      <div className={styles.postDetailsContainer}>
         {isPostFormVisible && (
           <PostForm
             setIsPostFormVisible={setIsPostFormVisible}
@@ -48,12 +51,15 @@ const Post = () => {
         )}
         <div className={styles.profilePicContainer}>
           <div className={styles.profilePic}>
-            {postData.profilePicImgUrl  ? <img src={postData.profilePicImgUrl} alt='post-profile-pic'></img>:
-            <FontAwesomeIcon icon={faUser} className="rounded me-2" />}
+            {postData.profilePicImgUrl ? (
+              <img src={postData.profilePicImgUrl} alt="post-profile-pic" />
+            ) : (
+              <FontAwesomeIcon icon={faUser} className="rounded me-2" />
+            )}
           </div>
         </div>
         <div className={styles.body}>
-          <div className={styles.header} >
+          <div className={styles.header}>
             <div className={styles.userInfo}>
               <div className={styles.name}>
                 <Link to={`/${postData.username}`} onClick={(e) => e.stopPropagation()}>
@@ -67,21 +73,19 @@ const Post = () => {
           </div>
           {postData.parentPostUsername && (
             <div className={styles.replyInfo}>
-              Replying to 
+              Replying to{' '}
               <Link to={`/${postData.parentPostUsername}`} onClick={(e) => e.stopPropagation()}>
                 @{postData.parentPostUsername}
               </Link>
             </div>
           )}
           <div className={styles.content}>{postData.content}</div>
-          <div className={styles.imageContainer} >
-            {postData.postImageUrl && (
-              <img src={postData.postImageUrl} alt='post' />
-            )}
+          <div className={styles.imageContainer}>
+            {postData.postImageUrl && <img src={postData.postImageUrl} alt="post" />}
           </div>
           <div className={styles.settings}>
             <div className={styles.commentContainer}>
-              <div className={styles.comment} onClick={(e) => {e.stopPropagation(); setIsPostFormVisible(true);}}>
+              <div className={styles.comment} onClick={(e) => { e.stopPropagation(); setIsPostFormVisible(true); }}>
                 <FontAwesomeIcon icon={faComment} className="rounded me-2" />
               </div>
               <span>{postData.commentsCount + commentsCount}</span>
@@ -94,14 +98,14 @@ const Post = () => {
                   style={{ color: isPostLiked ? 'rgb(255, 0, 162)' : '' }}
                 />
               </div>
-              <span>{postData.likesCount + (isPostLiked ? 1 : 0)}</span>
+              <span>{postData.likesCount + likeCountSwitch}</span>
             </div>
           </div>
         </div>
       </div>
-      <PostRepliesList  postId={postId}/>
+      <PostRepliesList postId={postId} />
     </div>
-  )
-}
+  );
+};
 
-export default Post
+export default Post;

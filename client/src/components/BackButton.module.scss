@@ -1,0 +1,21 @@
+.BackButton {
+  all: unset;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: black;
+  font-size: 1.2rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  margin-left: 0.5em;
+  @media (max-width: 600px) {
+    
+  font-size: 1rem;
+  }
+  svg {
+    margin-right: 0.5rem;
+  }
+}
+
+;
